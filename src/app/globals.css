@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f0f9ff;
+  --foreground: #0a2140;
+  --accent: #ff686c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-jakarta);
+}
+
+body {
+  background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fff7ed 100%);
+  color: var(--foreground);
+  font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 51, 102, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 51, 102, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.hero-wash {
+  background: linear-gradient(135deg, rgba(240, 249, 255, 0.9) 0%, rgba(245, 243, 255, 0.86) 45%, rgba(255, 247, 237, 0.86) 100%);
+  pointer-events: none;
+}
+
+.hero-pop {
+  opacity: 0;
+  animation: heroPop 0.9s ease-out forwards;
+}
+
+.hero-glow {
+  animation: heroGlow 6s ease-in-out infinite;
+}
+
+.bar-rise {
+  transform-origin: bottom;
+  animation: barRise 1s ease-out forwards;
+}
+
+.stat-pop {
+  animation: statPop 0.8s ease-out both;
+}
+
+.bar-fill {
+  animation: barFill 1s ease-out forwards;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.coral-btn {
+  background-color: var(--accent);
+  transition: all 0.3s ease;
+}
+
+.coral-btn:hover {
+  background-color: #ff686c;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(255, 127, 80, 0.3);
+}
+
+.input-glass {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 51, 102, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+.input-glass:focus {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--accent);
+  outline: none;
+}
+
+.check-icon {
+  color: #ff686c;
+}
+
+.x-icon {
+  color: #cbd5e1;
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(10px, -10px) scale(1.05);
+  }
+  66% {
+    transform: translate(-10px, 10px) scale(0.95);
+  }
+}
+
+.animate-blob {
+  animation: blob 12s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+@keyframes scroll-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes heroPop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes statPop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes barFill {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: var(--bar-width, 100%);
+  }
+}
+
+@keyframes heroGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes barRise {
+  0% {
+    transform: scaleY(0.2);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
