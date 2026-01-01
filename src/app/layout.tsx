@@ -9,9 +9,32 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Clarivue - The Intelligence Layer for Career Outcomes",
+  title: "Prep and Nail Interviews at Scale | Clarivue",
   description:
-    "Clarivue aligns institutions and individuals with AI-powered career outcomes and interview readiness.",
+    "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+  icons: {
+    icon: [
+      { url: "/clarivue-favicon/favicon.ico", sizes: "any" },
+      { url: "/clarivue-favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/clarivue-favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: "/clarivue-favicon/apple-touch-icon.png",
+  },
+  manifest: "/clarivue-favicon/site.webmanifest",
+  openGraph: {
+    title: "Prep and Nail Interviews at Scale | Clarivue",
+    description:
+      "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+    type: "website",
+    siteName: "Clarivue",
+    url: "https://clarivue.ai",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Prep and Nail Interviews at Scale | Clarivue",
+    description:
+      "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+  },
 };
 
 export default function RootLayout({

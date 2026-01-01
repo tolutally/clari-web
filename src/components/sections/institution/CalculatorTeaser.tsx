@@ -1,8 +1,11 @@
 "use client";
 
-import { Calculator, Users, DollarSign, ArrowRight } from "lucide-react";
+import { Calculator, Users, DollarSign, ArrowRight, Info } from "lucide-react";
+import { useState } from "react";
 
 export function CalculatorTeaser() {
+  const [showMethodology, setShowMethodology] = useState(false);
+
   return (
     <section className="relative max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-12">
       {/* Ambient Background Effects */}
@@ -110,11 +113,43 @@ export function CalculatorTeaser() {
                 <div className="relative z-10 flex flex-col h-full justify-between">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xs font-semibold text-[#003366]">Analysis</h3>
-                    <div className="flex gap-1.5">
-                      <div className="h-1.5 w-1.5 rounded-full bg-rose-500/60" />
-                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500/60" />
-                    </div>
+                    <button
+                      onClick={() => setShowMethodology(!showMethodology)}
+                      className="flex items-center gap-1 text-[10px] text-[#003366]/60 hover:text-[#003366] transition-colors group"
+                      title="Show methodology"
+                    >
+                      <Info className="h-3.5 w-3.5" strokeWidth={1.5} />
+                      <span className="hidden sm:inline">Methodology</span>
+                    </button>
                   </div>
+
+                  {/* Methodology Tooltip */}
+                  {showMethodology && (
+                    <div className="absolute top-8 right-0 w-72 bg-white border border-[#003366]/10 rounded-lg shadow-xl p-4 z-20 text-left">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="text-xs font-semibold text-[#003366]">Calculation Method</h4>
+                        <button
+                          onClick={() => setShowMethodology(false)}
+                          className="text-[#003366]/40 hover:text-[#003366] transition-colors"
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <div className="space-y-2 text-[11px] text-[#003366]/70 leading-relaxed">
+                        <p>
+                          <strong className="text-[#003366]">Risk/Loss:</strong> Estimated tuition revenue at risk from
+                          students who don't place (58% of cohort × avg. tuition × enrollment impact factor).
+                        </p>
+                        <p>
+                          <strong className="text-[#003366]">Recoverable:</strong> Potential revenue protected by
+                          improving placement rates through better interview readiness (estimated 15-20% improvement).
+                        </p>
+                        <p className="text-[10px] italic text-[#003366]/50 pt-2 border-t border-[#003366]/10">
+                          These are illustrative estimates. Use the full calculator for your program's specific metrics.
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Big Numbers */}
                   <div className="grid grid-cols-2 gap-3 mb-6">
@@ -179,7 +214,7 @@ export function CalculatorTeaser() {
 
         {/* CTA Button */}
         <a
-          href="#institutions-roi"
+          href="/roicalculator"
           className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5 href ='/roicalculator'"
         >
           <span>Calculate your ROI</span> 

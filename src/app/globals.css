@@ -12,6 +12,11 @@
   --font-sans: var(--font-jakarta);
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
 body {
   background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fff7ed 100%);
   color: var(--foreground);

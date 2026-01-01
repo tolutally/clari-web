@@ -444,7 +444,7 @@ export function InstitutionView() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff686c]" />
             </span>
             <span className="text-xs font-semibold text-[#003366] uppercase tracking-[0.12em]">
-             Mock interview infrastructure
+             BUILT FOR CAREER SERVICES
             </span>
           </div>
 
@@ -673,8 +673,11 @@ export function InstitutionView() {
               <div className="space-y-3">
                 {/* Interview ready */}
                 <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10">
-                  <div className="flex items-center justify-between text-xs text-[#003366]/60">
-                    <span className="font-semibold text-[#003366]">Interview-ready</span>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-[#003366]">Interview-ready</span>
+                      <span className="text-[10px] text-[#003366]/50">Cohort A • Last 30 days</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <span ref={readyPct} className="font-semibold text-[#003366]">
                         0%
@@ -696,8 +699,11 @@ export function InstitutionView() {
 
                 {/* Needs coaching */}
                 <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10">
-                  <div className="flex items-center justify-between text-xs text-[#003366]/60">
-                    <span className="font-semibold text-[#003366]">Needs coaching</span>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-[#003366]">Needs coaching</span>
+                      <span className="text-[10px] text-[#003366]/50">Cohort A • Last 30 days</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <span ref={coachingPct} className="font-semibold text-[#003366]">
                         0%

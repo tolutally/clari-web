@@ -60,6 +60,7 @@ export default function Home() {
             }`}
           >
             For Job Seekers
+            <span className="ml-1.5 text-[10px] font-bold text-[#ff686c] bg-[#ff686c]/10 px-1.5 py-0.5 rounded-full uppercase">Soon</span>
           </button>
           </div>
         </div>
@@ -97,10 +98,10 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold text-[#ff686c]">For Job Seekers</p>
-                <h3 className="text-xl font-semibold text-[#003366]">We’re polishing the individual experience</h3>
+                <p className="text-xs font-semibold text-[#ff686c]">Coming Soon for Job Seekers</p>
+                <h3 className="text-xl font-semibold text-[#003366]">We're building the individual experience</h3>
                 <p className="text-sm text-[#003366]/70 mt-1">
-                  Want early access to the beta and free practice sessions? Drop your work email below and we’ll invite you soon.
+                  Right now, Clarivue is focused on helping institutions scale interview prep. But we're also building something for individual job seekers — want early access? Drop your email and we'll invite you to the beta.
                 </p>
               </div>
             </div>
