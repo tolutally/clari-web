@@ -11,10 +11,11 @@ export function StatsConfidence() {
 
         <div className="text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
-           Help your grads nail the interview (and the job offer)
+           Help your grads ace interviews and land offers
           </h2>
           <p className="mt-4 text-sm sm:text-base text-[#003366]/70">
-           Clarivue’s intuitive platform expands your reach, captures measurable results, and ensures every student gets personalized, effective career preparation. With adaptable tools and built-in AI-powered guidance, it meets students exactly where they are, making your work simpler and their success easier.
+           Clarivue gives every learner meaningful practice, real feedback, 
+           and measurable readiness so you can lift placement outcomes without lifting advisor workload.
           </p>
         </div>
 
@@ -31,8 +32,7 @@ export function StatsConfidence() {
               <p className="mt-1 text-sm sm:text-base text-[#003366]/80">minutes analyzed</p>
             </div>
             <p className="mt-5 text-xs sm:text-sm max-w-md text-[#003366]/80">
-              Clarivue turns interview preparation into measurable evidence.
-On average, individuals who actively prepare with Huru.ai are 3 times more likely to receive a job offer. We provide the tools that translate preparation into tangible career outcomes.
+             Students get real interview experience, structured practice, and clear guidance to improve with every attempt.
             </p>
           </article>
 
@@ -49,7 +49,7 @@ On average, individuals who actively prepare with Huru.ai are 3 times more likel
               <p className="mt-1 text-sm sm:text-base text-[#003366]/70">Lift in placement outcomes within 90 days</p>
             </div>
             <p className="mt-5 text-xs sm:text-sm max-w-xs text-[#003366]/70">
-              Let’s face it: most career prep feels like homework. Clarivue is different. Programs using Clarivue improve interview conversion by identifying readiness gaps earlier, standardizing scoring, and focusing coaching where it actually moves the needle.
+               Programs using Clarivue see stronger interview performance, higher confidence, and faster hiring decisions.
             </p>
           </article>
 
@@ -66,7 +66,7 @@ On average, individuals who actively prepare with Huru.ai are 3 times more likel
               <p className="mt-1 text-sm sm:text-base text-[#003366]/70">Alumni support window</p>
             </div>
             <p className="mt-5 text-xs sm:text-sm max-w-xs text-[#003366]/70">
-              Graduates continues to get access to interview practice, AI coaching and improvement tracking, long after graduation, extending post-graduation support without increasing advisor headcount or operational cost.
+              Graduates continue building interview skills and tracking progress long after they leave, without adding pressure to your advising team.
             </p>
           </article>
         </div>

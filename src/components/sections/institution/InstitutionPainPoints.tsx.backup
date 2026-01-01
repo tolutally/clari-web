@@ -70,53 +70,35 @@ export default function InstitutionPainPoints() {
 
       {/* Arc layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
-        {painPoints.map((item, i) => {
-          const Icon = icons[i];
-          return (
-            <div
-              key={item.label}
-              className={[
-                "group relative rounded-2xl p-6 z-10",
-                "transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]",
-                "shadow-lg hover:shadow-2xl",
-                offsets[i] ?? "",
-              ].join(" ")}
-            >
-              {/* Background with gradient */}
-              <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.color} opacity-50 group-hover:opacity-70 transition-opacity`} />
-              
-              {/* White backdrop */}
-              <div className="absolute inset-0 rounded-2xl bg-white/95 backdrop-blur-sm" />
-              
-              {/* Border glow effect */}
-              <div className={`absolute inset-0 rounded-2xl border ${item.borderColor} group-hover:border-opacity-100 transition-all`} />
-              
-              {/* Subtle shadow at bottom */}
-              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 h-24 w-48 rounded-full bg-black/5 blur-xl group-hover:bg-black/8 transition-all" />
+        {painPoints.map((item, i) => (
+          <div
+            key={item.label}
+            className={[
+              "group relative rounded-[28px] p-5 sm:p-6 z-10",
+              "transition-all duration-300 hover:-translate-y-1 shadow-[0_22px_60px_-30px_rgba(0,0,0,0.2)] hover:shadow-[0_26px_70px_-30px_rgba(0,0,0,0.3)]",
+              offsets[i] ?? "",
+            ].join(" ")}
+          >
+            <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-white/30 backdrop-blur-xl" />
+            <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-gradient-to-br from-white/20 via-white/10 to-white/5" />
+            <div className="pointer-events-none absolute -inset-px rounded-[28px] ring-1 ring-white/40" />
+            <div className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 h-32 w-64 rounded-full bg-black/5 blur-2xl" />
 
-              {/* Content */}
-              <div className="relative">
-                {/* Icon and Label */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.iconBg} shadow-sm group-hover:shadow-md transition-all`}>
-                    {Icon && <Icon className={`h-5 w-5 ${item.iconColor}`} strokeWidth={1.5} />}
-                  </div>
-                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#003366]/60">
-                    {item.label}
-                  </span>
-                </div>
-
-                {/* Quote */}
-                <p className="text-sm leading-relaxed text-[#003366] font-medium">
-                  "{item.quote}"
-                </p>
-                
-                {/* Decorative accent line */}
-                <div className={`mt-4 h-1 w-12 rounded-full bg-gradient-to-r ${item.color} opacity-60`} />
-              </div>
+            <div className="relative flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-[#6b7280]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f3f4f6] text-[#9ca3af] text-sm shadow-inner">
+                {(() => {
+                  const Icon = icons[i];
+                  return Icon ? <Icon className="h-4 w-4 text-[#6b7280]" /> : <span className="h-1.5 w-1.5 rounded-full bg-[#9ca3af]" />;
+                })()}
+              </span>
+              <span>{item.label}</span>
             </div>
-          );
-        })}
+
+            <p className="relative mt-3 text-sm leading-relaxed text-[#111827]">
+              “{item.quote}”
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

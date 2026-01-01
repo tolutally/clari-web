@@ -12,18 +12,18 @@ type Step = {
 const steps: Step[] = [
   {
     step: "step 1",
-    title: "Practice against real job descriptions",
-    body: "Learners prepare using live job descriptions and realistic interview formats - phone screens, panels, 1:1, and culture fit.",
+    title: "Practice using real job descriptions",
+    body: "Learners prepare with live job descriptions and realistic interview formats so practice actually matches hiring expectations.",
   },
   {
     step: "step 2",
-    title: "Get actionable feedback instantly",
-    body: "Every response comes with clear, usable tips learners can apply immediately—no waiting for advisor availability.",
+    title: "Instant, actionable feedback",
+    body: "Every response receives clear guidance learners can use right away. No waiting. No bottlenecks. Faster improvement.",
   },
   {
     step: "step 3",
     title: "You stay in the loop",
-    body: "Review responses, add your feedback, focus 1:1 time on learners who need it most and and confidently recommend candidates to partner employers.",
+    body: "See responses, add advisor input when it matters most, and confidently recommend candidates to employers with evidence to back it up.",
   },
 ];
 
@@ -71,8 +71,8 @@ export default function HowItWorksInstitutions() {
           </h2>
 
           <p className="mt-3 sm:text-lg text-[#003366]/70 max-w-4xl mx-auto leading-relaxed">
-            Clarivue gives career educators one easy-to-use platform to reach more learners and support them at every level.
-            We provide interview prep that meets students where they are, and makes your job easier.
+            One platform to help every learner practice, improve, and prove readiness 
+            while your team stays focused on what matters most.
           </p>
         </div>
 

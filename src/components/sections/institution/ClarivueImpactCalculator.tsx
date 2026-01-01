@@ -660,8 +660,6 @@ export default function ClarivueImpactCalculator() {
               </svg>
             </button>
           </div>
-
-          <p className="mt-3 text-xs text-black/50 text-center">UI-only prototype • wire real logic + data later</p>
         </div>
       </div>
     </section>
