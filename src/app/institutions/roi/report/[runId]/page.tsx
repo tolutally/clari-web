@@ -6,6 +6,7 @@ interface ScenarioBreakdown {
   revenueImpact: number;
   costSavings: number;
   advisorHoursSaved: number;
+  addedSessionsCost: number;
   addedReadyLearners: number;
   addedOffers: number;
   newTimeToOfferWeeks: number | null;
@@ -13,6 +14,10 @@ interface ScenarioBreakdown {
 
 interface RoiResult {
   summary: ScenarioBreakdown;
+  enrollment?: {
+    atRisk: number;
+    uplift: number;
+  };
   baseline: {
     readyLearners: number;
     offers: number;
@@ -145,8 +150,8 @@ const run: RoiRunRow = data.run;
   const offersDelta = summary.addedOffers;
   const econRevenuePerPlacement = Number(result?.assumptions?.economics?.revenuePerPlacement ?? 0);
   const view = sp.view === "before" ? "before" : "after";
-  const enrollmentAtRisk = Number(result?.enrollment?.atRisk ?? 0);
-  const enrollmentUplift = Number(result?.enrollment?.uplift ?? 0);
+  const enrollmentAtRisk = Number(result.enrollment?.atRisk ?? 0);
+  const enrollmentUplift = Number(result.enrollment?.uplift ?? 0);
 
   const readyGap = Math.max(0, cohortSize - Number(baseline.readyLearners ?? 0));
   const offerGap = Math.max(0, cohortSize - Number(baseline.offers ?? 0));

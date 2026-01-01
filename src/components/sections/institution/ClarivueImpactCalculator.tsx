@@ -454,7 +454,7 @@ export default function ClarivueImpactCalculator() {
                             label="Advisor capacity unlocked"
                             value={formatInt(roiResult.summary.advisorHoursSaved)}
                             sub="Time back to coaching"
-                            accent="indigo"
+                            accent="violet"
                           />
                         </>
                       )}
