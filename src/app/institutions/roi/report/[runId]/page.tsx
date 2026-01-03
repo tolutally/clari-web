@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, TrendingUp, Users, Clock, DollarSign, AlertTriangle, CheckCircle2, ChevronDown } from "lucide-react";
+import { getRun } from "@/lib/institution-roi/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -53,33 +54,22 @@ const fmtNumber = (v: number) => Number(v ?? 0).toLocaleString();
 const fmtPct = (v: number) => `${Number(v ?? 0).toFixed(0)}%`;
 const fmtDateTime = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—");
 
-async function fetchReport(runId: string) {
-  const baseUrl = process.env.APP_BASE_URL 
-    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
-    || "https://www.clarivue.io";
-  
-  try {
-    const res = await fetch(`${baseUrl}/api/institutions/roi/report/${runId}`, { cache: "no-store" });
-    if (!res.ok) {
-      console.error(`[ROI Report] Fetch failed: ${res.status} ${res.statusText}`);
-      return null;
-    }
-    return res.json();
-  } catch (err) {
-    console.error("[ROI Report] Fetch error:", err);
-    return null;
-  }
-}
-
 export default async function RoiReportPage({
   params,
 }: {
   params: Promise<{ runId: string }>;
 }) {
   const { runId } = await params;
-  const data = await fetchReport(runId);
+  
+  // Fetch directly from database (avoids HTTP fetch issues with Vercel deployment protection)
+  let run: RoiRunRow | null = null;
+  try {
+    run = await getRun(runId) as RoiRunRow | null;
+  } catch (err) {
+    console.error("[ROI Report] Database error:", err);
+  }
 
-  if (!data || data.error) {
+  if (!run) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-[#003366] via-[#004080] to-[#003366]">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
@@ -96,7 +86,7 @@ export default async function RoiReportPage({
     );
   }
 
-  if (!data.gatePassed) {
+  if (!run.gate_passed) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-[#003366] via-[#004080] to-[#003366]">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
@@ -115,7 +105,6 @@ export default async function RoiReportPage({
   }
 
   // Extract data
-  const run: RoiRunRow = data.run;
   const { result, request } = run;
   const { summary, baseline, sensitivity, timeline } = result;
   const assumptions = result.assumptions ?? {};
