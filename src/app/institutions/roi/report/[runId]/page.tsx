@@ -55,10 +55,20 @@ const fmtDateTime = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("e
 
 async function fetchReport(runId: string) {
   const baseUrl = process.env.APP_BASE_URL 
-    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
-  const res = await fetch(`${baseUrl}/api/institutions/roi/report/${runId}`, { cache: "no-store" });
-  if (!res.ok) return null;
-  return res.json();
+    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+    || "https://www.clarivue.io";
+  
+  try {
+    const res = await fetch(`${baseUrl}/api/institutions/roi/report/${runId}`, { cache: "no-store" });
+    if (!res.ok) {
+      console.error(`[ROI Report] Fetch failed: ${res.status} ${res.statusText}`);
+      return null;
+    }
+    return res.json();
+  } catch (err) {
+    console.error("[ROI Report] Fetch error:", err);
+    return null;
+  }
 }
 
 export default async function RoiReportPage({
