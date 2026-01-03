@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getRun } from "@/lib/institution-roi/storage";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ runId: string }> }) {
+  console.log("[ROI Report API] ENV check - SUPABASE_URL exists:", !!process.env.SUPABASE_URL);
+  console.log("[ROI Report API] ENV check - SUPABASE_SERVICE_ROLE_KEY exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY);
+  
   try {
     const { runId } = await ctx.params;
     console.log("[ROI Report API] Fetching runId:", runId);
