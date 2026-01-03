@@ -50,7 +50,8 @@ const fmtNumber = (v: number) => Number(v ?? 0).toLocaleString();
 const fmtDateTime = (iso?: string) => (iso ? new Date(iso).toLocaleString() : "—");
 
 async function fetchReport(runId: string) {
-  const baseUrl = process.env.APP_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.APP_BASE_URL 
+    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
   const res = await fetch(`${baseUrl}/api/institutions/roi/report/${runId}`, { cache: "no-store" });
   if (!res.ok) return null;
   return res.json();

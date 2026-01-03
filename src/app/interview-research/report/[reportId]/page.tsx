@@ -40,7 +40,8 @@ function SectionCard({ title, bullets }: { title: string; bullets: string[] }) {
 
 export default async function ReportPage({ params }: { params: Promise<{ reportId: string }> }) {
   const { reportId } = await params;
-  const baseUrl = process.env.APP_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.APP_BASE_URL 
+    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
   const res = await fetch(`${baseUrl}/api/interview-research/status/${reportId}`, { cache: "no-store" });
 
   if (!res.ok) {
