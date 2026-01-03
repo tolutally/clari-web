@@ -1,5 +1,7 @@
 import React from "react";
 
+export const dynamic = "force-dynamic";
+
 // Types matching backend response
 interface ScenarioBreakdown {
   totalValueImpact: number;

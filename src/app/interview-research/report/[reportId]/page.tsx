@@ -1,5 +1,7 @@
 import { ReportFullJson } from "@/lib/interview-research/types";
 
+export const dynamic = "force-dynamic";
+
 type StatusResponse = {
   report: {
     id: string;
