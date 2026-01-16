@@ -30,13 +30,13 @@ export function Footer() {
             priority
           />
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/60">
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/terms" className="hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link href="/contact" className="hover:text-white transition-colors">
               Contact Us
             </Link>
           </div>

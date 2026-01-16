@@ -1,4 +1,60 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+function useCountUp(end: number, duration: number = 2000, startOnView: boolean = true) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!startOnView) {
+      setHasStarted(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [hasStarted, startOnView]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+
+    let startTime: number | null = null;
+    let animationFrame: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      // Easing function for smooth deceleration
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(easeOut * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [hasStarted, end, duration]);
+
+  return { count, ref };
+}
+
 export function StatsConfidence() {
+  const { count: minutesCount, ref: minutesRef } = useCountUp(120, 2000);
+
   return (
     <section id="institutions-stats" className="w-full text-[#003366]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -21,13 +77,16 @@ export function StatsConfidence() {
 
         <div className="grid gap-5 lg:gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
           {/* Stat 1 */}
-          <article className="rounded-3xl px-6 py-7 sm:px-8 sm:py-9 shadow-sm border border-[#b8ccf4]/50 flex flex-col justify-between bg-[#b8ccf4] text-[#003366]">
+          <article 
+            ref={minutesRef as React.RefObject<HTMLElement>}
+            className="rounded-3xl px-6 py-7 sm:px-8 sm:py-9 shadow-sm border border-[#b8ccf4]/50 flex flex-col justify-between bg-[#b8ccf4] text-[#003366]"
+          >
             <div>
               <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase mb-3 text-[#c7535a]">
                 MOCK INTERVIEWS
               </p>
               <p className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-[#003366]">
-                120K+
+                {minutesCount}K+
               </p>
               <p className="mt-1 text-sm sm:text-base text-[#003366]/80">minutes analyzed</p>
             </div>

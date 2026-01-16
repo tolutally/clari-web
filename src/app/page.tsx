@@ -29,44 +29,37 @@ export default function Home() {
       <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
         <div className="bg-white/80 backdrop-blur-md">
           <Header />
-        </div>
-        <div className="w-full flex justify-center pb-3 px-4 pointer-events-none">
-          <div className="glass-panel p-1.5 rounded-full flex items-center relative shadow-lg ring-1 ring-[#003366]/5 backdrop-blur-xl bg-white/85 pointer-events-auto">
-            <div
-              className="absolute left-1.5 top-1.5 h-[calc(100%-12px)] w-1/2 bg-white rounded-full shadow-sm transition-transform duration-300 ease-out z-0"
-              style={{ transform: tabTransform }}
-            />
-            <button
-            type="button"
-            onClick={() => setView("institutions")}
-            className={`relative z-10 px-8 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${
-              view === "institutions"
-                ? "text-[#003366]"
-                : "text-[#003366]/60 hover:text-[#003366]"
-            }`}
-          >
-            For Institutions
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setShowIndividualModal(true);
-              setBetaStatus("idle");
-            }}
-            className={`relative z-10 px-8 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${
-              view === "jobseekers"
-                ? "text-[#003366]"
-                : "text-[#003366]/60 hover:text-[#003366]"
-            }`}
-          >
-            For Job Seekers
-            <span className="ml-1.5 text-[10px] font-bold text-[#ff686c] bg-[#ff686c]/10 px-1.5 py-0.5 rounded-full uppercase">Soon</span>
-          </button>
+          {/* Tab toggle integrated below header */}
+          <div className="w-full flex justify-center pb-4 px-4 pointer-events-auto -mt-1">
+            <div className="glass-panel p-0.5 rounded-full flex items-center gap-0.5 shadow-lg ring-1 ring-[#003366]/5 backdrop-blur-xl bg-white/90">
+              <button
+                type="button"
+                onClick={() => setView("institutions")}
+                className={`px-4 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${
+                  view === "institutions"
+                    ? "text-[#003366] bg-white shadow-sm"
+                    : "text-[#003366]/60 hover:text-[#003366]"
+                }`}
+              >
+                For Institutions
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowIndividualModal(true);
+                  setBetaStatus("idle");
+                }}
+                className="px-4 py-1 rounded-full text-xs font-semibold transition-all duration-300 text-[#003366]/60 hover:text-[#003366]"
+              >
+                For Job Seekers
+                <span className="ml-1 text-[9px] font-bold text-[#ff686c] bg-[#ff686c]/10 px-1 py-0.5 rounded-full uppercase">Soon</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-32 pt-28">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-32 pt-32">
         {view === "institutions" ? <InstitutionView /> : <IndividualView />}
       </main>
 

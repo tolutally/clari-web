@@ -104,9 +104,15 @@ export default function ClarivueImpactCalculator() {
     () => [
       { label: "25", value: 25 },
       { label: "50", value: 50 },
+      { label: "75", value: 75 },
       { label: "100", value: 100 },
+      { label: "150", value: 150 },
+      { label: "200", value: 200 },
       { label: "250", value: 250 },
+      { label: "300", value: 300 },
+      { label: "400", value: 400 },
       { label: "500", value: 500 },
+      { label: "750", value: 750 },
       { label: "1000+", value: 1000 },
     ],
     [],
@@ -114,10 +120,23 @@ export default function ClarivueImpactCalculator() {
 
   const placementOptions = useMemo<SliderOption[]>(
     () => [
+      { label: "Not tracking", value: 0 },
+      { label: "10%", value: 10 },
+      { label: "15%", value: 15 },
+      { label: "20%", value: 20 },
+      { label: "25%", value: 25 },
       { label: "30%", value: 30 },
+      { label: "35%", value: 35 },
+      { label: "40%", value: 40 },
       { label: "45%", value: 45 },
+      { label: "50%", value: 50 },
+      { label: "55%", value: 55 },
       { label: "60%", value: 60 },
+      { label: "65%", value: 65 },
+      { label: "70%", value: 70 },
       { label: "75%", value: 75 },
+      { label: "80%", value: 80 },
+      { label: "85%", value: 85 },
       { label: "90%", value: 90 },
       { label: "95%", value: 95 },
     ],
@@ -341,7 +360,7 @@ export default function ClarivueImpactCalculator() {
                   id="placementRate"
                   value={placementRate}
                   options={placementOptions}
-                  badgeFormatter={(v) => `${v}%`}
+                  badgeFormatter={(v) => v === 0 ? "Not tracking" : `${v}%`}
                   icon="target"
                   onChange={setPlacementRate}
                 />
@@ -396,72 +415,67 @@ export default function ClarivueImpactCalculator() {
 
                 {showResults && !isCalculating && roiResult && (
                   <div className="mt-4 border rounded-2xl border-black/10 p-5 bg-black/[0.02]">
-                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-semibold text-[#003366]">Preview (conservative)</p>
-                        <p className="text-xs text-[#003366]/60 mt-1">
-                          Outcomes, support load, enrollment revenue, and ROI signals from your inputs.
-                        </p>
-                      </div>
+                    <div className="mb-5">
+                      <p className="text-sm font-semibold text-[#003366]">Preview (conservative)</p>
+                      <p className="text-xs text-[#003366]/60 mt-1">
+                        Outcomes, support load, enrollment revenue, and ROI signals from your inputs.
+                      </p>
+                    </div>
 
-                      {/* BEFORE / AFTER TOGGLE */}
-                      <div className="inline-flex rounded-full border border-black/10 bg-white p-1">
-                        {(["before", "after"] as const).map((k) => {
-                          const active = view === k;
-                          return (
-                            <button
-                              key={k}
-                              type="button"
-                              onClick={() => setView(k)}
-                              className={classNames(
-                                "px-3 py-1.5 text-xs font-semibold rounded-full transition-all",
-                                active ? "bg-[#003366] text-white" : "text-[#003366]/70 hover:text-[#003366]",
-                              )}
-                            >
-                              {k === "before" ? "Before Clarivue" : "With Clarivue"}
-                            </button>
-                          );
-                        })}
+                    {/* BEFORE CLARIVUE */}
+                    <div className="mb-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="h-2 w-2 rounded-full bg-[#003366]/40" />
+                        <p className="text-xs font-semibold text-[#003366]/70 uppercase tracking-wider">Before Clarivue</p>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <BigResultCard
+                          label="Ready learners"
+                          value={formatInt(roiResult.baseline.readyLearners)}
+                          sub="Current state"
+                          accent="slate"
+                        />
+                        <BigResultCard
+                          label="Offers"
+                          value={formatInt(roiResult.baseline.offers)}
+                          sub="Current state"
+                          accent="slate"
+                        />
                       </div>
                     </div>
 
-                    {/* SAME 2 CARDS — VALUES SWAP */}
-                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {view === "before" ? (
-                        <>
-                          <BigResultCard
-                            label="Ready learners"
-                            value={formatInt(roiResult.baseline.readyLearners)}
-                            sub="Current state"
-                            accent="violet"
-                          />
-                          <BigResultCard
-                            label="Offers"
-                            value={formatInt(roiResult.baseline.offers)}
-                            sub="Current state"
-                            accent="blue"
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <BigResultCard
-                            label="Total value impact"
-                            value={`$${formatInt(roiResult.summary.totalValueImpact)}`}
-                            sub="Revenue + cost savings"
-                            accent="emerald"
-                          />
-                          <BigResultCard
-                            label="Advisor capacity unlocked"
-                            value={formatInt(roiResult.summary.advisorHoursSaved)}
-                            sub="Time back to coaching"
-                            accent="violet"
-                          />
-                        </>
-                      )}
+                    {/* DIVIDER WITH ARROW */}
+                    <div className="flex items-center gap-3 my-4">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#003366]/20 to-transparent" />
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-600">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                      </div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#003366]/20 to-transparent" />
                     </div>
 
-                    {view === "after" && (
-                      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* WITH CLARIVUE */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">With Clarivue</p>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <BigResultCard
+                          label="Total value impact"
+                          value={`$${formatInt(roiResult.summary.totalValueImpact)}`}
+                          sub="Revenue + cost savings"
+                          accent="emerald"
+                        />
+                        <BigResultCard
+                          label="Advisor capacity unlocked"
+                          value={formatInt(roiResult.summary.advisorHoursSaved)}
+                          sub="Hours back to coaching"
+                          accent="violet"
+                        />
+                      </div>
+                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <BigResultCard
                           label="Enrollment revenue at risk"
                           value={`$${formatInt(
@@ -481,14 +495,14 @@ export default function ClarivueImpactCalculator() {
                           accent="emerald"
                         />
                       </div>
-                    )}
+                    </div>
 
-                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <MiniStat label="Learners/year" value={formatInt(learnersPerYear)} />
                       <MiniStat label="Funding model" value={fundingModel} />
                       <MiniStat
                         label="Placement (est.)"
-                        value={`${placementRate}% (baseline)`}
+                        value={placementRate === 0 ? "Not tracking" : `${placementRate}% (baseline)`}
                       />
                     </div>
 
@@ -677,9 +691,18 @@ function StepSlider(props: {
   badgeFormatter?: (v: number) => string;
   icon?: "users" | "target";
   onChange: (v: number) => void;
+  min?: number;
+  max?: number;
+  allowCustomInput?: boolean;
 }) {
-  const { value, options, onChange, badgeFormatter, icon } = props;
+  const { value, options, onChange, badgeFormatter, icon, min, max, allowCustomInput = true } = props;
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const [inputValue, setInputValue] = useState(String(value));
+
+  // Sync input when value changes externally
+  useEffect(() => {
+    setInputValue(String(value));
+  }, [value]);
 
   const index = useMemo(() => {
     const i = options.findIndex((o) => o.value === value);
@@ -730,6 +753,46 @@ function StepSlider(props: {
   }, [dragging, setFromClientX]);
 
   const badgeText = badgeFormatter ? badgeFormatter(value) : String(value);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const parsed = parseInt(inputValue, 10);
+    if (!isNaN(parsed)) {
+      const minVal = min ?? options[0].value;
+      const maxVal = max ?? options[options.length - 1].value;
+      const clamped = clamp(parsed, minVal, maxVal);
+      // Find nearest option
+      const nearest = options.reduce((prev, curr) =>
+        Math.abs(curr.value - clamped) < Math.abs(prev.value - clamped) ? curr : prev
+      );
+      onChange(nearest.value);
+      setInputValue(String(nearest.value));
+    } else {
+      setInputValue(String(value));
+    }
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleInputBlur();
+    }
+  };
+
+  // Display labels: show fewer labels on the slider track
+  const displayLabels = useMemo(() => {
+    if (options.length <= 6) return options;
+    // Show first, last, and evenly spaced labels
+    const step = Math.ceil(options.length / 5);
+    const labels: SliderOption[] = [options[0]];
+    for (let i = step; i < options.length - 1; i += step) {
+      labels.push(options[i]);
+    }
+    labels.push(options[options.length - 1]);
+    return labels;
+  }, [options]);
 
   return (
     <div className="pb-10">
@@ -788,7 +851,7 @@ function StepSlider(props: {
       </div>
 
       <div className="mt-3 flex justify-between text-xs text-black/50">
-        {options.slice(0, 5).map((o) => (
+        {displayLabels.slice(0, 5).map((o) => (
           <button
             key={o.label}
             type="button"
@@ -798,16 +861,35 @@ function StepSlider(props: {
             {o.label}
           </button>
         ))}
-        {options.length > 5 && (
+        {displayLabels.length > 5 && (
           <button
             type="button"
-            onClick={() => onChange(options[options.length - 1].value)}
+            onClick={() => onChange(displayLabels[displayLabels.length - 1].value)}
             className="transition-colors duration-300 hover:text-black/80"
           >
-            {options[options.length - 1].label}
+            {displayLabels[displayLabels.length - 1].label}
           </button>
         )}
       </div>
+
+      {/* Custom input box */}
+      {allowCustomInput && (
+        <div className="mt-4 flex items-center gap-2">
+          <label htmlFor={`${props.id}-input`} className="text-xs text-[#003366]/60">Or enter a value:</label>
+          <input
+            id={`${props.id}-input`}
+            type="number"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            placeholder="Enter value"
+            className="w-24 rounded-xl border border-black/10 px-3 py-1.5 text-sm text-center outline-none focus:ring-2 focus:ring-violet-300 bg-white"
+            min={min ?? options[0].value}
+            max={max ?? options[options.length - 1].value}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -890,7 +972,7 @@ function SelectCard(props: {
   );
 }
 
-function BigResultCard(props: { label: string; value: string; sub: string; accent?: "violet" | "blue" | "emerald" | "amber" }) {
+function BigResultCard(props: { label: string; value: string; sub: string; accent?: "violet" | "blue" | "emerald" | "amber" | "slate" }) {
   const { label, value, sub, accent } = props;
   const accentClass =
     accent === "blue"
@@ -899,7 +981,9 @@ function BigResultCard(props: { label: string; value: string; sub: string; accen
         ? "bg-emerald-500/10 border-emerald-500/25"
         : accent === "amber"
           ? "bg-amber-400/15 border-amber-400/25"
-          : "bg-violet-400/15 border-violet-400/25";
+          : accent === "slate"
+            ? "bg-slate-100 border-slate-200"
+            : "bg-violet-400/15 border-violet-400/25";
 
   return (
     <div className={classNames("border rounded-2xl p-4", accentClass)}>

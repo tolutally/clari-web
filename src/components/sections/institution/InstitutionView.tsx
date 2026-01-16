@@ -468,7 +468,7 @@ export function InstitutionView() {
               Book an institution demo
             </a>
             <a
-              href="#institutions-roi"
+              href="/roicalculator"
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#ff686c] hover:bg-[#ff5b5f] text-white font-semibold py-3.5 px-8 rounded-full shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5"
             >
               See the ROI impact
@@ -1038,6 +1038,7 @@ export function InstitutionView() {
         </div>
       </section>
 
+      {/* READINESS COMMUNITY section - disabled
       <section
         id="institutions-community"
         className="relative max-w-7xl mx-auto px-6 md:px-10 pt-10 md:pt-12 pb-6 md:pb-10"
@@ -1119,7 +1120,7 @@ export function InstitutionView() {
           </div>
         </div>
 
-        <style jsx global>{`
+        <style jsx global>{\`
           @keyframes marquee-vertical {
             0% {
               transform: translateY(0);
@@ -1128,8 +1129,9 @@ export function InstitutionView() {
               transform: translateY(-50%);
             }
           }
-        `}</style>
+        \`}</style>
       </section>
+      */}
     </div>
   );
 }
