@@ -17,9 +17,9 @@ import {
 type ViewType = "institutions" | "jobseekers";
 
 interface HeaderProps {
-  currentView: ViewType;
-  onSwitchView: (view: ViewType) => void;
-  onJobSeekerClick: () => void;
+  currentView?: ViewType;
+  onSwitchView?: (view: ViewType) => void;
+  onJobSeekerClick?: () => void;
 }
 
 const institutionLinks = [
@@ -38,7 +38,11 @@ const jobseekerLinks = [
   { href: "/blog", icon: PenLine, label: "Blog" },
 ];
 
-export function Header({ currentView, onSwitchView, onJobSeekerClick }: HeaderProps) {
+export function Header({
+  currentView = "institutions",
+  onSwitchView,
+  onJobSeekerClick,
+}: HeaderProps) {
   const links = currentView === "institutions" ? institutionLinks : jobseekerLinks;
 
   return (
@@ -74,7 +78,7 @@ export function Header({ currentView, onSwitchView, onJobSeekerClick }: HeaderPr
           <div className="hidden sm:flex items-center p-0.5 rounded-full bg-[#003366]/[0.04] border border-[#003366]/8">
             <button
               type="button"
-              onClick={() => onSwitchView("institutions")}
+              onClick={() => onSwitchView?.("institutions")}
               className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all duration-200 ${
                 currentView === "institutions"
                   ? "bg-white text-[#003366] shadow-sm"
@@ -85,7 +89,7 @@ export function Header({ currentView, onSwitchView, onJobSeekerClick }: HeaderPr
             </button>
             <button
               type="button"
-              onClick={onJobSeekerClick}
+              onClick={() => onJobSeekerClick?.()}
               className="px-3 py-1 rounded-full text-[11px] font-semibold text-[#003366]/50 hover:text-[#003366] transition-all duration-200"
             >
               For Job Seekers
