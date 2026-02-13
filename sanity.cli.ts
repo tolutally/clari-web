@@ -6,4 +6,7 @@ export default defineCliConfig({
     dataset: 'production',
   },
   studioHost: 'clarivue-cms',
+  deployment: {
+    appId: 'ecvubye8le7ilb7nclwptm1z',
+  },
 });
