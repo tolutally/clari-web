@@ -9,10 +9,12 @@ export async function insertRun({
   request,
   result,
   narrative,
+  result_version = 2,
 }: {
   request: RoiRequest;
   result: RoiResult;
   narrative?: string;
+  result_version?: number;
 }): Promise<{ id: string }> {
   const { data, error } = await supabaseAdmin
     .from(tableRuns)
@@ -21,6 +23,7 @@ export async function insertRun({
       result,
       narrative: narrative ?? null,
       gate_passed: false,
+      result_version,
     })
     .select("id")
     .single();
@@ -32,12 +35,16 @@ export async function insertRun({
 export async function getRun(runId: string): Promise<RoiRunRow | null> {
   const { data, error } = await supabaseAdmin
     .from(tableRuns)
-    .select("id,request,result,narrative,gate_passed,created_at,updated_at")
+    .select("id,request,result,narrative,gate_passed,result_version,created_at,updated_at")
     .eq("id", runId)
     .maybeSingle();
 
   if (error) throw new Error(error.message);
-  return data as RoiRunRow | null;
+  if (!data) return null;
+  return {
+    ...data,
+    result_version: data.result_version ?? 1, // legacy rows default to v1
+  } as RoiRunRow;
 }
 
 export async function setGatePassed(runId: string) {

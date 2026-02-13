@@ -5,28 +5,41 @@ export type ProgramContext = {
   programType: ProgramType;
   cohortSize: number;
   advisorCount?: number;
-  avgAdvisorHourlyCost?: number;
+  avgAdvisorHourlyCost?: number; // default 60
   avgSessionDurationHours?: number;
   sessionsPerLearnerWeekly?: number;
   location?: string;
 };
 
+/** Optional reference fields — kept for backward compat and guided defaults */
 export type BaselinePerformance = {
-  readinessRatePct: number; // 0-100
-  offerRatePct: number; // 0-100
+  readinessRatePct?: number; // 0-100, optional reference
+  offerRatePct?: number; // 0-100, optional — used as placementRateProxy if provided
   avgTimeToReadyWeeks?: number;
   avgTimeToOfferWeeks?: number;
   mockInterviewsPerLearner?: number;
   sessionsPerLearner?: number;
 };
 
-export type UpliftAssumptions = {
-  mockInterviewUpliftPct?: number; // percent increase
-  readinessUpliftPctPoints?: number; // percentage points
-  offerRateUpliftPctPoints?: number; // percentage points
-  advisorTimeSavingsPct?: number; // percent reduction
-  retentionImprovementPct?: number;
-  timeToOfferImprovementWeeks?: number;
+/** Status-quo leak inputs — the "readiness debt" observed today */
+export type LeakInputs = {
+  employerInterviewsPerLearner: number;
+  unreadyAtInterviewRatePct: number; // 0-100
+  remediationRatePct: number; // 0-100
+  extraCoachingHoursPerRemediationLearner: number;
+  employerOpportunityRationingPct: number; // 0-100
+};
+
+/** Assumptions about what changes under a verified-readiness operating model */
+export type ChangeAssumptions = {
+  reductionInUnreadyRatePct: number; // 0-100
+  reductionInRemediationRatePct: number; // 0-100
+  recoveryOfRationedOpportunityPct: number; // 0-100
+};
+
+/** One-number annual investment to adopt the approach */
+export type Investment = {
+  annualChangeInvestment: number;
 };
 
 export type Economics = {
@@ -34,16 +47,20 @@ export type Economics = {
   costPerSession?: number;
   fundingPerOutcome?: number;
   tuitionPerLearner?: number;
-  enrollmentCredibilityUpliftPct?: number; // 0-1 range for enrollment lift from credibility
+  enrollmentCredibilityUpliftPct?: number;
 };
 
-export type RoiRequest = {
-  context: ProgramContext;
-  baseline: BaselinePerformance;
-  uplift: UpliftAssumptions;
-  economics: Economics;
+// ── Legacy types kept so old "v1" reports still parse ────────────────────
+export type UpliftAssumptions = {
+  mockInterviewUpliftPct?: number;
+  readinessUpliftPctPoints?: number;
+  offerRateUpliftPctPoints?: number;
+  advisorTimeSavingsPct?: number;
+  retentionImprovementPct?: number;
+  timeToOfferImprovementWeeks?: number;
 };
 
+/** @deprecated v1 scenario shape — kept for backward compat */
 export type ScenarioBreakdown = {
   totalValueImpact: number;
   revenueImpact: number;
@@ -55,25 +72,43 @@ export type ScenarioBreakdown = {
   newTimeToOfferWeeks: number | null;
 };
 
+// ── V2 Challenger types ──────────────────────────────────────────────────
+
+export type RoiRequest = {
+  context: ProgramContext;
+  baseline?: BaselinePerformance; // optional reference
+  economics: Economics;
+  leak: LeakInputs;
+  change: ChangeAssumptions;
+  investment: Investment;
+};
+
+export type ChallengerScenarioBreakdown = {
+  costOfDoingNothing: number;
+  valueRecovered: number;
+  netAnnual: number;
+  roiPct: number | null;
+  paybackMonths: number | null;
+  reworkCost: number;
+  reworkSaved: number;
+  outcomeLeak: number;
+  outcomeRecovered: number;
+  confidenceLeak: number;
+  confidenceRecovered: number;
+};
+
 export type RoiResult = {
-  summary: ScenarioBreakdown;
-  enrollment?: {
-    atRisk: number;
-    uplift: number;
-  };
-  baseline: {
-    readyLearners: number;
-    offers: number;
-    sessions: number;
-  };
-  timeline: {
-    baselineTimeToOfferWeeks: number | null;
-    newTimeToOfferWeeks: number | null;
+  resultVersion: 2;
+  summary: ChallengerScenarioBreakdown;
+  baselineSignals: {
+    placementProxyUsed: number;
+    interviewsPerYear: number;
+    unreadyInterviewsPerYear: number;
   };
   sensitivity: {
-    low: ScenarioBreakdown;
-    expected: ScenarioBreakdown;
-    high: ScenarioBreakdown;
+    low: ChallengerScenarioBreakdown;
+    expected: ChallengerScenarioBreakdown;
+    high: ChallengerScenarioBreakdown;
   };
   assumptions: RoiRequest;
 };
@@ -82,6 +117,7 @@ export type RoiRunRow = {
   id: string;
   request: RoiRequest;
   result: RoiResult;
+  result_version: number; // 1 = legacy feature ROI, 2 = challenger ROI
   narrative?: string;
   gate_passed: boolean;
   created_at?: string;

@@ -10,16 +10,25 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "worker:interview-research": "tsx scripts/interview-research-worker.ts"
+    "worker:interview-research": "tsx scripts/interview-research-worker.ts",
+    "sanity": "sanity dev",
+    "sanity:deploy": "sanity deploy"
   },
   "dependencies": {
+    "@portabletext/react": "^3.1.0",
+    "@sanity/icons": "^3.7.4",
+    "@sanity/image-url": "^2.0.3",
+    "@sanity/vision": "^5.9.0",
     "@supabase/supabase-js": "^2.89.0",
     "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.562.0",
     "next": "^16.1.2",
+    "next-sanity": "^12.1.0",
     "openai": "^4.104.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sanity": "^5.9.0",
+    "styled-components": "^6.3.9"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

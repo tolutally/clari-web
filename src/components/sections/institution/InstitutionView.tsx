@@ -3,7 +3,9 @@ import {
   ArrowRight,
   BarChart2,
   Check,
+  ChevronDown,
   ClipboardCheck,
+  Gift,
   GraduationCap,
   Infinity,
   Link as LinkIcon,
@@ -16,12 +18,14 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { TrustShowcase } from "@/components/sections/trust/TrustShowcase";
+// import { TrustShowcase } from "@/components/sections/trust/TrustShowcase";
 import { StatsConfidence } from "@/components/sections/trust/StatsConfidence";
 import { CalculatorTeaser } from "@/components/sections/institution/CalculatorTeaser";
+import { InstitutionBenefits } from "@/components/sections/institution/InstitutionBenefits";
 import ClarivueImpactCalculator from "@/components/sections/institution/ClarivueImpactCalculator";
 import InstitutionPainPoints from "@/components/sections/institution/InstitutionPainPoints";
-import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
+import { BlogInsights } from "@/components/sections/institution/BlogInsights";
+// import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
 import { useEffect, useRef, useState, FormEvent } from "react";
 
 const comparisonRows = [
@@ -324,6 +328,7 @@ export function InstitutionView() {
   const hasAnimated = useRef(false);
   const advisoryCardRef = useRef<HTMLDivElement>(null);
   const [advisoryAnimated, setAdvisoryAnimated] = useState(false);
+  const [activeFeature, setActiveFeature] = useState(0);
 
   useEffect(() => {
     const animateProgress = () => {
@@ -426,200 +431,233 @@ export function InstitutionView() {
   }, []);
 
   return (
-    <div className="transition-opacity duration-500 ease-in-out opacity-100 space-y-12">
+    <div className="transition-opacity duration-500 ease-in-out opacity-100 space-y-8">
       {/* Hero */}
       <section
         id="institutions-hero"
-        className="relative overflow-hidden pt-16 pb-16 md:pt-20 md:pb-20"
+        className="relative pt-11 pb-0 md:pt-14 md:pb-0"
       >
         <div className="hero-wash absolute inset-0 -z-10" />
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
         <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[900px] h-[540px] bg-[#f0f9ff]/70 blur-[160px] rounded-full -z-10" />
         <div className="absolute -right-16 top-24 w-72 h-72 bg-[#fff7ed]/70 rounded-full blur-3xl -z-10" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#003366]/10 shadow-sm backdrop-blur mb-8">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff686c] opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff686c]" />
-            </span>
-            <span className="text-xs font-semibold text-[#003366] uppercase tracking-[0.12em]">
-             BUILT FOR CAREER SERVICES
-            </span>
-          </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-[#003366] mb-6 leading-[1.08]">
-            Reach every student, prepare them for{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#102c64] via-[#b8ccf4] to-[#ff686c]">
-               interview success
-            </span>
-          </h1>
-
-          <p className="text-lg md:text-xl text-[#003366]/70 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Clarivue helps you scale mock interviews, give students actionable coaching, 
-            and track real interview readiness across cohorts without adding staff workload.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <a
-              href="#institutions-contact"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/80 border border-[#003366]/10 hover:bg-white text-[#003366] font-semibold py-3.5 px-8 rounded-full shadow-sm backdrop-blur transition-all"
-            >
-              Book an institution demo
-            </a>
-            <a
-              href="/roicalculator"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#ff686c] hover:bg-[#ff5b5f] text-white font-semibold py-3.5 px-8 rounded-full shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5"
-            >
-              See the ROI impact
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-
-          <div className="relative max-w-5xl mx-auto transform hover:scale-[1.01] transition-transform duration-700 ease-out hero-pop">
-            <div className="absolute -inset-1 bg-gradient-to-b from-[#003366]/15 via-transparent to-transparent rounded-[28px] blur-2xl opacity-70 hero-glow" />
-            <div className="relative bg-white/90 border border-white/60 rounded-[28px] overflow-hidden shadow-2xl shadow-blue-900/10 backdrop-blur">
-              <div className="h-11 bg-[#f4f7fb] border-b border-[#003366]/5 flex items-center px-4 gap-2">
-                <div className="flex gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-[#ffb4b6]" />
-                  <span className="w-3 h-3 rounded-full bg-[#ffe3b3]" />
-                  <span className="w-3 h-3 rounded-full bg-[#b8d2ff]" />
-                </div>
-                <div className="flex items-center justify-center text-[11px] text-[#003366]/60 font-semibold bg-white border border-[#003366]/10 w-1/3 max-w-[260px] h-7 rounded-full px-2 mx-auto gap-2">
-                  <Lock className="w-3 h-3" />
-                  app.clarivue.io
-                </div>
+            {/* Left: Text — 45% */}
+            <div className="w-full lg:w-[45%] text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#003366]/10 shadow-sm backdrop-blur mb-8">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff686c] opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff686c]" />
+                </span>
+                <span className="text-xs font-semibold text-[#003366] uppercase tracking-[0.12em]">
+                 Interview Readiness Platform
+                </span>
               </div>
 
-              <div className="p-8 bg-gradient-to-b from-[#f8fbff] via-white to-white grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                <div className="bg-white/90 p-5 rounded-2xl border border-[#003366]/10 shadow-sm">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-[#003366]/10 rounded-xl text-[#003366]">
-                      <GraduationCap className="w-4 h-4" />
-                    </div>
-                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                      Live
-                    </span>
-                  </div>
-                  <div className="text-2xl font-semibold text-[#003366]">78%</div>
-                  <div className="text-xs text-[#003366]/60 mt-1">Interview-ready (cohort)</div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-[#003366] mb-6 leading-[1.08]">
+                Know who is interview-ready{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#102c64] via-[#b8ccf4] to-[#ff686c]">
+                   before employers do.
+                </span>
+              </h1>
+
+              <p className="text-lg md:text-xl text-[#003366]/70 max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+                See readiness before employer exposure. Intervene early.
+                Defend outcomes.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
+                <a
+                  href="https://app.clarivue.io/register"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/80 border border-[#003366]/10 hover:bg-white text-[#003366] font-semibold py-3.5 px-8 rounded-full shadow-sm backdrop-blur transition-all"
+                >
+                  Start for free
+                </a>
+                <a
+                  href="/book-demo"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#ff686c] hover:bg-[#ff5b5f] text-white font-semibold py-3.5 px-8 rounded-full shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5"
+                >
+                 Speak to us
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+              <p className="mt-3 text-sm text-[#003366]/50 text-center lg:text-left flex items-center justify-center lg:justify-start gap-1.5">
+                <Gift className="w-4 h-4 text-[#ff686c]" />
+                Get 30 minutes free after sign up — no credit card required
+              </p>
+            </div>
+
+            {/* Right: UI — 55% */}
+            <div className="w-full lg:w-[55%] overflow-visible">
+              <div className="relative min-h-[520px] overflow-visible">
+
+                {/* ── Top-right: Placeholder person image ── */}
+                <div className="absolute right-0 top-0 w-[52%] aspect-[3/4] rounded-3xl overflow-hidden shadow-xl z-0 hero-card-enter" style={{ animationDelay: '0s' }}>
+                  <Image
+                    src="/hero-image-2.png"
+                    alt="Student ready for interview"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
 
-                <div className="bg-white/90 p-5 rounded-2xl border border-[#003366]/10 shadow-sm">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-amber-100 rounded-xl text-amber-700">
+                {/* ── Top-left: Candidate profile card ── */}
+                <div className="absolute left-0 top-6 w-[55%] bg-white rounded-2xl shadow-xl border border-[#003366]/8 p-4 z-10 hero-card-enter hero-card-float" style={{ animationDelay: '0.2s, 0s' }}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-bold text-[#003366]">Sarah Mitchell</h3>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full uppercase">Ready</span>
+                    <span className="text-[#003366]/30 ml-auto text-lg">⋮</span>
+                  </div>
+                  <p className="text-[11px] text-[#003366]/50 mb-3">Scored 2 hours ago</p>
+                  <div className="flex gap-6 text-[11px]">
+                    <div>
+                      <p className="text-[#003366]/50">Program</p>
+                      <p className="font-semibold text-[#003366]">Data Analytics</p>
+                    </div>
+                    <div>
+                      <p className="text-[#003366]/50">Cohort</p>
+                      <p className="font-semibold text-[#003366]">Spring 2026</p>
+                    </div>
+                  </div>
+
+                  {/* Mock interview card */}
+                  <div className="mt-3 flex items-center gap-3 rounded-xl bg-[#f4f7fb] p-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#003366]/10 flex items-center justify-center text-[#003366]/50">
                       <ClipboardCheck className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-semibold text-[#003366]/70">This week</span>
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-[#003366]">Mock interview</p>
+                      <p className="text-[10px] text-[#003366]/50">Watch replay</p>
+                    </div>
+                    <span className="text-[10px] text-[#003366]/50">12:45m</span>
                   </div>
-                  <div className="text-2xl font-semibold text-[#003366]">51%</div>
-                  <div className="text-xs text-[#003366]/60 mt-1">Needs coaching flagged</div>
-                </div>
 
-                <div className="bg-white/90 p-5 rounded-2xl border border-[#003366]/10 shadow-sm">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-[#003366]/10 rounded-xl text-[#003366]">
+                  {/* Rubric alignment row */}
+                  <div className="mt-2 flex items-center gap-3 rounded-xl bg-[#f4f7fb] p-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#003366]/10 flex items-center justify-center text-[#003366]/50">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                      Verified
-                    </span>
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-[#003366]">Rubric alignment</p>
+                      <p className="text-[10px] text-[#003366]/50">View scorecard</p>
+                    </div>
+                    <span className="text-[10px] text-emerald-600 font-semibold">4/5 aligned</span>
                   </div>
-                  <div className="text-2xl font-semibold text-[#003366]">1,204</div>
-                  <div className="text-xs text-[#003366]/60 mt-1">Mock interviews scored</div>
                 </div>
 
-                <div className="md:col-span-3 bg-white/90 p-6 rounded-2xl border border-[#003366]/10 shadow-sm min-h-[240px] flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-sm font-semibold text-[#003366]">Readiness by rubric</h3>
-                      <p className="text-xs text-[#003366]/60">Last 30 days</p>
+                {/* ── Middle-right: Readiness score card ── */}
+                <div className="absolute -right-[10%] top-[53%] w-[23%] bg-white rounded-xl shadow-xl border border-[#003366]/8 p-3 z-20 text-center hero-card-enter hero-card-float-alt hero-card-glow" style={{ animationDelay: '0.6s, 1s, 1.5s' }}>
+                  <p className="text-[10px] font-semibold text-[#003366]/60 mb-0.5">Readiness score</p>
+                  <p className="text-2xl font-bold text-[#003366] hero-score-pop">91%</p>
+                  <p className="text-[9px] text-emerald-600 font-semibold mt-0.5">Interview-ready</p>
+                  <button className="mt-2 w-full rounded-full border border-[#003366]/15 py-1 text-[10px] font-semibold text-[#003366] hover:bg-[#003366]/5 transition-colors">
+                    View report
+                  </button>
+                </div>
+
+                {/* ── Bottom-left: Second placeholder person image ── */}
+                <div className="absolute left-4 bottom-0 w-[38%] aspect-square rounded-3xl overflow-hidden shadow-xl z-0 hero-card-enter" style={{ animationDelay: '0.4s' }}>
+                  <Image
+                    src="/hero-image-1.png"
+                    alt="Student preparing for interview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* ── Bottom-right: Cohort overview card ── */}
+                <div className="absolute right-[15%] -bottom-8 w-[52%] bg-white rounded-2xl shadow-xl border border-[#003366]/8 p-4 z-10 hero-card-enter hero-card-float" style={{ animationDelay: '0.9s, 2s' }}>
+                  <p className="text-sm font-bold text-[#003366] mb-3">Cohort overview</p>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 rounded-full overflow-hidden">
+                      <Image src="/avatars/avatar-2.jpg" alt="Oliver Chen" width={36} height={36} className="w-full h-full object-cover" />
                     </div>
-                    <div className="flex gap-4">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ff686c]" />
-                        <span className="text-xs text-[#003366]/70">Aligned</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#003366]/30" />
-                        <span className="text-xs text-[#003366]/70">Needs work</span>
-                      </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-[#003366]">Oliver Chen</p>
+                      <p className="text-[10px] text-[#003366]/50">Cohort: Spring 2026</p>
+                    </div>
+                    {/* Circular progress indicator */}
+                    <div className="relative w-10 h-10">
+                      <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                        <circle cx="18" cy="18" r="15" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                        <circle cx="18" cy="18" r="15" fill="none" stroke="#003366" strokeWidth="3" strokeDasharray="94.2" strokeDashoffset="16" strokeLinecap="round" />
+                      </svg>
+                      <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-[#003366]">83%</span>
                     </div>
                   </div>
-
-                  <div className="flex items-end justify-between gap-2 h-32 px-1.5">
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[30%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[60%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[45%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[50%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[40%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[70%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[60%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[65%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[55%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[80%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[80%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[50%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[75%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[90%] bar-rise" />
-                    </div>
-                    <div className="w-full bg-[#003366]/10 rounded-t-sm h-[90%] relative overflow-hidden">
-                      <div className="absolute bottom-0 w-full bg-gradient-to-t from-[#c8a0fe] to-[#b8ccf4] h-[75%] bar-rise" />
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] text-[#003366]/70">
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#003366]/30" />
-                      STAR structure
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#003366]/30" />
-                      Technical depth
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#003366]/30" />
-                      Communication
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#003366]/30" />
-                      Industry language
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] text-[#003366]/60">See all learners</p>
+                    {/* Avatar stack */}
+                    <div className="flex -space-x-2">
+                      {[
+                        "/avatars/avatar-1.jpg", "/avatars/avatar-2.jpg", "/avatars/avatar-3.jpg", "/avatars/avatar-4.jpg", "/avatars/avatar-5.jpg"
+                      ].map((src, i) => (
+                        <div key={i} className="w-7 h-7 rounded-full border-2 border-white overflow-hidden">
+                          <Image src={src} alt="" width={28} height={28} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
+
+                {/* ── Decorative curved line ── */}
+                <svg className="absolute -bottom-4 right-8 w-20 h-28 z-20 text-[#003366]/20" viewBox="0 0 60 90" fill="none">
+                  <path d="M30 0 C30 40, 55 50, 55 90" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
+      {/* Partner Brand Strip */}
+      <div className="-mt-8 pt-28 pb-6">
+        <p className="text-[22px] font-bold uppercase tracking-[0.25em] text-[#003366]/55 text-center mb-6">
+          Fully Canadian Built, Backed By:
+        </p>
+        <div className="flex items-center justify-center gap-10 sm:gap-16 md:gap-20 flex-wrap px-6">
+          <Image
+            src="/partners/tribe_logo.png"
+            alt="Tribe"
+            width={250}
+            height={83}
+            className="h-16 sm:h-[83px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+          />
+          <Image
+            src="/partners/Volta-Logo.png"
+            alt="Volta"
+            width={208}
+            height={67}
+            className="h-[52px] sm:h-[58px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+          />
+          <Image
+            src="/partners/Invest-Nova-Scotia-Logo.png"
+            alt="Invest Nova Scotia"
+            width={333}
+            height={99}
+            className="h-[76px] sm:h-[91px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+          />
+        </div>
+      </div>
+
       {/* Pain Points */}
       <InstitutionPainPoints />
-
-      <StatsConfidence />
-
-      {/* Calculator Teaser */}
-      <CalculatorTeaser />
-
-      {/* How it works */}
-      <HowItWorksInstitutions />
 
       {/* Complete Career Infrastructure */}
       <section
         id="institutions-features"
-        className="md:px-10 md:pt-12 max-w-6xl mx-auto pt-12 px-6"
+        className="md:px-10 md:pt-8 max-w-6xl mx-auto pt-8 px-6"
       >
         {/* SECTION PILL */}
         <div className="flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70">
             <Sparkles className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-            <span className="text-sm text-[#003366]">WHAT&apos;S INSIDE</span>
+            <span className="text-sm text-[#003366]">WHY WE ARE THE BEST</span>
           </div>
         </div>
 
@@ -632,350 +670,335 @@ export function InstitutionView() {
           See who is ready, who needs coaching, and how your grads move from practice to placement.
         </p>
 
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          {/* Placement Analytics */}
-          <article
-            id="card-realtime"
-            ref={readinessCardRef}
-            className="group relative overflow-hidden rounded-3xl bg-white/[0.6] ring-1 p-5 md:p-6 ring-[#003366]/10"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" />
+        {(() => {
+          const FEATURES = [
+    {
+  icon: <BarChart2 className="h-5 w-5" strokeWidth={1.5} />,
+  title: "Placement intelligence",
+  description:
+    "You don't know who's ready until interviews fail. See readiness rates, risk flags, and conversion gaps before employer exposure. No more guessing. No more surprises.",
+  color: "bg-sky-500",
+  image: "/Career_Readiness_Dashboard_Video.mp4",
+},
+{
+  icon: <Settings2 className="h-5 w-5" strokeWidth={1.5} />,
+  title: "Governed advisory",
+  description:
+    "Manual mocks don't scale. Lock your criteria into enforced rubrics and risk queues so advisors focus where it matters. Standards stay consistent. Time stops leaking.",
+  color: "bg-indigo-500",
+  image: "/Focused_Coaching_Session_Video_Ready.mp4",
+},
+{
+  icon: <Infinity className="h-5 w-5" strokeWidth={1.5} />,
+  title: "Role-specific readiness",
+  description:
+    "Generic interview prep doesn't convert. Practice is tied to real job descriptions, real role families, and structured evaluation — so performance transfers to the actual interview.",
+     color: "bg-emerald-500",
+  image: "/Practicing_Job_Interview_On_Laptop.mp4",
+},
+{
+  icon: <Users className="h-5 w-5" strokeWidth={1.5} />,
+ title: "Employer Confidence Bridge",
+description:
+  "Share candidates who have already proven interview readiness. Partners receive consistent quality, move from shortlist to offer faster, and trust your pipeline enough to expand it.",
+  color: "bg-fuchsia-500",
+  image: "/employer_bridge.mp4",
+},
+          ];
 
-            <div className="rounded-2xl bg-gradient-to-b to-white/[0.4] p-4 ring-1 backdrop-blur from-white/70 ring-[#003366]/10 min-h-[380px] flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2 text-sm text-[#003366]/80">
-                  <BarChart2 className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-                  <span className="font-medium">Placement Analytics</span>
-                </div>
-                <div className="inline-flex items-center gap-2 text-[11px] text-[#003366]/60">
-                  <Activity className="h-3.5 w-3.5 text-emerald-700" strokeWidth={1.5} />
-                  Live
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 text-[11px] text-[#003366]/70 mb-3">
-                {["Cohort A", "Cohort B", "All"].map((label, idx) => (
+          return (
+            <div className="mt-12 flex flex-col lg:flex-row gap-10 lg:gap-14 items-start">
+              {/* Left: Accordion */}
+              <div className="w-full lg:w-5/12 divide-y divide-[#003366]/10">
+                {FEATURES.map((f, i) => (
                   <button
-                    key={label}
-                    className={`rounded-full px-3 py-1 ring-1 ${
-                      idx === 0
-                        ? "bg-[#003366]/10 text-[#003366] ring-[#003366]/20"
-                        : "bg-white/70 text-[#003366]/70 ring-[#003366]/15 hover:text-[#003366]"
-                    }`}
-                    type="button"
+                    key={i}
+                    onClick={() => setActiveFeature(i)}
+                    className="w-full text-left py-5 group"
                   >
-                    {label}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[#003366]/70 group-hover:text-[#003366] transition-colors`}>
+                          {f.icon}
+                        </span>
+                        <span className={`text-lg font-semibold transition-colors ${
+                          activeFeature === i ? "text-[#003366]" : "text-[#003366]/70 group-hover:text-[#003366]"
+                        }`}>
+                          {f.title}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        className={`h-5 w-5 text-[#003366]/40 transition-transform duration-300 ${
+                          activeFeature === i ? "rotate-180" : ""
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                    </div>
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        activeFeature === i ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      <p className="text-sm text-[#003366]/60 leading-relaxed pl-8">
+                        {f.description}
+                      </p>
+                    </div>
                   </button>
                 ))}
               </div>
 
-              <div className="space-y-3">
-                {/* Interview ready */}
-                <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10">
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-[#003366]">Interview-ready</span>
-                      <span className="text-[10px] text-[#003366]/50">Cohort A • Last 30 days</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span ref={readyPct} className="font-semibold text-[#003366]">
-                        0%
-                      </span>
-                      <span className="text-[11px] text-emerald-600 font-semibold">+6 this week</span>
-                    </div>
-                  </div>
-                  <div className="mt-2 h-2 w-full rounded-full overflow-hidden bg-[#003366]/10">
-                    <div
-                      ref={readyBar}
-                      className="h-full rounded-full bg-gradient-to-r from-sky-600 to-blue-500"
-                      style={{ width: "0%" }}
+              {/* Right: Image area with overlapping UI card */}
+              <div className="w-full lg:w-7/12">
+                <div className="relative min-h-[420px] lg:min-h-[480px]">
+                  {/* GIF image area — sits to the right */}
+                  <div className="absolute right-0 top-4 bottom-4 w-[75%] rounded-3xl overflow-hidden">
+                    <video
+                      src={FEATURES[activeFeature].image}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover transition-opacity duration-500"
+                      key={activeFeature}
                     />
+                    {/* Subtle gradient overlay for contrast with white card */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent pointer-events-none" />
                   </div>
-                  <p className="mt-2 text-[11px] text-[#003366]/60">
-                    See who is ready at a glance.
-                  </p>
-                </div>
 
-                {/* Needs coaching */}
-                <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10">
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-[#003366]">Needs coaching</span>
-                      <span className="text-[10px] text-[#003366]/50">Cohort A • Last 30 days</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span ref={coachingPct} className="font-semibold text-[#003366]">
-                        0%
-                      </span>
-                      <span className="text-[11px] text-amber-600 font-semibold">-3 this week</span>
-                    </div>
-                  </div>
-                  <div className="mt-2 h-2 w-full rounded-full overflow-hidden bg-amber-200/50">
-                    <div
-                      ref={coachingBar}
-                      className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
-                      style={{ width: "0%" }}
-                    />
-                  </div>
-                  <p className="mt-2 text-[11px] text-[#003366]/60">
-                    Focus advisor time where it matters.
-                  </p>
-                </div>
-              </div>
+                  {/* White UI card — overlaps left edge */}
+                  <div className={`absolute left-0 -translate-y-1/2 w-[39%] max-w-xs z-10 transition-all duration-500 ${activeFeature === 2 ? "top-[25%]" : "top-[80%]"}`}>
+                    <div className="bg-white rounded-2xl shadow-2xl shadow-black/[0.08] border border-[#003366]/10 overflow-hidden">
 
-              {/* condensed stats row */}
-              <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-[#003366]/70">
-                {[
-                  { label: "Avg wpm", value: "142", trend: "+8%" },
-                  { label: "Offer rate", value: "28%", trend: "+5%" },
-                  { label: "Mocks scored", value: "1,204", trend: "324 this month" },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-xl bg-white/80 p-2.5 ring-1 ring-[#003366]/10">
-                    <p className="text-[11px] text-[#003366]/60">{stat.label}</p>
-                    <p className="text-base font-semibold text-[#003366]">{stat.value}</p>
-                    <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">{stat.trend}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+                      {/* ── Placement Intelligence card ── */}
+                      {activeFeature === 0 && (
+                        <div className="p-5 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <span className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">
+                              <BarChart2 className="h-4 w-4 text-sky-600" strokeWidth={2} />
+                            </span>
+                            <div>
+                              <p className="text-sm font-bold text-[#003366]">Cohort Readiness</p>
+                              <p className="text-[10px] text-[#003366]/40">Live snapshot · 247 learners</p>
+                            </div>
+                          </div>
 
-            <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight text-[#003366]">
-              Placement analytics
-            </h3>
-            <p className="mt-1 text-xs md:text-sm text-[#003366]/70 max-w-sm">
-              See who is ready, who needs coaching, and how cohorts are trending over time.
-            </p>
-          </article>
+                          {/* Readiness ring */}
+                          <div className="flex items-center gap-4">
+                            <div className="relative w-16 h-16 shrink-0">
+                              <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="15" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                                <circle cx="18" cy="18" r="15" fill="none" stroke="#0ea5e9" strokeWidth="3" strokeDasharray="94.2" strokeDashoffset="32" strokeLinecap="round" />
+                              </svg>
+                              <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-[#003366]">66%</span>
+                            </div>
+                            <div className="space-y-1 text-[11px]">
+                              <div className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                                <span className="text-[#003366]/70">Interview-ready</span>
+                                <span className="ml-auto font-semibold text-[#003366]">163</span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                                <span className="text-[#003366]/70">Needs coaching</span>
+                                <span className="ml-auto font-semibold text-[#003366]">52</span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-rose-400" />
+                                <span className="text-[#003366]/70">At risk</span>
+                                <span className="ml-auto font-semibold text-[#003366]">32</span>
+                              </div>
+                            </div>
+                          </div>
 
-          {/* Automate Advisory */}
-          <article
-            ref={advisoryCardRef}
-            className="group relative overflow-hidden rounded-3xl bg-white/[0.6] ring-1 p-5 md:p-6 ring-[#003366]/10"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
+                          <div className="border-t border-[#003366]/[0.06]" />
 
-            <div className="rounded-2xl bg-gradient-to-b to-white/[0.4] p-4 ring-1 backdrop-blur from-white/70 ring-[#003366]/10 min-h-[380px] flex flex-col">
-              <div className="flex items-center justify-between text-sm text-[#003366]/80 mb-3">
-                <div className="flex items-center gap-2">
-                  <Settings2 className="h-4 w-4 text-indigo-700" strokeWidth={1.5} />
-                  <span className="font-medium">Automated advisory</span>
-                </div>
-                <span className="text-[11px] text-[#003366]/60">Rubric: BA Internship v2</span>
-              </div>
-
-              <div className="space-y-2">
-                {[
-                  { name: "Technical Depth", status: "Aligned", color: "bg-emerald-100 text-emerald-700" },
-                  { name: "STAR Method", status: "Needs work", color: "bg-amber-100 text-amber-700" },
-                  { name: "Industry Language", status: "Aligned", color: "bg-emerald-100 text-emerald-700" },
-                ].map((row) => (
-                  <div
-                    key={row.name}
-                    className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10 space-y-2"
-                  >
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#003366]">{row.name}</span>
-                      <span className={`px-2 py-1 rounded-full text-[11px] font-semibold ${row.color}`}>
-                        {row.status}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-[11px] text-[#003366]/70">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span>Before</span>
-                          <span>62</span>
+                          {/* Conversion rate */}
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-[10px] text-[#003366]/50 uppercase tracking-wider font-semibold">Employer conversion</p>
+                              <p className="text-lg font-bold text-[#003366]">78%<span className="text-emerald-500 text-xs ml-1">↑ 12%</span></p>
+                            </div>
+                            <div className="flex gap-[2px] items-end h-8">
+                              {[40, 55, 45, 65, 60, 72, 78].map((h, i) => (
+                                <div key={i} className="w-2 rounded-t-sm bg-sky-400/70" style={{ height: `${h}%` }} />
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                        <div className="mt-1 h-1.5 rounded-full bg-[#003366]/10 overflow-hidden">
-                          <div className="h-full w-[55%] bg-[#003366]" />
+                      )}
+
+                      {/* ── Generic card for other features (will be customized next) ── */}
+                      {activeFeature !== 0 && (
+                        <>
+
+                      {/* ── Governed Advisory card ── */}
+                      {activeFeature === 1 && (
+                        <div className="p-3.5 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
+                              <Settings2 className="h-3.5 w-3.5 text-indigo-600" strokeWidth={2} />
+                            </span>
+                            <div>
+                              <p className="text-xs font-bold text-[#003366]">Advisor Queue</p>
+                              <p className="text-[9px] text-[#003366]/40">3 flagged · 2 rubrics active</p>
+                            </div>
+                          </div>
+
+                          {/* Risk queue items */}
+                          <div className="space-y-1">
+                            {[
+                              { name: "Sarah K.", flag: "Weak structure", status: "bg-rose-400" },
+                              { name: "James T.", flag: "No follow-ups", status: "bg-amber-400" },
+                              { name: "Priya M.", flag: "Low confidence", status: "bg-amber-400" },
+                            ].map((item, i) => (
+                              <div key={i} className="flex items-center gap-2 rounded-lg bg-[#003366]/[0.03] px-2.5 py-1.5">
+                                <span className={`w-1.5 h-1.5 rounded-full ${item.status} shrink-0`} />
+                                <span className="text-[11px] font-semibold text-[#003366] flex-1">{item.name}</span>
+                                <span className="text-[9px] text-[#003366]/50">{item.flag}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="border-t border-[#003366]/[0.06]" />
+
+                          {/* Rubric enforcement */}
+                          <div className="space-y-1">
+                            <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Enforced rubrics</p>
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 h-1 rounded-full bg-gray-100 overflow-hidden">
+                                <div className="h-full w-[92%] rounded-full bg-indigo-500" />
+                              </div>
+                              <span className="text-[11px] font-bold text-[#003366]">92%</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span>After</span>
-                          <span>78</span>
+                      )}
+
+                      {/* ── Role-Specific Readiness card ── */}
+                      {activeFeature === 2 && (
+                        <div className="p-4 space-y-2.5">
+                          {/* Mini JD card */}
+                          <div className="rounded-lg bg-emerald-50 border border-emerald-200/60 px-3 py-2">
+                            <div className="flex items-center gap-1.5 mb-1.5">
+                              <span className="w-5 h-5 rounded bg-emerald-500 flex items-center justify-center">
+                                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                              </span>
+                              <p className="text-[11px] font-bold text-emerald-800">Targeting: Data Analyst</p>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {["SQL", "Dashboards", "Stakeholder Comm."].map((s) => (
+                                <span key={s} className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-semibold text-emerald-700">{s}</span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Arrow */}
+                          <div className="flex justify-center">
+                            <svg className="w-4 h-4 text-[#003366]/25" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                          </div>
+
+                          {/* Generated questions */}
+                          <div className="rounded-lg bg-[#003366]/[0.03] border border-[#003366]/[0.06] px-3 py-2 space-y-1.5">
+                            <p className="text-[9px] text-[#003366]/40 uppercase tracking-wider font-semibold">Interview questions</p>
+                            {[
+                              "Walk me through how you'd structure a dashboard for…",
+                              "A stakeholder disputes your data — what's your next step?",
+                            ].map((q, i) => (
+                              <div key={i} className="flex items-start gap-1.5">
+                                <span className="text-emerald-500 text-[10px] mt-px font-bold">Q{i + 1}</span>
+                                <p className="text-[10px] text-[#003366]/70 leading-tight">{q}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Tagline */}
+                          <p className="text-center text-[9px] text-[#003366]/40 font-medium">
+                            Only drills what the role demands
+                          </p>
                         </div>
-                        <div className="mt-1 h-1.5 rounded-full bg-[#ff686c]/10 overflow-hidden">
-                          <div className="h-full w-[78%] bg-[#ff686c]" />
+                      )}
+
+                      {/* ── Employer Confidence Bridge card ── */}
+                      {activeFeature === 3 && (
+                        <div className="p-3.5 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="w-7 h-7 rounded-lg bg-fuchsia-100 flex items-center justify-center">
+                              <Users className="h-3.5 w-3.5 text-fuchsia-600" strokeWidth={2} />
+                            </span>
+                            <div>
+                              <p className="text-xs font-bold text-[#003366]">Partner Pipeline</p>
+                              <p className="text-[9px] text-[#003366]/40">Verified-ready candidates shared</p>
+                            </div>
+                          </div>
+
+                          {/* Employer partners */}
+                          <div className="space-y-1">
+                            {[
+                              { partner: "TechCorp Inc.", sent: 12, converted: 9 },
+                              { partner: "FinServ Group", sent: 8, converted: 7 },
+                              { partner: "MedHealth Co.", sent: 6, converted: 5 },
+                            ].map((item, i) => (
+                              <div key={i} className="flex items-center gap-2 rounded-lg bg-[#003366]/[0.03] px-2.5 py-1.5">
+                                <div className="w-5 h-5 rounded bg-fuchsia-100 flex items-center justify-center text-[9px] font-bold text-fuchsia-600 shrink-0">
+                                  {item.partner.charAt(0)}
+                                </div>
+                                <p className="text-[11px] font-semibold text-[#003366] flex-1 truncate">{item.partner}</p>
+                                <p className="text-[11px] font-bold text-emerald-600">{item.converted}/{item.sent}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="border-t border-[#003366]/[0.06]" />
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Offer rate</p>
+                              <p className="text-sm font-bold text-[#003366]">81%<span className="text-emerald-500 text-[10px] ml-1">↑ 24%</span></p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Repeat partners</p>
+                              <p className="text-sm font-bold text-[#003366]">94%</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
+
+                        </>
+                      )}
+
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-3 rounded-xl bg-[#003366]/5 px-3 py-2 ring-1 ring-[#003366]/10 text-[11px] text-[#003366]">
-                <span className="font-semibold block">12 learners need coaching this week</span>
-                <span className="text-[#003366]/70">Advisors get a clear coaching queue.</span>
-              </div>
-            </div>
-
-            <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight text-[#003366]">
-              Automate advisory
-            </h3>
-            <p className="mt-1 text-xs md:text-sm text-[#003366]/70 max-w-sm">
-              Turn your standards into AI-enforced rubrics and coaching queues your team can trust.
-            </p>
-          </article>
-
-          {/* Alumni Portal */}
-          <article className="group relative overflow-hidden rounded-3xl bg-white/[0.6] ring-1 p-5 md:p-6 ring-[#003366]/10">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
-
-            <div className="rounded-2xl bg-gradient-to-b to-white/[0.4] p-4 ring-1 backdrop-blur from-white/70 ring-[#003366]/10 min-h-[380px] flex flex-col">
-              <div className="flex items-center gap-2 text-sm text-[#003366]/80 mb-3">
-                <Infinity className="h-4 w-4 text-emerald-700" strokeWidth={1.5} />
-                <span className="font-medium">Alumni portal</span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 text-[11px] text-[#003366]/70 mb-3">
-                {[
-                  { label: "0–2 years", tag: "Career acceleration", count: "184 active" },
-                  { label: "2–5 years", tag: "Switch support", count: "132 active" },
-                  { label: "5–10 years", tag: "Executive track", count: "94 active" },
-                ].map((track) => (
-                  <div key={track.label} className="rounded-xl bg-white/80 p-2.5 ring-1 ring-[#003366]/10">
-                    <p className="text-xs font-semibold text-[#003366]">{track.label}</p>
-                    <p className="mt-1 text-[11px] text-[#003366]/60">{track.tag}</p>
-                    <p className="mt-1 text-[10px] text-emerald-600 font-semibold">{track.count}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10 mb-3">
-                <p className="text-sm font-semibold text-[#003366]">Lifetime practice library</p>
-                <p className="mt-1 text-[11px] text-[#003366]/60">
-                  Alumni keep access to mocks, scorecards, and recruiter-ready profiles.
-                </p>
-              </div>
-
-              <div className="rounded-xl bg-white/80 p-2.5 ring-1 ring-[#003366]/10 mb-3">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#003366] font-semibold">Recent activity</span>
-                  <span className="text-[11px] text-[#003366]/60">Last 30 days</span>
-                </div>
-                <div className="mt-2 grid grid-cols-3 gap-2 text-[11px]">
-                  <div>
-                    <p className="text-[#003366] font-semibold">47</p>
-                    <p className="text-[10px] text-[#003366]/60">Mocks taken</p>
-                  </div>
-                  <div>
-                    <p className="text-[#003366] font-semibold">23</p>
-                    <p className="text-[10px] text-[#003366]/60">Offers landed</p>
-                  </div>
-                  <div>
-                    <p className="text-[#003366] font-semibold">89%</p>
-                    <p className="text-[10px] text-[#003366]/60">Satisfaction</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-sm text-white mt-auto">
-                <button className="rounded-xl bg-[#ff686c] px-3 py-2 font-semibold shadow-sm hover:bg-[#FF6347] transition text-left">
-                  Launch alumni mock
-                  <span className="block text-[11px] text-white/80">Spin up practice in seconds</span>
-                </button>
-                <button className="rounded-xl bg-[#003366] px-3 py-2 font-semibold shadow-sm hover:bg-[#02294f] transition text-left">
-                  Send check-in
-                  <span className="block text-[11px] text-white/80">Stay top of mind with grads</span>
-                </button>
-              </div>
-            </div>
-
-            <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight text-[#003366]">
-              Alumni portal
-            </h3>
-            <p className="mt-1 text-xs md:text-sm text-[#003366]/70 max-w-sm">
-              Give grads ongoing interview practice and check-ins for 2–10 years without extra staff load.
-            </p>
-          </article>
-
-          {/* Hiring Partner Bridge */}
-          <article className="group relative overflow-hidden rounded-3xl bg-white/[0.6] ring-1 p-5 md:p-6 ring-[#003366]/10">
-            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl" />
-
-            <div className="rounded-2xl bg-gradient-to-b to-white/[0.4] p-4 ring-1 backdrop-blur from-white/70 ring-[#003366]/10 min-h-[380px] flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2 text-sm text-[#003366]/80">
-                  <Users className="h-4 w-4 text-fuchsia-700" strokeWidth={1.5} />
-                  <span className="font-medium">Hiring partner bridge</span>
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#003366]/5 px-3 py-1 text-[11px] text-[#003366]/70 ring-1 ring-[#003366]/10">
-                  <LinkIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  Share report
-                </div>
-              </div>
-
-              <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10 mb-3">
-                <div className="text-xs font-semibold text-[#003366] mb-2">Pipeline</div>
-                <div className="grid grid-cols-4 gap-2 text-[11px] text-[#003366]/70">
-                  {["Shared", "Interviewing", "Offer", "Hired"].map((stage, idx) => (
-                    <div
-                      key={stage}
-                      className={`rounded-lg px-2 py-2 text-center ring-1 ${
-                        idx < 2
-                          ? "bg-[#ff686c]/15 text-[#003366] ring-[#ff686c]/40"
-                          : "bg-[#003366]/5 text-[#003366]/60 ring-[#003366]/15"
-                      }`}
-                    >
-                      {stage}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10 mb-3">
-                <p className="text-xs font-semibold text-[#003366] mb-1">What recruiters see</p>
-                <p className="text-[11px] text-[#003366]/80">
-                  Scorecards, transcript highlights, and job-description match in one report.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-[11px] text-[#003366]/70 mb-3">
-                <div className="rounded-lg bg-[#003366]/5 px-3 py-2 ring-1 ring-[#003366]/10 text-[#003366] font-semibold">
-                  Verified by institution
-                </div>
-                <div className="rounded-lg bg-[#003366]/5 px-3 py-2 ring-1 ring-[#003366]/10 text-[#003366] font-semibold">
-                  Timestamped
-                </div>
-              </div>
-
-              <div className="rounded-xl bg-white/80 p-3 ring-1 ring-[#003366]/10">
-                <div className="flex items-center justify-between text-xs text-[#003366]/70 mb-1">
-                  <span className="font-semibold text-[#003366]">Avg time to decision: 4.2 days</span>
-                  <span className="text-[#003366]/60">Report ID: CLV-4821</span>
-                </div>
-                <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#003366]/10 overflow-hidden">
-                  <div
-                    ref={hiringBarRef}
-                    className="h-full w-0 bg-gradient-to-r from-[#ff686c] to-[#FF6347]"
-                  />
                 </div>
               </div>
             </div>
-
-            <h3 className="mt-4 text-lg md:text-xl font-semibold tracking-tight text-[#003366]">
-              Hiring partner bridge
-            </h3>
-            <p className="mt-1 text-xs md:text-sm text-[#003366]/70 max-w-sm">
-              Share verified readiness reports that help partners move from shortlists to offers faster.
-            </p>
-          </article>
-        </div>
+          );
+        })()}
       </section>
 
-      {/* Trust showcase (replaces testimonial) */}
+      {/* Calculator Teaser */}
+      <CalculatorTeaser />
+
+      {/* Benefits — Security, Stats, Readiness */}
+      <InstitutionBenefits />
+
+      {/* How it works (disabled for now)
+      <HowItWorksInstitutions />
+      */}
+
+      {/* Trust showcase (disabled for now)
       <section id="institutions-testimonial" className="pt-10 md:pt-12">
         <TrustShowcase />
       </section>
+      */}
 
-      {/* Comparison */}
-      <section id="institutions-comparison" className="pt-10 md:pt-12">
+      <div className="-mt-8">
+        <StatsConfidence />
+      </div>
+
+      {/* Comparison — Lattice-style dual cards with scrolling items */}
+      <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-2 mb-10">
             <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#003366]/70 border-[#003366]/15 bg-white/80">
               WHY CLARIVUE MATTERS
             </div>
@@ -983,45 +1006,147 @@ export function InstitutionView() {
               Move from guesswork to measurable readiness
             </h2>
             <p className="text-sm sm:text-base text-[#003366]/70 max-w-3xl mx-auto">
-              Instead of hoping students are interview-ready, Clarivue gives you proof, visibility, early risk detection, and scalable support that improves outcomes across cohorts.
+              Instead of hoping students are interview-ready, Clarivue gives you proof, visibility, early risk detection, and scalable support.
             </p>
           </div>
 
-          <div className="mt-8 rounded-[32px] border border-[#e5e7eb] bg-white/90 shadow-[0_20px_80px_-40px_rgba(0,0,0,0.35)] overflow-hidden">
-            <div className="grid grid-cols-12 text-[#003366] text-sm sm:text-base font-semibold tracking-tight">
-              <div className="col-span-12 sm:col-span-4 px-4 sm:px-6 py-4 text-left">Product Comparison</div>
-              <div className="col-span-6 sm:col-span-4 px-4 sm:px-6 py-4 text-center bg-[#f9fafb] border-l border-r border-[#e5e7eb]">
-                With Clarivue
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* ── Without Clarivue ── */}
+            <div className="relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-[#003366]">Without Clarivue</h3>
+                <span className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200/60 flex items-center justify-center">
+                  <X className="h-4 w-4 text-rose-500" strokeWidth={2.5} />
+                </span>
               </div>
-              <div className="col-span-6 sm:col-span-4 px-4 sm:px-6 py-4 text-center">Without Clarivue</div>
+
+              {/* Scrolling list with mask */}
+              <div className="relative h-[260px] overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-rose-50/80 to-transparent z-10 pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
+                <div className="animate-scroll-up-slow space-y-1">
+                  {[...comparisonRows, ...comparisonRows].map((row, i) => (
+                    <div key={i} className={`flex items-center gap-3 py-2.5 ${i % comparisonRows.length < 4 ? "opacity-100" : "opacity-50"}`}>
+                      <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
+                        <X className="h-3 w-3" strokeWidth={2.5} />
+                      </span>
+                      <span className={`text-sm text-[#003366]/70 ${i % comparisonRows.length < 4 ? "font-semibold text-[#003366]/90" : ""}`}>
+                        {row.without}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-xs text-rose-400/80 mt-3 leading-relaxed">
+                Unstructured prep that leaves gaps in readiness and costs your program trust.
+              </p>
             </div>
 
-            <div className="divide-y divide-[#e5e7eb]">
-              {comparisonRows.map((row) => (
-                <div key={row.feature} className="grid grid-cols-12">
-                  <div className="col-span-12 sm:col-span-4 px-4 sm:px-6 py-5 text-sm font-semibold text-[#003366] bg-white/80">
-                    {row.feature}
-                  </div>
-                  <div className="col-span-6 sm:col-span-4 px-4 sm:px-6 py-5 bg-[#f9fafb] border-l border-[#e5e7eb] flex gap-3">
-                    <span className="mt-1 h-4 w-4 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center">
-                      <Check className="h-3 w-3" strokeWidth={2.2} />
-                    </span>
-                    <p className="text-sm text-[#003366]/80 leading-relaxed">{row.with}</p>
-                  </div>
-                  <div className="col-span-6 sm:col-span-4 px-4 sm:px-6 py-5 flex gap-3">
-                    <span className="mt-1 h-4 w-4 rounded-full border border-[#d1d5db] text-[#9ca3af] grid place-items-center">
-                      <X className="h-3 w-3" strokeWidth={2.2} />
-                    </span>
-                    <p className="text-sm text-[#003366]/65 leading-relaxed">{row.without}</p>
-                  </div>
+            {/* ── With Clarivue ── */}
+            <div className="relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-[#003366]">With Clarivue</h3>
+                <span className="w-9 h-9 rounded-full bg-sky-100 border border-sky-200/60 flex items-center justify-center">
+                  <ArrowRight className="h-4 w-4 text-sky-600" strokeWidth={2.5} />
+                </span>
+              </div>
+
+              {/* Scrolling list with mask */}
+              <div className="relative h-[260px] overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-sky-50/80 to-transparent z-10 pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
+                <div className="animate-scroll-up-slow space-y-1">
+                  {[...comparisonRows, ...comparisonRows].map((row, i) => (
+                    <div key={i} className={`flex items-center gap-3 py-2.5 ${i % comparisonRows.length < 4 ? "opacity-100" : "opacity-50"}`}>
+                      <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
+                        <Check className="h-3 w-3" strokeWidth={2.5} />
+                      </span>
+                      <span className={`text-sm text-[#003366]/70 ${i % comparisonRows.length < 4 ? "font-semibold text-[#003366]/90" : ""}`}>
+                        {row.with}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              <p className="text-xs text-sky-500/80 mt-3 leading-relaxed">
+                Structured, measurable interview prep that protects outcomes and builds employer trust.
+              </p>
+
+              {/* CTA bar */}
+              <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
+                <a href="/roicalculator" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
+                  See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact */}
+      {/* Blog Insights */}
+      <BlogInsights />
+
+      {/* CTA Banner */}
+      <section className="relative py-14 md:py-20 overflow-hidden">
+        {/* Cloud background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-[#dce8f8]/50 to-white" />
+
+        {/* Cloud blobs — layered, organic shapes */}
+        <div className="absolute -left-20 top-[10%] w-[700px] h-[220px] rounded-[50%] bg-[#c5d9f0]/60 blur-[60px]" />
+        <div className="absolute left-[15%] top-[30%] w-[500px] h-[180px] rounded-[50%] bg-[#b8ccf4]/50 blur-[50px]" />
+        <div className="absolute right-[-5%] top-[5%] w-[600px] h-[200px] rounded-[50%] bg-[#c0d4ed]/55 blur-[55px]" />
+        <div className="absolute right-[20%] top-[45%] w-[450px] h-[160px] rounded-[50%] bg-[#d0dff3]/45 blur-[45px]" />
+        <div className="absolute left-[5%] bottom-[5%] w-[550px] h-[190px] rounded-[50%] bg-[#b8ccf4]/40 blur-[50px]" />
+        <div className="absolute right-[-10%] bottom-[15%] w-[650px] h-[210px] rounded-[50%] bg-[#c5d9f0]/50 blur-[55px]" />
+        <div className="absolute left-[40%] top-[15%] w-[400px] h-[140px] rounded-[50%] bg-[#dce8f8]/60 blur-[40px]" />
+        <div className="absolute left-[25%] bottom-[20%] w-[480px] h-[170px] rounded-[50%] bg-[#dce8f8]/50 blur-[45px]" />
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-[#003366] leading-tight">
+            Your learners' success is your reputation
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-[#003366]/70">
+            Ensure both are protected with Clarivue.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="/book-demo"
+              className="inline-flex items-center justify-center h-14 px-8 rounded-2xl bg-[#003366] text-white text-base font-semibold shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:bg-[#02294f] hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5 min-w-[200px]"
+            >
+              Request a demo
+            </a>
+            <a
+              href="/roicalculator"
+              className="inline-flex items-center justify-center h-14 px-8 rounded-2xl bg-white text-[#003366] text-base font-semibold border border-[#003366]/15 shadow-sm transition-all duration-300 hover:border-[#003366]/30 hover:shadow-md hover:-translate-y-0.5 min-w-[200px]"
+            >
+              Calculate your ROI
+            </a>
+          </div>
+
+          {/* Trust badges */}
+          <div className="mt-8 flex items-center justify-center gap-8 text-sm text-[#003366]/50">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-[#003366]/40" />
+              <span className="font-medium">PIPEDA &amp; GDPR ready</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-[#003366]/15" />
+            <div className="hidden sm:flex items-center gap-2">
+              <Lock className="w-5 h-5 text-[#003366]/40" />
+              <span className="font-medium">SOC 2 aligned</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-[#003366]/15" />
+            <div className="hidden sm:flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#003366]/40" />
+              <span className="font-medium">120K+ minutes analyzed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact - disabled
       <section id="institutions-contact" className="max-w-xl mx-auto pt-10 md:pt-12">
         <div className="glass-panel rounded-[32px] p-8 md:p-10 shadow-xl shadow-blue-900/5 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-[#ff686c]" />
@@ -1037,6 +1162,7 @@ export function InstitutionView() {
           <RequestAccessForm />
         </div>
       </section>
+      */}
 
       {/* READINESS COMMUNITY section - disabled
       <section

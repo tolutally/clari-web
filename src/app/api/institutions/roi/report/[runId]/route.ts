@@ -2,27 +2,32 @@ import { NextResponse } from "next/server";
 import { getRun } from "@/lib/institution-roi/storage";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ runId: string }> }) {
-  console.log("[ROI Report API] ENV check - SUPABASE_URL exists:", !!process.env.SUPABASE_URL);
-  console.log("[ROI Report API] ENV check - SUPABASE_SERVICE_ROLE_KEY exists:", !!process.env.SUPABASE_SERVICE_ROLE_KEY);
-  
   try {
     const { runId } = await ctx.params;
-    console.log("[ROI Report API] Fetching runId:", runId);
-    
+
     const run = await getRun(runId);
-    console.log("[ROI Report API] Run found:", !!run);
-    
+
     if (!run) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     if (!run.gate_passed) {
+      // Teaser varies by result version
+      const isV2 = run.result_version === 2;
       return NextResponse.json(
         {
           gatePassed: false,
-          teaser: {
-            summary: run.result.summary,
-            baseline: run.result.baseline,
-            sensitivity: run.result.sensitivity,
-          },
+          resultVersion: run.result_version,
+          teaser: isV2
+            ? {
+                summary: run.result.summary,
+                baselineSignals: (run.result as any).baselineSignals,
+                sensitivity: run.result.sensitivity,
+              }
+            : {
+                // Legacy v1 shape
+                summary: run.result.summary,
+                baseline: (run.result as any).baseline,
+                sensitivity: run.result.sensitivity,
+              },
         },
         { status: 200 },
       );
@@ -30,6 +35,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ runId: string 
 
     return NextResponse.json({
       gatePassed: true,
+      resultVersion: run.result_version,
       run,
     });
   } catch (err: any) {

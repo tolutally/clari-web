@@ -1,68 +1,81 @@
-import { RoiRequest, RoiResult, ScenarioBreakdown } from "./types";
+import type { RoiRequest, RoiResult, ChallengerScenarioBreakdown } from "./types";
+import { FAIL_CONVERSION_VALUE_FACTOR, PLACEMENT_RATE_PROXY } from "./defaults";
 
 const clampPct = (v: number | undefined, min = 0, max = 100) =>
   Math.min(max, Math.max(min, Number.isFinite(v ?? NaN) ? (v as number) : 0));
 
-const safe = (v: number | undefined) => (Number.isFinite(v ?? NaN) ? (v as number) : 0);
+const safe = (v: number | undefined, floor = 0) =>
+  Math.max(floor, Number.isFinite(v ?? NaN) ? (v as number) : 0);
 
-function computeScenario(input: RoiRequest, multiplier = 1): ScenarioBreakdown {
-  const cohort = Math.max(0, safe(input.context.cohortSize));
+/**
+ * Compute one scenario.
+ * `multiplier` is applied ONLY to the change assumptions (not the leak inputs).
+ *   low  = 0.8
+ *   expected = 1.0
+ *   high = 1.2
+ */
+function computeScenario(
+  input: RoiRequest,
+  multiplier = 1,
+): ChallengerScenarioBreakdown {
+  // ── Inputs ─────────────────────────────────────────────────────────────
+  const L = safe(input.context.cohortSize);
+  const V = safe(input.economics.revenuePerPlacement);
+  const W = safe(input.context.avgAdvisorHourlyCost) || 60;
+  const I = safe(input.leak.employerInterviewsPerLearner);
+  const U = clampPct(input.leak.unreadyAtInterviewRatePct) / 100;
+  const Rm = clampPct(input.leak.remediationRatePct) / 100;
+  const Hx = safe(input.leak.extraCoachingHoursPerRemediationLearner);
+  const Or = clampPct(input.leak.employerOpportunityRationingPct) / 100;
 
-  const readinessRate = clampPct(input.baseline.readinessRatePct) / 100;
-  const offerRate = clampPct(input.baseline.offerRatePct) / 100;
-  const readinessUplift = clampPct(input.uplift.readinessUpliftPctPoints) / 100;
-  const offerUplift = clampPct(input.uplift.offerRateUpliftPctPoints) / 100;
-  const advisorTimeSavings = clampPct(input.uplift.advisorTimeSavingsPct) / 100;
+  // ── Change assumptions (scaled by multiplier) ──────────────────────────
+  const dU = (clampPct(input.change.reductionInUnreadyRatePct) / 100) * multiplier;
+  const dRm = (clampPct(input.change.reductionInRemediationRatePct) / 100) * multiplier;
+  const recOr = (clampPct(input.change.recoveryOfRationedOpportunityPct) / 100) * multiplier;
 
-  const mockInterviewsPerLearner = safe(input.baseline.mockInterviewsPerLearner);
-  const sessionUplift = 1 + (safe(input.uplift.mockInterviewUpliftPct) / 100 || 0);
-  const baselineSessionsRaw = mockInterviewsPerLearner * cohort;
-  const baselineSessions = baselineSessionsRaw * sessionUplift;
+  // ── Investment ─────────────────────────────────────────────────────────
+  const Inv = safe(input.investment.annualChangeInvestment);
 
-  const avgSessionDurationHours = safe(input.context.avgSessionDurationHours) || 0.75;
-  // Keep advisorHourlyCost for time savings only
-  const advisorHourlyCost = safe(input.context.avgAdvisorHourlyCost) || 0;
-  // Use explicit costPerSession when provided; otherwise fall back to time-based approximation
-  const explicitCostPerSession = safe(input.economics.costPerSession);
-  const costPerSessionRate =
-    explicitCostPerSession || (avgSessionDurationHours > 0 ? avgSessionDurationHours * advisorHourlyCost : advisorHourlyCost);
-  const revenuePerPlacement = safe(input.economics.revenuePerPlacement);
-  const tuitionPerLearner = safe(input.economics.tuitionPerLearner);
-  const enrollmentUpliftPct = safe(input.economics.enrollmentCredibilityUpliftPct) / 100 || 0;
+  // ── Block 1: Rework loop tax ───────────────────────────────────────────
+  const reworkCost = L * Rm * Hx * W;
+  const reworkSaved = reworkCost * dRm;
 
-  const addedReadyLearners = cohort * readinessUplift * multiplier;
-  const baselineReady = cohort * readinessRate;
-  const finalReady = clampPct((baselineReady + addedReadyLearners) / cohort * 100) / 100;
+  // ── Block 2: Outcome leakage from unready interviews ───────────────────
+  const failFactor =
+    FAIL_CONVERSION_VALUE_FACTOR[input.context.programType] ??
+    FAIL_CONVERSION_VALUE_FACTOR.other;
+  const outcomeLeak = L * I * U * failFactor * V;
+  const outcomeRecovered = outcomeLeak * dU;
 
-  const addedOffers = cohort * offerUplift * multiplier;
-  const baselineOffers = cohort * offerRate;
-  const finalOffers = clampPct((baselineOffers + addedOffers) / cohort * 100) / 100;
+  // ── Block 3: Employer confidence tax ───────────────────────────────────
+  const placementProxy =
+    input.baseline?.offerRatePct != null && Number.isFinite(input.baseline.offerRatePct)
+      ? clampPct(input.baseline.offerRatePct) / 100
+      : PLACEMENT_RATE_PROXY[input.context.programType] ?? PLACEMENT_RATE_PROXY.other;
 
-  const advisorHoursSaved = baselineSessions * advisorTimeSavings * avgSessionDurationHours * multiplier;
-  const costSavings = advisorHoursSaved * advisorHourlyCost;
-  const revenueImpact = addedOffers * revenuePerPlacement;
-  const addedSessions = Math.max(0, baselineSessions - baselineSessionsRaw);
-  const addedSessionsCost = addedSessions * costPerSessionRate;
+  const confidenceLeak = L * placementProxy * Or * V;
+  const confidenceRecovered = confidenceLeak * recOr;
 
-  const baselineTimeToOffer = safe(input.baseline.avgTimeToOfferWeeks);
-  const hasBaselineTime = Number.isFinite(baselineTimeToOffer);
-  const newTimeToOffer =
-    hasBaselineTime && input.uplift.timeToOfferImprovementWeeks
-      ? Math.max(0, baselineTimeToOffer - safe(input.uplift.timeToOfferImprovementWeeks) * multiplier)
-      : hasBaselineTime
-        ? baselineTimeToOffer
-        : null;
+  // ── Totals ─────────────────────────────────────────────────────────────
+  const costOfDoingNothing = reworkCost + outcomeLeak + confidenceLeak;
+  const valueRecovered = reworkSaved + outcomeRecovered + confidenceRecovered;
+  const netAnnual = valueRecovered - Inv;
+  const roiPct = Inv <= 0 ? null : (netAnnual / Inv) * 100;
+  const paybackMonths =
+    valueRecovered <= 0 ? null : (Inv / valueRecovered) * 12;
 
   return {
-    totalValueImpact: revenueImpact + costSavings - addedSessionsCost,
-    revenueImpact,
-    costSavings,
-    addedSessionsCost,
-    advisorHoursSaved,
-    addedReadyLearners: cohort * (finalReady - readinessRate),
-    addedOffers: cohort * (finalOffers - offerRate),
-    newTimeToOfferWeeks: Number.isFinite(newTimeToOffer ?? NaN) ? (newTimeToOffer as number) : null,
-    // enrollment impact modeled separately (handled in buildResult)
+    costOfDoingNothing,
+    valueRecovered,
+    netAnnual,
+    roiPct,
+    paybackMonths,
+    reworkCost,
+    reworkSaved,
+    outcomeLeak,
+    outcomeRecovered,
+    confidenceLeak,
+    confidenceRecovered,
   };
 }
 
@@ -71,48 +84,28 @@ export function calculateRoi(input: RoiRequest): RoiResult {
   const low = computeScenario(input, 0.8);
   const high = computeScenario(input, 1.2);
 
-  const baselineReady = input.context.cohortSize * (clampPct(input.baseline.readinessRatePct) / 100);
-  const baselineOffers = input.context.cohortSize * (clampPct(input.baseline.offerRatePct) / 100);
-  const baselineSessions = safe(input.baseline.mockInterviewsPerLearner) * safe(input.context.cohortSize);
+  const L = safe(input.context.cohortSize);
+  const I = safe(input.leak.employerInterviewsPerLearner);
+  const U = clampPct(input.leak.unreadyAtInterviewRatePct) / 100;
 
-  // Outcome funding impact (for programs paid per successful outcome)
-  const outcomeFundingPerOffer = safe(input.economics.fundingPerOutcome);
-  const outcomeFundingUplift = expected.addedOffers * outcomeFundingPerOffer;
-
-  // Simple retention/tuition protection model: at-risk tuition from placement gap; protection from added offers
-  const tuitionPerLearner = safe(input.economics.tuitionPerLearner);
-  const baseEnrollmentAtRisk = Math.max(
-    0,
-    (1 - clampPct(input.baseline.offerRatePct) / 100) * safe(input.context.cohortSize) * tuitionPerLearner,
-  );
-  const enrollmentProtection = Math.min(baseEnrollmentAtRisk, expected.addedOffers * tuitionPerLearner);
+  const placementProxy =
+    input.baseline?.offerRatePct != null && Number.isFinite(input.baseline.offerRatePct)
+      ? clampPct(input.baseline.offerRatePct) / 100
+      : PLACEMENT_RATE_PROXY[input.context.programType] ?? PLACEMENT_RATE_PROXY.other;
 
   return {
+    resultVersion: 2,
     summary: expected,
-    enrollment: {
-      atRisk: baseEnrollmentAtRisk,
-      uplift: enrollmentProtection,
-    },
-    baseline: {
-      readyLearners: baselineReady,
-      offers: baselineOffers,
-      sessions: baselineSessions,
-    },
-    timeline: {
-      baselineTimeToOfferWeeks: safe(input.baseline.avgTimeToOfferWeeks) || null,
-      newTimeToOfferWeeks: expected.newTimeToOfferWeeks,
+    baselineSignals: {
+      placementProxyUsed: placementProxy,
+      interviewsPerYear: L * I,
+      unreadyInterviewsPerYear: L * I * U,
     },
     sensitivity: {
       low,
       expected,
       high,
     },
-    assumptions: {
-      ...input,
-      economics: {
-        ...input.economics,
-        fundingPerOutcome: outcomeFundingPerOffer,
-      },
-    },
+    assumptions: input,
   };
 }

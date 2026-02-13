@@ -1,19 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { BarChart3, Building2, LineChart, Target, TrendingUp } from "lucide-react";
 
 const painPoints = [
-  {
-    label: "OUTCOME PROOF",
-    quote: "Partners are asking for proof of outcomes — we can't keep selling 'trust us.'",
-    color: "from-sky-500/10 to-blue-500/10",
-    iconBg: "bg-sky-50",
-    iconColor: "text-sky-600",
-    borderColor: "border-sky-200/50",
-  },
+
   {
     label: "PLACEMENT PRESSURE",
-    quote: "If placements don't improve this cycle, enrollments, referrals, and funding are at risk.",
+    quote: "Placement numbers start to wobble",
+    description: "When interview conversion slips and next cycle's enrollment feels exposed. You need signal before results decline.",
     color: "from-amber-500/10 to-orange-500/10",
     iconBg: "bg-amber-50",
     iconColor: "text-amber-600",
@@ -21,46 +16,47 @@ const painPoints = [
   },
   {
     label: "EMPLOYER CONFIDENCE",
-    quote: "Employers say our learners aren't interview-ready — and they stop hiring from us.",
+    quote: "Employers slow referrals",
+    description: "When employer/partners question candidate quality and stop scaling hiring. You need better prepared candidates, not hope.",
     color: "from-rose-500/10 to-pink-500/10",
     iconBg: "bg-rose-50",
     iconColor: "text-rose-600",
     borderColor: "border-rose-200/50",
   },
   {
-    label: "READINESS VISIBILITY",
-    quote: "We don't know who's ready until interviews fail — that's too late to intervene.",
-    color: "from-indigo-500/10 to-purple-500/10",
-    iconBg: "bg-indigo-50",
-    iconColor: "text-indigo-600",
-    borderColor: "border-indigo-200/50",
-  },
-  {
     label: "COACHING CAPACITY",
-    quote: "Our advisors can't give every learner deep interview coaching — it doesn't scale.",
+    quote: "Advisors are overwhelmed",
+    description: "When mock interviews pile up and depth drops. You need structure without adding headcount.",
     color: "from-emerald-500/10 to-teal-500/10",
     iconBg: "bg-emerald-50",
     iconColor: "text-emerald-600",
     borderColor: "border-emerald-200/50",
   },
+  {
+    label: "READINESS VISIBILITY",
+    quote: "You only find gaps after rejection",
+    description: "When learners reach final rounds and fail for avoidable reasons. You need intervention before exposure.",
+    color: "from-indigo-500/10 to-purple-500/10",
+    iconBg: "bg-indigo-50",
+    iconColor: "text-indigo-600",
+    borderColor: "border-indigo-200/50",
+  },
 ];
 
 const icons = [LineChart, TrendingUp, Building2, BarChart3, Target];
 
-function PainPointCard({ item, index }: { item: typeof painPoints[number]; index: number }) {
+function PainPointCard({ item, index, isHovered, isSiblingHovered }: { item: typeof painPoints[number]; index: number; isHovered: boolean; isSiblingHovered: boolean }) {
   const Icon = icons[index % icons.length];
-  // Stagger the bounce animation for each card
-  const bounceDelay = `${index * 0.2}s`;
   
   return (
     <div
-      className={[
-        "group relative rounded-2xl p-6 z-10 flex-shrink-0 w-[280px]",
-        "transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]",
-        "shadow-lg hover:shadow-2xl",
-        "animate-bounce-gentle",
-      ].join(" ")}
-      style={{ animationDelay: bounceDelay }}
+      className={`group relative rounded-2xl p-6 z-10 shadow-lg transition-all duration-500 ease-out cursor-default ${
+        isHovered
+          ? "scale-105 shadow-2xl z-20"
+          : isSiblingHovered
+            ? "scale-[0.96] opacity-70 blur-[0.5px]"
+            : "hover:shadow-2xl"
+      }`}
     >
       {/* Background with gradient */}
       <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${item.color} opacity-50 group-hover:opacity-70 transition-opacity`} />
@@ -87,8 +83,13 @@ function PainPointCard({ item, index }: { item: typeof painPoints[number]; index
         </div>
 
         {/* Quote */}
-        <p className="text-sm leading-relaxed text-[#003366] font-medium">
-          "{item.quote}"
+        <p className="text-sm leading-relaxed text-[#003366] font-semibold">
+          {item.quote}
+        </p>
+
+        {/* Description */}
+        <p className="mt-2 text-xs leading-relaxed text-[#003366]/60">
+          {item.description}
         </p>
         
         {/* Decorative accent line */}
@@ -99,69 +100,46 @@ function PainPointCard({ item, index }: { item: typeof painPoints[number]; index
 }
 
 export default function InstitutionPainPoints() {
-  // Duplicate items for seamless infinite scroll
-  const duplicatedItems = [...painPoints, ...painPoints];
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="relative py-16 overflow-hidden">
+    <section className="relative py-16">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-12 px-6">
         <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70 mb-4">
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#003366]">
-            WHAT INSTITUTIONS ARE FACING
+            USE CASES
           </span>
         </div>
         
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#003366] mb-3">
-          Placements depend on interview success. But readiness is hard to measure.
+          Interview prep usually feels fine, until something breaks.
         </h2>
         
         <p className="text-base text-[#003366]/70">
-          You prepare students for careers. But when it comes to interviews, too much still comes down to hope.
+          These are the moments teams realize they need more than workshops.
         </p>
       </div>
 
-      {/* Scrolling marquee */}
-      <div className="relative">
-        {/* Gradient fade on left */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        
-        {/* Gradient fade on right */}
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-        
-        {/* Scrolling container */}
-        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused]">
-          {duplicatedItems.map((item, i) => (
-            <PainPointCard key={`${item.label}-${i}`} item={item} index={i} />
+      {/* Cards grid */}
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {painPoints.map((item, i) => (
+            <div
+              key={item.label}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <PainPointCard
+                item={item}
+                index={i}
+                isHovered={hoveredIndex === i}
+                isSiblingHovered={hoveredIndex !== null && hoveredIndex !== i}
+              />
+            </div>
           ))}
         </div>
       </div>
-
-      {/* CSS for marquee animation */}
-      <style jsx>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        @keyframes bounce-gentle {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
-        }
-        .animate-bounce-gentle {
-          animation: bounce-gentle 2s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 }

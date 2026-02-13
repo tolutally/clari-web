@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
-import { Footer, FloatingNav } from "@/components/layout/Footer";
+import { Footer } from "@/components/layout/Footer";
 import { InstitutionView } from "@/components/sections/institution/InstitutionView";
 import { IndividualView } from "@/components/sections/individual/IndividualView";
 
@@ -17,54 +17,24 @@ export default function Home() {
   const [betaError, setBetaError] = useState<string | null>(null);
   const [botTrap, setBotTrap] = useState("");
 
-  const tabTransform = useMemo(
-    () => (view === "institutions" ? "translateX(0)" : "translateX(100%)"),
-    [view],
-  );
-
   return (
     <div className="min-h-screen flex flex-col relative overflow-x-hidden">
       <div className="absolute inset-0 bg-grid opacity-40 pointer-events-none" aria-hidden="true" />
 
-      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
-        <div className="bg-white/80 backdrop-blur-md">
-          <Header />
-          {/* Tab toggle integrated below header */}
-          <div className="w-full flex justify-center pb-4 px-4 pointer-events-auto -mt-1">
-            <div className="glass-panel p-0.5 rounded-full flex items-center gap-0.5 shadow-lg ring-1 ring-[#003366]/5 backdrop-blur-xl bg-white/90">
-              <button
-                type="button"
-                onClick={() => setView("institutions")}
-                className={`px-4 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${
-                  view === "institutions"
-                    ? "text-[#003366] bg-white shadow-sm"
-                    : "text-[#003366]/60 hover:text-[#003366]"
-                }`}
-              >
-                For Institutions
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowIndividualModal(true);
-                  setBetaStatus("idle");
-                }}
-                className="px-4 py-1 rounded-full text-xs font-semibold transition-all duration-300 text-[#003366]/60 hover:text-[#003366]"
-              >
-                For Job Seekers
-                <span className="ml-1 text-[9px] font-bold text-[#ff686c] bg-[#ff686c]/10 px-1 py-0.5 rounded-full uppercase">Soon</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header
+        currentView={view}
+        onSwitchView={setView}
+        onJobSeekerClick={() => {
+          setShowIndividualModal(true);
+          setBetaStatus("idle");
+        }}
+      />
 
-      <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-32 pt-32">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-32 pt-20">
         {view === "institutions" ? <InstitutionView /> : <IndividualView />}
       </main>
 
       <Footer />
-      <FloatingNav currentView={view} />
 
       {showIndividualModal && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">

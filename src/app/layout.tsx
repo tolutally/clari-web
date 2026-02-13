@@ -10,9 +10,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Prep and Nail Interviews at Scale | Clarivue",
+  title: "Interview Readiness Platform for Career Centers | Clarivue",
   description:
-    "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+    "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
   icons: {
     icon: [
       { url: "/clarivue-favicon/favicon.ico", sizes: "any" },
@@ -23,18 +23,18 @@ export const metadata: Metadata = {
   },
   manifest: "/clarivue-favicon/site.webmanifest",
   openGraph: {
-    title: "Prep and Nail Interviews at Scale | Clarivue",
+    title: "Interview Readiness Platform for Career Centers | Clarivue",
     description:
-      "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+      "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
     type: "website",
     siteName: "Clarivue",
-    url: "https://clarivue.ai",
+    url: "https://clarivue.io",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Prep and Nail Interviews at Scale | Clarivue",
+    title: "Interview Readiness Platform for Career Centers | Clarivue",
     description:
-      "Prep learners for real interviews at scale with AI-driven mock interviews, actionable coaching, readiness analytics, and proven improvements in placement performance.",
+      "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
   },
 };
 

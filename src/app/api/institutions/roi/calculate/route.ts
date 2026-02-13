@@ -5,13 +5,22 @@ import type { RoiRequest } from "@/lib/institution-roi/types";
 function validate(body: RoiRequest): string | null {
   if (!body?.context) return "context is required";
   if (!body.context.programType) return "programType is required";
-  if (!Number.isFinite(body.context.cohortSize)) return "cohortSize is required";
-  if (!body?.baseline) return "baseline is required";
-  if (!Number.isFinite(body.baseline.readinessRatePct)) return "readinessRatePct is required";
-  if (!Number.isFinite(body.baseline.offerRatePct)) return "offerRatePct is required";
-  if (!body?.uplift) return "uplift is required";
+  if (!Number.isFinite(body.context.cohortSize) || body.context.cohortSize <= 0)
+    return "cohortSize is required and must be > 0";
+
   if (!body?.economics) return "economics is required";
-  if (!Number.isFinite(body.economics.revenuePerPlacement)) return "revenuePerPlacement is required";
+  if (!Number.isFinite(body.economics.revenuePerPlacement) || body.economics.revenuePerPlacement <= 0)
+    return "revenuePerPlacement is required and must be > 0";
+
+  if (!body?.leak) return "leak is required";
+  if (!Number.isFinite(body.leak.employerInterviewsPerLearner))
+    return "leak.employerInterviewsPerLearner is required";
+
+  if (!body?.change) return "change is required";
+  if (!body?.investment) return "investment is required";
+  if (!Number.isFinite(body.investment.annualChangeInvestment))
+    return "investment.annualChangeInvestment is required";
+
   return null;
 }
 

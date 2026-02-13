@@ -1,74 +1,37 @@
 import React from "react";
-import { ArrowRight, TrendingUp, Users, Clock, DollarSign, AlertTriangle, CheckCircle2, ChevronDown } from "lucide-react";
+import { ArrowRight, TrendingUp, Users, Clock, DollarSign, AlertTriangle, CheckCircle2, ChevronDown, Shield, RefreshCw, Target } from "lucide-react";
 import { getRun } from "@/lib/institution-roi/storage";
 
 export const dynamic = "force-dynamic";
 
-// Types matching backend response
-interface ScenarioBreakdown {
-  totalValueImpact: number;
-  revenueImpact: number;
-  costSavings: number;
-  advisorHoursSaved: number;
-  addedSessionsCost: number;
-  addedReadyLearners: number;
-  addedOffers: number;
-  newTimeToOfferWeeks: number | null;
-}
-
-interface RoiResult {
-  summary: ScenarioBreakdown;
-  enrollment?: {
-    atRisk: number;
-    uplift: number;
-  };
-  baseline: {
-    readyLearners: number;
-    offers: number;
-    sessions: number;
-  };
-  timeline: {
-    baselineTimeToOfferWeeks: number | null;
-    newTimeToOfferWeeks: number | null;
-  };
-  sensitivity: {
-    low: ScenarioBreakdown;
-    expected: ScenarioBreakdown;
-    high: ScenarioBreakdown;
-  };
-  assumptions: any;
-}
-
-interface RoiRunRow {
-  id: string;
-  request: any;
-  result: RoiResult;
-  narrative?: string;
-  gate_passed: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
+/* ---------- Formatting helpers ---------- */
 const fmtCurrency = (v: number) => `$${Number(v ?? 0).toLocaleString()}`;
 const fmtNumber = (v: number) => Number(v ?? 0).toLocaleString();
 const fmtPct = (v: number) => `${Number(v ?? 0).toFixed(0)}%`;
-const fmtDateTime = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—");
+const fmtDateTime = (iso?: string) =>
+  iso
+    ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "—";
 
+/* =================================================================
+ * Page component
+ * ================================================================= */
 export default async function RoiReportPage({
   params,
 }: {
   params: Promise<{ runId: string }>;
 }) {
   const { runId } = await params;
-  
-  // Fetch directly from database (avoids HTTP fetch issues with Vercel deployment protection)
-  let run: RoiRunRow | null = null;
+
+  // Fetch directly from database
+  let run: any | null = null;
   try {
-    run = await getRun(runId) as RoiRunRow | null;
+    run = await getRun(runId);
   } catch (err) {
     console.error("[ROI Report] Database error:", err);
   }
 
+  /* ---------- Not found ---------- */
   if (!run) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-[#003366] via-[#004080] to-[#003366]">
@@ -78,7 +41,10 @@ export default async function RoiReportPage({
           </div>
           <h1 className="text-2xl font-semibold text-white mb-3">Report not found</h1>
           <p className="text-white/60 mb-8">This report may not exist or may not be ready.</p>
-          <a href="/roicalculator" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#003366] font-semibold hover:bg-white/90 transition-all">
+          <a
+            href="/roicalculator"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#003366] font-semibold hover:bg-white/90 transition-all"
+          >
             Back to Calculator
           </a>
         </div>
@@ -86,6 +52,7 @@ export default async function RoiReportPage({
     );
   }
 
+  /* ---------- Gate not passed ---------- */
   if (!run.gate_passed) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-[#003366] via-[#004080] to-[#003366]">
@@ -96,7 +63,10 @@ export default async function RoiReportPage({
           </div>
           <h1 className="text-3xl font-semibold text-white mb-3">Unlock the full report</h1>
           <p className="text-white/60 mb-8">Submit your email in the calculator to view the complete analysis.</p>
-          <a href="/roicalculator" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all">
+          <a
+            href="/roicalculator"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all"
+          >
             Complete Calculator <ArrowRight className="w-4 h-4" />
           </a>
         </div>
@@ -104,40 +74,34 @@ export default async function RoiReportPage({
     );
   }
 
-  // Extract data
+  /* ---------- Route to correct renderer ---------- */
+  const resultVersion = run.result_version ?? 1;
+
+  if (resultVersion >= 2) {
+    return <V2Report run={run} />;
+  }
+  return <V1Report run={run} />;
+}
+
+/* =================================================================
+ * V2 Challenger Report
+ * ================================================================= */
+function V2Report({ run }: { run: any }) {
   const { result, request } = run;
-  const { summary, baseline, sensitivity, timeline } = result;
+  const summary = result.summary ?? {};
+  const sensitivity = result.sensitivity ?? {};
+  const baselineSignals = result.baselineSignals ?? {};
   const assumptions = result.assumptions ?? {};
   const context = request?.context ?? {};
+  const narrative = run.narrative;
 
-  // Computed values
   const cohortSize = Number(context.cohortSize ?? 0);
-  const baselineMockInterviews = Number(assumptions.baseline?.mockInterviewsPerLearner ?? 0);
-  const mockUpliftPct = Number(assumptions.uplift?.mockInterviewUpliftPct ?? 0);
-  const baseSessions = cohortSize * baselineMockInterviews;
-  const afterSessions = Math.round(baseSessions * (1 + mockUpliftPct / 100));
-
-  const readyDelta = summary.addedReadyLearners;
-  const offersDelta = summary.addedOffers;
-  const enrollmentAtRisk = Number(result.enrollment?.atRisk ?? 0);
-  const enrollmentUplift = Number(result.enrollment?.uplift ?? 0);
-
-  const readyGap = Math.max(0, cohortSize - Number(baseline.readyLearners ?? 0));
-  const offerGap = Math.max(0, cohortSize - Number(baseline.offers ?? 0));
-  const baselineAdvisorHours = Number(baseline.offers ?? 0) * 0.75;
-  const readinessRate = Number(assumptions.baseline?.readinessRatePct ?? 0);
-  const offerRate = Number(assumptions.baseline?.offerRatePct ?? 0);
-  const advisorTimeSavingsPct = Number(assumptions.uplift?.advisorTimeSavingsPct ?? 0);
-
-  // Cap advisor hours saved conservatively
-  const advisorHoursSavedCapped = Math.min(summary.advisorHoursSaved, baselineAdvisorHours * 0.35);
-  const hardValueTotal = summary.revenueImpact + summary.costSavings - summary.addedSessionsCost;
+  const programType = context.programType ?? "Institution";
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section - Most Valuable Point First */}
+      {/* ── Hero ── */}
       <section className="relative bg-gradient-to-br from-[#003366] via-[#004080] to-[#002244] pt-12 pb-20 overflow-hidden">
-        {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[#ff686c]/10 blur-3xl" />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-sky-500/10 blur-3xl" />
@@ -148,55 +112,51 @@ export default async function RoiReportPage({
           {/* Header badges */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/10 text-white/80 text-xs font-semibold uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              ROI Analysis
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Readiness Debt Analysis
             </span>
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/10 text-white/80 text-xs font-semibold">
-              {context.programType ?? "Institution"} • {fmtNumber(cohortSize)} learners
+              {programType} &bull; {fmtNumber(cohortSize)} learners
             </span>
           </div>
 
-          {/* Main value proposition */}
+          {/* Cost of doing nothing — hero number */}
           <div className="text-center mb-12">
-            <p className="text-[#ff686c] font-semibold text-sm uppercase tracking-wider mb-4">Projected Annual Value</p>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
-              {fmtCurrency(hardValueTotal)}
-            </h1>
-            <p className="text-white/60 text-lg">
-              in recoverable value from closing the placement gap
+            <p className="text-amber-400 font-semibold text-sm uppercase tracking-wider mb-4">
+              Annual cost of doing nothing
             </p>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
+              {fmtCurrency(summary.costOfDoingNothing ?? 0)}
+            </h1>
+            <p className="text-white/60 text-lg">leaking each year through rework, failed interviews, and employer pullback</p>
           </div>
 
           {/* Key metrics row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10 text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 mb-3">
-                <Users className="w-5 h-5 text-emerald-400" />
-              </div>
-              <p className="text-2xl md:text-3xl font-bold text-white">+{fmtNumber(offersDelta)}</p>
-              <p className="text-white/50 text-sm mt-1">Additional Offers</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10 text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-sky-500/20 mb-3">
-                <TrendingUp className="w-5 h-5 text-sky-400" />
-              </div>
-              <p className="text-2xl md:text-3xl font-bold text-white">+{fmtNumber(readyDelta)}</p>
-              <p className="text-white/50 text-sm mt-1">Ready Learners</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10 text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 mb-3">
-                <Clock className="w-5 h-5 text-amber-400" />
-              </div>
-              <p className="text-2xl md:text-3xl font-bold text-white">{fmtNumber(Math.round(advisorHoursSavedCapped))}</p>
-              <p className="text-white/50 text-sm mt-1">Hours Returned</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10 text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#ff686c]/20 mb-3">
-                <DollarSign className="w-5 h-5 text-[#ff686c]" />
-              </div>
-              <p className="text-2xl md:text-3xl font-bold text-white">{fmtCurrency(summary.revenueImpact)}</p>
-              <p className="text-white/50 text-sm mt-1">Revenue Impact</p>
-            </div>
+            <MetricCard
+              icon={<DollarSign className="w-5 h-5 text-emerald-400" />}
+              iconBg="bg-emerald-500/20"
+              value={fmtCurrency(summary.valueRecovered ?? 0)}
+              label="Value Recovered"
+            />
+            <MetricCard
+              icon={<Clock className="w-5 h-5 text-sky-400" />}
+              iconBg="bg-sky-500/20"
+              value={summary.paybackMonths != null ? `${summary.paybackMonths.toFixed(1)} mo` : "—"}
+              label="Payback Period"
+            />
+            <MetricCard
+              icon={<TrendingUp className="w-5 h-5 text-amber-400" />}
+              iconBg="bg-amber-500/20"
+              value={summary.roiPct != null ? `${summary.roiPct.toFixed(0)}%` : "—"}
+              label="Annual ROI"
+            />
+            <MetricCard
+              icon={<Users className="w-5 h-5 text-[#ff686c]" />}
+              iconBg="bg-[#ff686c]/20"
+              value={fmtNumber(baselineSignals.unreadyInterviewsPerYear ?? 0)}
+              label="Unready Interviews / yr"
+            />
           </div>
 
           {/* Scroll indicator */}
@@ -209,194 +169,132 @@ export default async function RoiReportPage({
         </div>
       </section>
 
-      {/* Content sections */}
+      {/* ── Content ── */}
       <div className="bg-gradient-to-b from-[#f8fafc] to-white">
         <div className="max-w-4xl mx-auto px-6 py-16 space-y-12">
-
-          {/* The Gap - Emotional Impact */}
-          <section className="relative">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#ff686c]/10 text-[#ff686c] text-sm font-bold">1</span>
-              <h2 className="text-xl font-semibold text-[#003366]">The Gap You&apos;re Facing Today</h2>
-            </div>
-            <div className="bg-gradient-to-br from-[#ff686c]/5 to-rose-50 rounded-2xl p-6 border border-[#ff686c]/10">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff686c]/10 flex items-center justify-center mt-0.5">
-                      <AlertTriangle className="w-4 h-4 text-[#ff686c]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#003366]">{fmtNumber(offerGap)} learners not converting</p>
-                      <p className="text-sm text-[#003366]/60">{fmtPct(100 - offerRate)} of your cohort misses out on offers</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff686c]/10 flex items-center justify-center mt-0.5">
-                      <AlertTriangle className="w-4 h-4 text-[#ff686c]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#003366]">{fmtNumber(readyGap)} not interview-ready</p>
-                      <p className="text-sm text-[#003366]/60">{fmtPct(100 - readinessRate)} unprepared before employer contact</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff686c]/10 flex items-center justify-center mt-0.5">
-                      <Clock className="w-4 h-4 text-[#ff686c]" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#003366]">{timeline.baselineTimeToOfferWeeks ?? "—"} weeks to offer</p>
-                      <p className="text-sm text-[#003366]/60">Extended hiring cycles drain momentum</p>
-                    </div>
-                  </div>
-                  {enrollmentAtRisk > 0 && (
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff686c]/10 flex items-center justify-center mt-0.5">
-                        <DollarSign className="w-4 h-4 text-[#ff686c]" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-[#003366]">{fmtCurrency(enrollmentAtRisk)} at risk</p>
-                        <p className="text-sm text-[#003366]/60">Enrollment credibility tied to weak signals</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+          {/* Section 1: Where the leak comes from */}
+          <section>
+            <SectionHeader number="1" title="Where the Readiness Debt Comes From" accent="rose" />
+            <div className="grid md:grid-cols-3 gap-4">
+              <TaxCard
+                icon={<RefreshCw className="w-5 h-5 text-[#ff686c]" />}
+                title="Rework Loop Tax"
+                cost={summary.reworkCost ?? 0}
+                recoverable={summary.reworkSaved ?? 0}
+                description="Remediation coaching that repeats because learners weren't ready the first time."
+              />
+              <TaxCard
+                icon={<Target className="w-5 h-5 text-[#ff686c]" />}
+                title="Outcome Leakage"
+                cost={summary.outcomeLeak ?? 0}
+                recoverable={summary.outcomeRecovered ?? 0}
+                description="Interviews that fail to convert because candidates lacked verified readiness."
+              />
+              <TaxCard
+                icon={<Shield className="w-5 h-5 text-[#ff686c]" />}
+                title="Employer Confidence Tax"
+                cost={summary.confidenceLeak ?? 0}
+                recoverable={summary.confidenceRecovered ?? 0}
+                description="Employer opportunity rationing — fewer slots offered when past cohorts underperform."
+              />
             </div>
           </section>
 
-          {/* With Clarivue - The Transformation */}
+          {/* Section 2: Value recovered */}
           <section>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-600 text-sm font-bold">2</span>
-              <h2 className="text-xl font-semibold text-[#003366]">Your Projected State With Clarivue</h2>
-            </div>
+            <SectionHeader number="2" title="What Verified Readiness Recovers" accent="emerald" />
             <div className="bg-gradient-to-br from-emerald-50 to-sky-50 rounded-2xl p-6 border border-emerald-100">
-              <div className="space-y-4">
-                {[
-                  { label: "Ready learners", before: fmtNumber(baseline.readyLearners), after: fmtNumber(baseline.readyLearners + readyDelta), icon: Users },
-                  { label: "Offers", before: fmtNumber(baseline.offers), after: fmtNumber(baseline.offers + offersDelta), icon: CheckCircle2 },
-                  { label: "Practice throughput", before: fmtNumber(baseSessions), after: fmtNumber(afterSessions), icon: TrendingUp },
-                  { label: "Time to offer", before: `${timeline.baselineTimeToOfferWeeks ?? "—"} wks`, after: `${timeline.newTimeToOfferWeeks ?? "—"} wks`, icon: Clock },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between py-3 border-b border-emerald-100 last:border-0">
-                    <div className="flex items-center gap-3">
-                      <item.icon className="w-5 h-5 text-emerald-600" />
-                      <span className="font-medium text-[#003366]">{item.label}</span>
-                    </div>
-                    <div className="flex items-center gap-3 font-mono text-sm">
-                      <span className="text-[#003366]/40">{item.before}</span>
-                      <ArrowRight className="w-4 h-4 text-emerald-500" />
-                      <span className="font-semibold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded">{item.after}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Value Breakdown */}
-          <section>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003366]/10 text-[#003366] text-sm font-bold">3</span>
-              <h2 className="text-xl font-semibold text-[#003366]">Value Breakdown</h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* Hard Value */}
-              <div className="bg-white rounded-2xl p-6 border border-[#003366]/10 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-[#003366]" />
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/60">Hard Value (Included in ROI)</p>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between py-2 border-b border-[#003366]/5">
-                    <span className="text-sm text-[#003366]/70">Placement revenue</span>
-                    <span className="font-semibold text-[#003366]">{fmtCurrency(summary.revenueImpact)}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-[#003366]/5">
-                    <span className="text-sm text-[#003366]/70">Net delivery impact</span>
-                    <span className="font-semibold text-[#003366]">{fmtCurrency(summary.costSavings - summary.addedSessionsCost)}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-[#003366]/5">
-                    <span className="text-sm text-[#003366]/70">Advisor hours returned</span>
-                    <span className="font-semibold text-[#003366]">{fmtNumber(Math.round(advisorHoursSavedCapped))} hrs</span>
-                  </div>
-                  <div className="flex justify-between pt-3 mt-2 border-t-2 border-[#003366]/10">
-                    <span className="font-semibold text-[#003366]">Total</span>
-                    <span className="font-bold text-lg text-[#003366]">{fmtCurrency(hardValueTotal)}</span>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600/70 mb-4">
+                    Status Quo vs Improved
+                  </p>
+                  <div className="space-y-4">
+                    {[
+                      { label: "Cost of doing nothing", val: fmtCurrency(summary.costOfDoingNothing ?? 0), icon: AlertTriangle },
+                      { label: "Value recovered", val: fmtCurrency(summary.valueRecovered ?? 0), icon: CheckCircle2 },
+                      { label: "Net annual impact", val: fmtCurrency(summary.netAnnual ?? 0), icon: TrendingUp },
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center justify-between py-2 border-b border-emerald-100 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <item.icon className="w-4 h-4 text-emerald-600" />
+                          <span className="text-sm font-medium text-[#003366]">{item.label}</span>
+                        </div>
+                        <span className="font-semibold text-emerald-600">{item.val}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-
-              {/* Strategic Upside */}
-              <div className="bg-gradient-to-br from-[#003366]/5 to-sky-50 rounded-2xl p-6 border border-dashed border-[#003366]/20">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-[#003366]/30" />
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40">Strategic Upside (Not in ROI)</p>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between py-2 border-b border-[#003366]/5">
-                    <span className="text-sm text-[#003366]/50">Employer signal quality</span>
-                    <span className="text-sm font-medium text-[#003366]/50">Improved</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-[#003366]/5">
-                    <span className="text-sm text-[#003366]/50">Cohort credibility</span>
-                    <span className="text-sm font-medium text-[#003366]/50">{enrollmentUplift > 0 ? fmtCurrency(enrollmentUplift) : "Improved"}</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-sm text-[#003366]/50">Operational resilience</span>
-                    <span className="text-sm font-medium text-[#003366]/50">Increased</span>
-                  </div>
+                <div className="flex flex-col justify-center items-center text-center">
+                  <p className="text-xs text-emerald-600/70 uppercase tracking-wider mb-2">Return on Investment</p>
+                  <p className="text-5xl font-bold text-emerald-600">
+                    {summary.roiPct != null ? `${summary.roiPct.toFixed(0)}%` : "N/A"}
+                  </p>
+                  <p className="text-sm text-emerald-600/60 mt-2">
+                    {summary.paybackMonths != null
+                      ? `Pays for itself in ${summary.paybackMonths.toFixed(1)} months`
+                      : ""}
+                  </p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Sensitivity */}
+          {/* Section 3: Sensitivity */}
           <section>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003366]/10 text-[#003366] text-sm font-bold">4</span>
-              <h2 className="text-xl font-semibold text-[#003366]">Sensitivity Range</h2>
-            </div>
+            <SectionHeader number="3" title="Sensitivity Range" accent="navy" />
             <div className="bg-white rounded-2xl p-6 border border-[#003366]/10 shadow-sm">
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 rounded-xl bg-[#003366]/5">
                   <p className="text-xs text-[#003366]/50 mb-2 uppercase tracking-wider">Conservative</p>
-                  <p className="text-2xl font-bold text-[#003366]">{fmtCurrency(sensitivity.low.totalValueImpact)}</p>
-                  <p className="text-xs text-[#003366]/50 mt-2">{fmtNumber(sensitivity.low.addedOffers)} offers</p>
+                  <p className="text-2xl font-bold text-[#003366]">
+                    {fmtCurrency(sensitivity.low?.valueRecovered ?? 0)}
+                  </p>
+                  <p className="text-xs text-[#003366]/50 mt-2">recovered / yr</p>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-emerald-50 border-2 border-emerald-200">
                   <p className="text-xs text-emerald-600 mb-2 uppercase tracking-wider font-semibold">Expected</p>
-                  <p className="text-2xl font-bold text-emerald-600">{fmtCurrency(sensitivity.expected.totalValueImpact)}</p>
-                  <p className="text-xs text-emerald-600/70 mt-2">{fmtNumber(sensitivity.expected.addedOffers)} offers</p>
+                  <p className="text-2xl font-bold text-emerald-600">
+                    {fmtCurrency(sensitivity.expected?.valueRecovered ?? 0)}
+                  </p>
+                  <p className="text-xs text-emerald-600/70 mt-2">recovered / yr</p>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-[#003366]/5">
                   <p className="text-xs text-[#003366]/50 mb-2 uppercase tracking-wider">Upside</p>
-                  <p className="text-2xl font-bold text-[#003366]">{fmtCurrency(sensitivity.high.totalValueImpact)}</p>
-                  <p className="text-xs text-[#003366]/50 mt-2">{fmtNumber(sensitivity.high.addedOffers)} offers</p>
+                  <p className="text-2xl font-bold text-[#003366]">
+                    {fmtCurrency(sensitivity.high?.valueRecovered ?? 0)}
+                  </p>
+                  <p className="text-xs text-[#003366]/50 mt-2">recovered / yr</p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* If Nothing Changes */}
+          {/* Section 4: Narrative */}
+          {narrative && (
+            <section>
+              <SectionHeader number="4" title="Executive Summary" accent="violet" />
+              <div className="bg-gradient-to-br from-violet-50 to-indigo-50 rounded-2xl p-6 border border-violet-100">
+                <div className="text-sm text-[#003366]/80 whitespace-pre-line leading-relaxed">
+                  {narrative}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Section 5: If nothing changes */}
           <section>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#ff686c]/10 text-[#ff686c] text-sm font-bold">5</span>
-              <h2 className="text-xl font-semibold text-[#003366]">If Nothing Changes</h2>
-            </div>
+            <SectionHeader number={narrative ? "5" : "4"} title="If Nothing Changes" accent="slate" />
             <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 {[
-                  `${fmtNumber(readyGap)} learners remain unprepared per cohort`,
-                  `${fmtNumber(offerGap)} potential offers continue to be missed`,
-                  "Advisor time consumed by repetitive coaching",
-                  "Employer confidence remains unverified",
+                  `${fmtCurrency(summary.costOfDoingNothing ?? 0)} leaks annually — with no visible line item`,
+                  `${fmtNumber(baselineSignals.unreadyInterviewsPerYear ?? 0)} unready interviews burn employer goodwill`,
+                  "Remediation cycles repeat without systemic change",
+                  "Employer opportunity rationing compounds over time",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-sm text-[#003366]/70">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-400 flex-shrink-0" />
                     {item}
                   </div>
                 ))}
@@ -414,44 +312,36 @@ export default async function RoiReportPage({
             <details className="group">
               <summary className="flex items-center justify-between cursor-pointer py-4 border-b border-[#003366]/10">
                 <div className="flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003366]/5 text-[#003366]/60 text-sm font-bold">6</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#003366]/5 text-[#003366]/60 text-sm font-bold">
+                    {narrative ? "6" : "5"}
+                  </span>
                   <h2 className="text-xl font-semibold text-[#003366]">Assumptions</h2>
                 </div>
                 <ChevronDown className="w-5 h-5 text-[#003366]/40 transition-transform group-open:rotate-180" />
               </summary>
               <div className="pt-6 grid md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl p-4 border border-[#003366]/10">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40 mb-3">Context</p>
-                  <div className="space-y-2 text-sm text-[#003366]/70">
-                    <p>Cohort size: {fmtNumber(cohortSize)}</p>
-                    <p>Program type: {context.programType ?? "—"}</p>
-                    <p>Advisor hourly cost: {fmtCurrency(context.avgAdvisorHourlyCost ?? 0)}</p>
-                  </div>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-[#003366]/10">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40 mb-3">Baseline</p>
-                  <div className="space-y-2 text-sm text-[#003366]/70">
-                    <p>Readiness rate: {fmtPct(assumptions.baseline?.readinessRatePct ?? 0)}</p>
-                    <p>Offer rate: {fmtPct(assumptions.baseline?.offerRatePct ?? 0)}</p>
-                    <p>Time to offer: {assumptions.baseline?.avgTimeToOfferWeeks ?? "—"} weeks</p>
-                  </div>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-[#003366]/10">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40 mb-3">Uplift</p>
-                  <div className="space-y-2 text-sm text-[#003366]/70">
-                    <p>Readiness lift: {assumptions.uplift?.readinessUpliftPctPoints ?? "—"} pp</p>
-                    <p>Offer lift: {assumptions.uplift?.offerRateUpliftPctPoints ?? "—"} pp</p>
-                    <p>Advisor savings: {fmtPct(assumptions.uplift?.advisorTimeSavingsPct ?? 0)}</p>
-                  </div>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-[#003366]/10">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40 mb-3">Economics</p>
-                  <div className="space-y-2 text-sm text-[#003366]/70">
-                    <p>Revenue per placement: {fmtCurrency(assumptions.economics?.revenuePerPlacement ?? 0)}</p>
-                    <p>Cost per session: {fmtCurrency(assumptions.economics?.costPerSession ?? 0)}</p>
-                    <p>Tuition per learner: {fmtCurrency(assumptions.economics?.tuitionPerLearner ?? 0)}</p>
-                  </div>
-                </div>
+                <AssumptionCard title="Context">
+                  <p>Cohort size: {fmtNumber(cohortSize)}</p>
+                  <p>Program type: {programType}</p>
+                  <p>Advisor hourly cost: {fmtCurrency(context.avgAdvisorHourlyCost ?? 0)}</p>
+                </AssumptionCard>
+                <AssumptionCard title="Leak Inputs">
+                  <p>Interviews per learner: {assumptions.leak?.employerInterviewsPerLearner ?? "—"}</p>
+                  <p>Unready at interview: {fmtPct(assumptions.leak?.unreadyAtInterviewRatePct ?? 0)}</p>
+                  <p>Remediation rate: {fmtPct(assumptions.leak?.remediationRatePct ?? 0)}</p>
+                  <p>Extra coaching hrs: {assumptions.leak?.extraCoachingHoursPerRemediationLearner ?? "—"}</p>
+                  <p>Employer rationing: {fmtPct(assumptions.leak?.employerOpportunityRationingPct ?? 0)}</p>
+                </AssumptionCard>
+                <AssumptionCard title="Change Assumptions">
+                  <p>Unready rate reduction: {fmtPct(assumptions.change?.reductionInUnreadyRatePct ?? 0)}</p>
+                  <p>Remediation reduction: {fmtPct(assumptions.change?.reductionInRemediationRatePct ?? 0)}</p>
+                  <p>Opportunity recovery: {fmtPct(assumptions.change?.recoveryOfRationedOpportunityPct ?? 0)}</p>
+                </AssumptionCard>
+                <AssumptionCard title="Investment">
+                  <p>Annual investment: {fmtCurrency(assumptions.investment?.annualChangeInvestment ?? 0)}</p>
+                  <p>Revenue per placement: {fmtCurrency(assumptions.economics?.revenuePerPlacement ?? 0)}</p>
+                  <p>Placement proxy: {fmtPct((baselineSignals.placementProxyUsed ?? 0) * 100)}</p>
+                </AssumptionCard>
               </div>
             </details>
           </section>
@@ -463,12 +353,12 @@ export default async function RoiReportPage({
               <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-sky-500/20 blur-3xl" />
             </div>
             <div className="relative">
-              <h3 className="text-2xl font-semibold text-white mb-3">Ready to close the gap?</h3>
+              <h3 className="text-2xl font-semibold text-white mb-3">Ready to close the readiness gap?</h3>
               <p className="text-white/60 mb-6 max-w-md mx-auto">
                 Schedule a walkthrough to validate these projections with your specific program data.
               </p>
-              <a 
-                href="/roicalculator#institutions-contact" 
+              <a
+                href="/roicalculator#institutions-contact"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all shadow-lg shadow-[#ff686c]/25"
               >
                 Schedule Walkthrough <ArrowRight className="w-5 h-5" />
@@ -479,14 +369,186 @@ export default async function RoiReportPage({
           {/* Footer */}
           <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
             <a href="/roicalculator" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
-              ← Back to Calculator
+              &larr; Back to Calculator
             </a>
-            <p className="text-[#003366]/40 text-xs">
-              Report generated {fmtDateTime(run.created_at)}
-            </p>
+            <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
           </footer>
         </div>
       </div>
     </main>
+  );
+}
+
+/* =================================================================
+ * V1 Legacy Report (backward compat)
+ * ================================================================= */
+function V1Report({ run }: { run: any }) {
+  const { result, request } = run;
+  const summary = result.summary ?? {};
+  const baseline = result.baseline ?? {};
+  const sensitivity = result.sensitivity ?? {};
+  const assumptions = result.assumptions ?? {};
+  const context = request?.context ?? {};
+
+  const cohortSize = Number(context.cohortSize ?? 0);
+  const readyDelta = Number(summary.addedReadyLearners ?? 0);
+  const offersDelta = Number(summary.addedOffers ?? 0);
+  const hardValueTotal = Number(summary.revenueImpact ?? 0) + Number(summary.costSavings ?? 0) - Number(summary.addedSessionsCost ?? 0);
+
+  return (
+    <main className="min-h-screen">
+      {/* Hero */}
+      <section className="relative bg-gradient-to-br from-[#003366] via-[#004080] to-[#002244] pt-12 pb-20 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[#ff686c]/10 blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-sky-500/10 blur-3xl" />
+        </div>
+        <div className="relative max-w-4xl mx-auto px-6">
+          <div className="flex flex-wrap items-center gap-3 mb-8">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/10 text-white/80 text-xs font-semibold uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              ROI Analysis
+            </span>
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/10 text-white/80 text-xs font-semibold">
+              {context.programType ?? "Institution"} &bull; {fmtNumber(cohortSize)} learners
+            </span>
+          </div>
+          <div className="text-center mb-12">
+            <p className="text-[#ff686c] font-semibold text-sm uppercase tracking-wider mb-4">Projected Annual Value</p>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
+              {fmtCurrency(hardValueTotal)}
+            </h1>
+            <p className="text-white/60 text-lg">in recoverable value from closing the placement gap</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <MetricCard icon={<Users className="w-5 h-5 text-emerald-400" />} iconBg="bg-emerald-500/20" value={`+${fmtNumber(offersDelta)}`} label="Additional Offers" />
+            <MetricCard icon={<TrendingUp className="w-5 h-5 text-sky-400" />} iconBg="bg-sky-500/20" value={`+${fmtNumber(readyDelta)}`} label="Ready Learners" />
+            <MetricCard icon={<Clock className="w-5 h-5 text-amber-400" />} iconBg="bg-amber-500/20" value={fmtNumber(Math.round(Number(summary.advisorHoursSaved ?? 0)))} label="Hours Returned" />
+            <MetricCard icon={<DollarSign className="w-5 h-5 text-[#ff686c]" />} iconBg="bg-[#ff686c]/20" value={fmtCurrency(summary.revenueImpact ?? 0)} label="Revenue Impact" />
+          </div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <div className="bg-gradient-to-b from-[#f8fafc] to-white">
+        <div className="max-w-4xl mx-auto px-6 py-16 space-y-12">
+          {/* Sensitivity */}
+          <section>
+            <SectionHeader number="1" title="Sensitivity Range" accent="navy" />
+            <div className="bg-white rounded-2xl p-6 border border-[#003366]/10 shadow-sm">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="text-center p-4 rounded-xl bg-[#003366]/5">
+                  <p className="text-xs text-[#003366]/50 mb-2 uppercase tracking-wider">Conservative</p>
+                  <p className="text-2xl font-bold text-[#003366]">{fmtCurrency(sensitivity.low?.totalValueImpact ?? 0)}</p>
+                </div>
+                <div className="text-center p-4 rounded-xl bg-emerald-50 border-2 border-emerald-200">
+                  <p className="text-xs text-emerald-600 mb-2 uppercase tracking-wider font-semibold">Expected</p>
+                  <p className="text-2xl font-bold text-emerald-600">{fmtCurrency(sensitivity.expected?.totalValueImpact ?? 0)}</p>
+                </div>
+                <div className="text-center p-4 rounded-xl bg-[#003366]/5">
+                  <p className="text-xs text-[#003366]/50 mb-2 uppercase tracking-wider">Upside</p>
+                  <p className="text-2xl font-bold text-[#003366]">{fmtCurrency(sensitivity.high?.totalValueImpact ?? 0)}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Narrative */}
+          {run.narrative && (
+            <section>
+              <SectionHeader number="2" title="Executive Summary" accent="violet" />
+              <div className="bg-gradient-to-br from-violet-50 to-indigo-50 rounded-2xl p-6 border border-violet-100">
+                <div className="text-sm text-[#003366]/80 whitespace-pre-line leading-relaxed">{run.narrative}</div>
+              </div>
+            </section>
+          )}
+
+          {/* CTA */}
+          <section className="bg-gradient-to-br from-[#003366] to-[#004080] rounded-3xl p-8 md:p-10 text-center relative overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#ff686c]/20 blur-3xl" />
+            </div>
+            <div className="relative">
+              <h3 className="text-2xl font-semibold text-white mb-3">Ready to close the gap?</h3>
+              <p className="text-white/60 mb-6 max-w-md mx-auto">Schedule a walkthrough to validate these projections.</p>
+              <a
+                href="/roicalculator#institutions-contact"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all shadow-lg shadow-[#ff686c]/25"
+              >
+                Schedule Walkthrough <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+          </section>
+
+          <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
+            <a href="/roicalculator" className="text-[#003366]/60 hover:text-[#003366] transition-colors">&larr; Back to Calculator</a>
+            <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
+          </footer>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+/* =================================================================
+ * Shared sub-components
+ * ================================================================= */
+
+function MetricCard({ icon, iconBg, value, label }: { icon: React.ReactNode; iconBg: string; value: string; label: string }) {
+  return (
+    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10 text-center">
+      <div className={`inline-flex items-center justify-center w-10 h-10 rounded-full ${iconBg} mb-3`}>
+        {icon}
+      </div>
+      <p className="text-2xl md:text-3xl font-bold text-white">{value}</p>
+      <p className="text-white/50 text-sm mt-1">{label}</p>
+    </div>
+  );
+}
+
+function SectionHeader({ number, title, accent }: { number: string; title: string; accent: string }) {
+  const bgMap: Record<string, string> = {
+    rose: "bg-[#ff686c]/10 text-[#ff686c]",
+    emerald: "bg-emerald-500/10 text-emerald-600",
+    navy: "bg-[#003366]/10 text-[#003366]",
+    violet: "bg-violet-500/10 text-violet-600",
+    slate: "bg-slate-200 text-slate-600",
+  };
+  const cls = bgMap[accent] ?? bgMap.navy;
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${cls}`}>{number}</span>
+      <h2 className="text-xl font-semibold text-[#003366]">{title}</h2>
+    </div>
+  );
+}
+
+function TaxCard({ icon, title, cost, recoverable, description }: { icon: React.ReactNode; title: string; cost: number; recoverable: number; description: string }) {
+  return (
+    <div className="bg-gradient-to-br from-[#ff686c]/5 to-rose-50 rounded-2xl p-5 border border-[#ff686c]/10">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#ff686c]/10 flex items-center justify-center">
+          {icon}
+        </div>
+        <p className="font-semibold text-[#003366] text-sm">{title}</p>
+      </div>
+      <p className="text-2xl font-bold text-[#003366] mb-1">{fmtCurrency(cost)}</p>
+      <p className="text-xs text-[#003366]/60 mb-3">{description}</p>
+      <div className="flex items-center gap-2 pt-3 border-t border-[#ff686c]/10">
+        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+        <span className="text-sm font-semibold text-emerald-600">
+          {fmtCurrency(recoverable)} recoverable
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function AssumptionCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-white rounded-xl p-4 border border-[#003366]/10">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[#003366]/40 mb-3">{title}</p>
+      <div className="space-y-2 text-sm text-[#003366]/70">{children}</div>
+    </div>
   );
 }

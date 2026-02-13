@@ -1,225 +1,264 @@
 "use client";
 
-import { Calculator, Users, DollarSign, ArrowRight, Info } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+
+/* ── Animation keyframes: field typing + result updates ── */
+const FRAMES = [
+  { active: "", learners: "", program: "bootcamp", interviews: "", coaching: "", spend: "", cost: "$0", recovered: "$0", payback: "—", roi: "—", ms: 900 },
+  // Type learners: 200
+  { active: "learners", learners: "2", program: "bootcamp", interviews: "", coaching: "", spend: "", cost: "$0", recovered: "$0", payback: "—", roi: "—", ms: 160 },
+  { active: "learners", learners: "20", program: "bootcamp", interviews: "", coaching: "", spend: "", cost: "$0", recovered: "$0", payback: "—", roi: "—", ms: 160 },
+  { active: "learners", learners: "200", program: "bootcamp", interviews: "", coaching: "", spend: "", cost: "$0", recovered: "$0", payback: "—", roi: "—", ms: 500 },
+  // Switch program → University
+  { active: "program", learners: "200", program: "university", interviews: "", coaching: "", spend: "", cost: "$0", recovered: "$0", payback: "—", roi: "—", ms: 600 },
+  // Type interviews: 3 → results appear
+  { active: "interviews", learners: "200", program: "university", interviews: "3", coaching: "", spend: "", cost: "$482,400", recovered: "$253,260", payback: "—", roi: "—", ms: 1000 },
+  // Type coaching: 60 → results update
+  { active: "coaching", learners: "200", program: "university", interviews: "3", coaching: "6", spend: "", cost: "$482,400", recovered: "$253,260", payback: "—", roi: "—", ms: 160 },
+  { active: "coaching", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "", cost: "$547,120", recovered: "$287,238", payback: "—", roi: "—", ms: 700 },
+  // Type spend: 25,000 → payback & ROI appear
+  { active: "spend", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "2", cost: "$547,120", recovered: "$287,238", payback: "—", roi: "—", ms: 120 },
+  { active: "spend", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "25", cost: "$547,120", recovered: "$287,238", payback: "—", roi: "—", ms: 120 },
+  { active: "spend", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "250", cost: "$547,120", recovered: "$287,238", payback: "—", roi: "—", ms: 120 },
+  { active: "spend", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "2,500", cost: "$547,120", recovered: "$287,238", payback: "—", roi: "—", ms: 120 },
+  { active: "spend", learners: "200", program: "university", interviews: "3", coaching: "60", spend: "25,000", cost: "$547,120", recovered: "$287,238", payback: "2 months", roi: "1,048%", ms: 3500 },
+];
+
+const RESULTS = [
+  { key: "cost" as const, label: "Annual cost of doing nothing", accent: "bg-[#ff686c]" },
+  { key: "recovered" as const, label: "Value recovered annually", accent: "bg-emerald-500" },
+  { key: "payback" as const, label: "Payback period", accent: "bg-blue-500" },
+  { key: "roi" as const, label: "Return on investment", accent: "bg-violet-500" },
+];
+
+/* ── Animated calculator form ── */
+function CalculatorAnimation() {
+  const [step, setStep] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let idx = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    let running = false;
+
+    function tick() {
+      setStep(idx);
+      timer = setTimeout(() => {
+        idx = (idx + 1) % FRAMES.length;
+        if (running) tick();
+      }, FRAMES[idx].ms);
+    }
+
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && !running) {
+          running = true;
+          tick();
+        } else if (!e.isIntersecting) {
+          running = false;
+          clearTimeout(timer);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    obs.observe(el);
+    return () => { obs.disconnect(); clearTimeout(timer); running = false; };
+  }, []);
+
+  const f = FRAMES[step];
+  const prev = FRAMES[step > 0 ? step - 1 : 0];
+
+  const fieldCls = (name: string) =>
+    `w-full rounded border px-2.5 py-1.5 text-sm pointer-events-none transition-all duration-200 ${
+      f.active === name
+        ? "border-sky-400 ring-2 ring-sky-400/30 bg-sky-50/30 text-[#003366]"
+        : "border-gray-300 bg-white text-[#003366]"
+    }`;
+
+  return (
+    <div ref={ref} className="space-y-5">
+      {/* ── Inputs ── */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold text-[#003366] uppercase tracking-wide">
+          Your current setup
+        </h3>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3">
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-[#003366]/80">
+              Learners completing your program each year?
+            </label>
+            <input type="text" value={f.learners} readOnly tabIndex={-1} placeholder="0" className={fieldCls("learners")} />
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-[#003366]/80">
+              What type of program do you run?
+            </label>
+            <select value={f.program} disabled tabIndex={-1} className={fieldCls("program").replace("pointer-events-none", "pointer-events-none appearance-none")}>
+              <option value="bootcamp">Bootcamp</option>
+              <option value="university">University</option>
+              <option value="workforce">Workforce</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-[#003366]/80">
+              Mock interviews per learner on average?
+            </label>
+            <input type="text" value={f.interviews} readOnly tabIndex={-1} placeholder="0" className={fieldCls("interviews")} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 max-w-md mx-auto">
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-[#003366]/80">
+              How many learners need extra coaching before interviews?
+            </label>
+            <input type="text" value={f.coaching} readOnly tabIndex={-1} placeholder="0" className={fieldCls("coaching")} />
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold text-[#003366]/80">
+              Annual spend on interview prep?
+            </label>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-medium text-[#003366]/50 shrink-0">$</span>
+              <input type="text" value={f.spend} readOnly tabIndex={-1} placeholder="0" className={fieldCls("spend")} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Results ── */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-[#003366] uppercase tracking-wide">
+          Calculate savings
+        </h3>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {RESULTS.map(({ key, label, accent }) => {
+            const val = f[key];
+            const prevVal = prev[key];
+            const justChanged = val !== prevVal;
+            const isLive = val !== "$0" && val !== "—";
+
+            return (
+              <div
+                key={key}
+                className={`rounded overflow-hidden shadow-sm border transition-all duration-500 ${
+                  justChanged
+                    ? "border-sky-300 shadow-lg scale-[1.04]"
+                    : isLive
+                    ? "border-sky-200/60 shadow-md"
+                    : "border-gray-100"
+                }`}
+              >
+                <div className={`${accent} px-3 py-1.5`}>
+                  <span className="text-xs font-semibold text-white">{label}</span>
+                </div>
+                <div className={`px-3 py-2.5 transition-colors duration-500 ${justChanged ? "bg-sky-50" : "bg-white"}`}>
+                  <span className={`text-xl font-bold transition-colors duration-300 ${isLive ? "text-[#003366]" : "text-[#003366]/25"}`}>
+                    {val}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function CalculatorTeaser() {
-  const [showMethodology, setShowMethodology] = useState(false);
-
   return (
     <section className="relative max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-12">
       {/* Ambient Background Effects */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-sky-500/5 blur-[100px] rounded-full pointer-events-none -z-10" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#ff686c]/5 blur-[80px] rounded-full pointer-events-none -z-10" />
 
-      <div className="flex flex-col items-center text-center">
-        {/* Section Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#003366]/15 bg-white/70 backdrop-blur-md mb-6 group hover:bg-white transition-colors">
+      {/* ── Centered Header ── */}
+      <div className="text-center mb-12 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#003366]/15 bg-white/70 backdrop-blur-md group hover:bg-white transition-colors">
           <span className="flex h-2 w-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.4)]" />
           <span className="text-[11px] font-semibold text-[#003366] tracking-[0.2em] uppercase">
-            Program Value
+            Value for money
           </span>
         </div>
 
-        {/* Title */}
-        <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-[#003366] mb-4 max-w-2xl leading-[1.1]">
-          Curious what this looks like for your program? 
-          <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#003366] via-[#003366] to-[#003366]/40">
-           
-          </span>
+        <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-[#003366] leading-[1.1]">
+          Weak interview readiness has a cost.
         </h2>
 
-        {/* Subtitle */}
-        <p className="text-sm md:text-base text-[#003366]/70 max-w-xl leading-relaxed mb-10">
-          Estimate the impact of low placements and see how improving interview readiness helps protect enrollment and income. 
+        <p className="text-lg md:text-xl font-medium text-[#003366]/70">
+          Most institutions never price it, but high program placements protect enrollment, referrals, and funding.
         </p>
+      </div>
 
-        {/* Calculator Tool */}
-        <div className="relative w-full max-w-3xl mx-auto mb-10">
-          {/* Glow behind container */}
-          <div className="absolute -inset-1 bg-gradient-to-b from-sky-500/10 to-transparent rounded-2xl blur opacity-40" />
+      <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center">
+        {/* ── Left: Copy ── */}
+        <div className="w-full lg:w-5/12 space-y-6">
 
-          {/* Calculator Card */}
-          <div className="relative glass-panel rounded-2xl border border-[#003366]/10 p-1 overflow-hidden shadow-2xl shadow-blue-900/10">
-            {/* Inner Window Frame */}
-            <div className="bg-white/90 rounded-xl border border-[#003366]/5 overflow-hidden flex flex-col md:flex-row">
-              {/* Sidebar / Controls */}
-              <div className="w-full md:w-5/12 border-b md:border-b-0 md:border-r border-[#003366]/10 p-5 flex flex-col gap-5 bg-white/95">
-                <div className="flex items-center gap-2 text-[#003366]/60 mb-1">
-                  <Calculator className="h-4 w-4 text-sky-600" strokeWidth={1.5} />
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
-                    Parameters
-                  </span>
-                </div>
+          <p className="text-sm text-[#003366]/60 leading-relaxed">
+            When candidates underperform in employer interviews, the impact shows up as:
+          </p>
 
-                {/* Input Group 1 */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <label className="text-[#003366]/70 font-medium">Cohort Size</label>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white border border-[#003366]/20 rounded-lg px-3 py-2 transition-all focus-within:ring-2 focus-within:ring-sky-500/20">
-                    <Users className="h-4 w-4 text-[#003366]/40" strokeWidth={1.5} />
-                    <input
-                      type="text"
-                      value="125"
-                      className="bg-transparent border-none outline-none text-[#003366] text-sm w-full font-mono placeholder-[#003366]/30"
-                      readOnly
-                    />
-                    <span className="text-[11px] text-[#003366]/50 font-mono">Students</span>
-                  </div>
-                </div>
+          <ul className="space-y-2.5 text-sm text-[#003366]/70">
+            <li className="flex items-center gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
+              Rework your team absorbs
+            </li>
+            <li className="flex items-center gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
+              Outcomes that slip
+            </li>
+            <li className="flex items-center gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
+              Employer trust that tightens
+            </li>
+          </ul>
 
-                {/* Input Group 2 */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-xs">
-                    <label className="text-[#003366]/70 font-medium">Placement Rate</label>
-                    <span className="text-sky-600 font-mono text-[11px] bg-sky-100 px-2 py-0.5 rounded">
-                      42%
-                    </span>
-                  </div>
-                  {/* Custom Slider UI */}
-                  <div className="relative w-full h-4 flex items-center">
-                    <div className="w-full h-1.5 bg-[#003366]/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-sky-500 to-blue-600 w-[42%]" />
-                    </div>
-                    <div className="absolute left-[42%] w-3.5 h-3.5 bg-white border-2 border-sky-500 rounded-full shadow-md -translate-x-1/2 cursor-grab" />
-                  </div>
-                </div>
+          <p className="text-sm text-[#003366]/60 leading-relaxed">
+           See the estimated annual cost of unreadiness in your program —
+            and what becomes recoverable when readiness is verified before exposure.
+          </p>
 
-                {/* Input Group 3 */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <label className="text-[#003366]/70 font-medium">Avg. Tuition</label>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white border border-[#003366]/20 rounded-lg px-3 py-2">
-                    <DollarSign className="h-4 w-4 text-[#003366]/40" strokeWidth={1.5} />
-                    <input
-                      type="text"
-                      value="12,500"
-                      className="bg-transparent border-none outline-none text-[#003366] text-sm w-full font-mono"
-                      readOnly
-                    />
-                    <span className="text-[11px] text-[#003366]/50 font-mono">USD</span>
-                  </div>
-                </div>
-              </div>
+          {/* CTA */}
+          <div className="pt-2 space-y-2">
+            <a
+              href="/roicalculator"
+              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5"
+            >
+              <span>Price Your Cost</span>
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
+            </a>
+            <p className="text-[11px] text-[#003366]/40">
+              Open the full readiness impact calculator.
+            </p>
+          </div>
+        </div>
 
-              {/* Main Visualization Area */}
-              <div className="w-full md:w-7/12 p-5 flex flex-col relative min-h-[240px] bg-gradient-to-br from-white/80 via-[#f8fbff]/80 to-white/80">
-                {/* Background Grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,51,102,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,51,102,0.03)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+        {/* ── Right: Animated Calculator Preview ── */}
+        <div className="w-full lg:w-7/12">
+          <div className="relative">
+            {/* Glow behind container */}
+            <div className="absolute -inset-1 bg-gradient-to-b from-sky-500/10 to-transparent rounded-2xl blur opacity-40" />
 
-                <div className="relative z-10 flex flex-col h-full justify-between">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xs font-semibold text-[#003366]">Analysis</h3>
-                    <button
-                      onClick={() => setShowMethodology(!showMethodology)}
-                      className="flex items-center gap-1 text-[10px] text-[#003366]/60 hover:text-[#003366] transition-colors group"
-                      title="Show methodology"
-                    >
-                      <Info className="h-3.5 w-3.5" strokeWidth={1.5} />
-                      <span className="hidden sm:inline">Methodology</span>
-                    </button>
-                  </div>
-
-                  {/* Methodology Tooltip */}
-                  {showMethodology && (
-                    <div className="absolute top-8 right-0 w-72 bg-white border border-[#003366]/10 rounded-lg shadow-xl p-4 z-20 text-left">
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-xs font-semibold text-[#003366]">Calculation Method</h4>
-                        <button
-                          onClick={() => setShowMethodology(false)}
-                          className="text-[#003366]/40 hover:text-[#003366] transition-colors"
-                        >
-                          ×
-                        </button>
-                      </div>
-                      <div className="space-y-2 text-[11px] text-[#003366]/70 leading-relaxed">
-                        <p>
-                          <strong className="text-[#003366]">Risk/Loss:</strong> Estimated tuition revenue at risk from
-                          students who don't place (58% of cohort × avg. tuition × enrollment impact factor).
-                        </p>
-                        <p>
-                          <strong className="text-[#003366]">Recoverable:</strong> Potential revenue protected by
-                          improving placement rates through better interview readiness (estimated 15-20% improvement).
-                        </p>
-                        <p className="text-[10px] italic text-[#003366]/50 pt-2 border-t border-[#003366]/10">
-                          These are illustrative estimates. Use the full calculator for your program's specific metrics.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Big Numbers */}
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    <div className="bg-rose-50 border border-rose-200/50 rounded-xl p-3 flex flex-col gap-0.5">
-                      <span className="text-[10px] text-rose-600/80 font-semibold uppercase tracking-wider">
-                        Risk / Loss
-                      </span>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-lg font-semibold text-rose-600 tracking-tight font-mono">
-                          -$906k
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="bg-emerald-50 border border-emerald-200/50 rounded-xl p-3 flex flex-col gap-0.5">
-                      <span className="text-[10px] text-emerald-600/80 font-semibold uppercase tracking-wider">
-                        Recoverable
-                      </span>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-lg font-semibold text-emerald-600 tracking-tight font-mono">
-                          +$475k
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Chart Visualization */}
-                  <div className="mt-auto">
-                    <div className="flex justify-between items-end h-16 gap-3 px-1 pb-2 border-b border-[#003366]/10 relative">
-                      {/* Bar 1 */}
-                      <div className="w-full bg-[#003366]/10 rounded-t-sm h-[42%] relative group" />
-                      {/* Bar 2 */}
-                      <div className="w-full bg-sky-100 rounded-t-sm h-[55%] relative group">
-                        <div className="absolute bottom-0 left-0 w-full h-[76%] bg-sky-200 border-t-2 border-sky-500/50" />
-                      </div>
-                      {/* Bar 3 */}
-                      <div className="w-full bg-emerald-100 rounded-t-sm h-[80%] relative group border-t-2 border-emerald-500">
-                        <div className="absolute inset-0 bg-gradient-to-t from-emerald-200/50 to-transparent" />
-                      </div>
-                    </div>
-                    <div className="flex justify-between px-1 pt-2 text-[10px] text-[#003366]/50 font-mono uppercase">
-                      <span>Q1</span>
-                      <span>Q2</span>
-                      <span>Q3</span>
-                    </div>
-                  </div>
-                </div>
+            {/* Calculator Card */}
+            <div className="relative glass-panel rounded-2xl border border-[#003366]/10 p-1 overflow-hidden shadow-2xl shadow-blue-900/10">
+              <div className="bg-white/90 rounded-xl border border-[#003366]/5 overflow-hidden p-5 md:p-6">
+                <CalculatorAnimation />
               </div>
             </div>
           </div>
-
-          {/* Decorative Elements */}
-          <div className="absolute -right-4 -top-3 bg-white/90 text-[#003366]/60 text-[10px] font-mono px-2 py-1 rounded border border-[#003366]/10 shadow-lg backdrop-blur">
-            v2.0
-          </div>
-          <div className="absolute -left-6 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 opacity-50">
-            <div className="w-1 h-1 rounded-full bg-[#003366]/30" />
-            <div className="w-1 h-1 rounded-full bg-[#003366]/20" />
-            <div className="w-1 h-1 rounded-full bg-[#003366]/20" />
-          </div>
         </div>
-
-        {/* CTA Button */}
-        <a
-          href="/roicalculator"
-          className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5 href ='/roicalculator'"
-        >
-          <span>Calculate your ROI</span> 
-          <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
-        </a>
       </div>
     </section>
   );

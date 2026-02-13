@@ -14,7 +14,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "request and result are required" }, { status: 400 });
   }
   try {
-    const { id } = await insertRun(body);
+    const resultVersion = (body.result as any).resultVersion ?? 1;
+    const { id } = await insertRun({
+      ...body,
+      result_version: resultVersion,
+    });
     return NextResponse.json({ runId: id });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message ?? "Failed to save run" }, { status: 500 });
