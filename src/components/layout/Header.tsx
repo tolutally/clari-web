@@ -74,8 +74,8 @@ export function Header({
 
         {/* ── Right: Tab toggle + Auth ── */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Tab toggle pill */}
-          <div className="hidden sm:flex items-center p-0.5 rounded-full bg-[#003366]/[0.04] border border-[#003366]/8">
+          {/* Tab toggle pill — hidden for now (institutions only) */}
+          {/* <div className="hidden sm:flex items-center p-0.5 rounded-full bg-[#003366]/[0.04] border border-[#003366]/8">
             <button
               type="button"
               onClick={() => onSwitchView?.("institutions")}
@@ -97,7 +97,7 @@ export function Header({
                 Soon
               </span>
             </button>
-          </div>
+          </div> */}
 
           {/* Auth buttons */}
           <Link

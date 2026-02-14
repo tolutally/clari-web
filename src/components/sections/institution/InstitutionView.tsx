@@ -30,49 +30,24 @@ import { useEffect, useRef, useState, FormEvent } from "react";
 
 const comparisonRows = [
   {
-    feature: "Readiness proof",
-    with: "Clear metrics and reports you can show confidently",
-    without: "Anecdotes and internal guesswork",
+    feature: "Risk detection",
+    with: "Risk flagged before employer exposure",
+    without: "Problems surface after rejection",
   },
   {
     feature: "Scoring consistency",
-    with: "Standardized rubrics applied to every mock",
-    without: "Subjective and varies by advisor",
+    with: "Standardized rubrics, every session",
+    without: "Advisor intuition, no consistency",
   },
   {
     feature: "Role-specific practice",
-    with: "Practice aligned to real roles and industries",
-    without: "Generic, unrealistic questions",
+    with: "Practice built from real job descriptions",
+    without: "Generic prep that doesn't transfer",
   },
   {
-    feature: "Feedback speed",
-    with: "Instant, actionable feedback after practice",
-    without: "Delayed or missing feedback",
-  },
-  {
-    feature: "Early risk detection",
-    with: "See struggling learners before interviews fail",
-    without: "Problems only surface after rejection",
-  },
-  {
-    feature: "Coaching scalability",
-    with: "AI handles repetition so advisors focus on impact",
-    without: "Advisor time limits depth and reach",
-  },
-  {
-    feature: "Time-to-placement",
-    with: "Better prep leads to faster, cleaner hiring decisions",
-    without: "Longer cycles and stalled momentum",
-  },
-  {
-    feature: "Evidence & artifacts",
-    with: "Scorecards, transcripts, and readiness profiles",
-    without: "Scattered notes or nothing at all",
-  },
-  {
-    feature: "Program improvement",
-    with: "Cohort insights reveal real curriculum gaps",
-    without: "Changes based on stories, not data",
+    feature: "Readiness proof",
+    with: "Scorecards and readiness data you can show",
+    without: "Anecdotes when funders ask for proof",
   },
 ];
 
@@ -327,8 +302,28 @@ export function InstitutionView() {
   const coachingPct = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
   const advisoryCardRef = useRef<HTMLDivElement>(null);
+  const comparisonRef = useRef<HTMLDivElement>(null);
   const [advisoryAnimated, setAdvisoryAnimated] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
+
+  // Comparison slide-in animation
+  useEffect(() => {
+    const el = comparisonRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.querySelectorAll(".compare-slide-left, .compare-slide-right").forEach(
+            (card) => card.classList.add("compare-visible")
+          );
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     const animateProgress = () => {
@@ -453,7 +448,7 @@ export function InstitutionView() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff686c]" />
                 </span>
                 <span className="text-xs font-semibold text-[#003366] uppercase tracking-[0.12em]">
-                 Interview Readiness Platform
+                 For Career Centers & Workforce Programs
                 </span>
               </div>
 
@@ -657,7 +652,7 @@ export function InstitutionView() {
         <div className="flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70">
             <Sparkles className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-            <span className="text-sm text-[#003366]">WHY WE ARE THE BEST</span>
+            <span className="text-sm text-[#003366]">WHAT YOU GET</span>
           </div>
         </div>
 
@@ -995,7 +990,7 @@ description:
         <StatsConfidence />
       </div>
 
-      {/* Comparison — Lattice-style dual cards with scrolling items */}
+      {/* Comparison — side-by-side paired rows */}
       <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center space-y-2 mb-10">
@@ -1010,9 +1005,9 @@ description:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div ref={comparisonRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* ── Without Clarivue ── */}
-            <div className="relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
+            <div className="compare-slide-left relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-bold text-[#003366]">Without Clarivue</h3>
                 <span className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200/60 flex items-center justify-center">
@@ -1020,31 +1015,26 @@ description:
                 </span>
               </div>
 
-              {/* Scrolling list with mask */}
-              <div className="relative h-[260px] overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-rose-50/80 to-transparent z-10 pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
-                <div className="animate-scroll-up-slow space-y-1">
-                  {[...comparisonRows, ...comparisonRows].map((row, i) => (
-                    <div key={i} className={`flex items-center gap-3 py-2.5 ${i % comparisonRows.length < 4 ? "opacity-100" : "opacity-50"}`}>
-                      <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
-                        <X className="h-3 w-3" strokeWidth={2.5} />
-                      </span>
-                      <span className={`text-sm text-[#003366]/70 ${i % comparisonRows.length < 4 ? "font-semibold text-[#003366]/90" : ""}`}>
-                        {row.without}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-1">
+                {comparisonRows.map((row, i) => (
+                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
+                    <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
+                      <X className="h-3 w-3" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-sm font-semibold text-[#003366]/90">
+                      {row.without}
+                    </span>
+                  </div>
+                ))}
               </div>
 
-              <p className="text-xs text-rose-400/80 mt-3 leading-relaxed">
-                Unstructured prep that leaves gaps in readiness and costs your program trust.
+              <p className="text-xs text-rose-400/80 mt-4 font-semibold leading-relaxed">
+                Gaps you find after it&apos;s too late.
               </p>
             </div>
 
             {/* ── With Clarivue ── */}
-            <div className="relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
+            <div className="compare-slide-right relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-bold text-[#003366]">With Clarivue</h3>
                 <span className="w-9 h-9 rounded-full bg-sky-100 border border-sky-200/60 flex items-center justify-center">
@@ -1052,26 +1042,21 @@ description:
                 </span>
               </div>
 
-              {/* Scrolling list with mask */}
-              <div className="relative h-[260px] overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-sky-50/80 to-transparent z-10 pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
-                <div className="animate-scroll-up-slow space-y-1">
-                  {[...comparisonRows, ...comparisonRows].map((row, i) => (
-                    <div key={i} className={`flex items-center gap-3 py-2.5 ${i % comparisonRows.length < 4 ? "opacity-100" : "opacity-50"}`}>
-                      <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
-                        <Check className="h-3 w-3" strokeWidth={2.5} />
-                      </span>
-                      <span className={`text-sm text-[#003366]/70 ${i % comparisonRows.length < 4 ? "font-semibold text-[#003366]/90" : ""}`}>
-                        {row.with}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-1">
+                {comparisonRows.map((row, i) => (
+                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
+                    <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
+                      <Check className="h-3 w-3" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-sm font-semibold text-[#003366]/90">
+                      {row.with}
+                    </span>
+                  </div>
+                ))}
               </div>
 
-              <p className="text-xs text-sky-500/80 mt-3 leading-relaxed">
-                Structured, measurable interview prep that protects outcomes and builds employer trust.
+              <p className="text-xs text-sky-600/80 mt-4 font-semibold leading-relaxed">
+                Proof you control before it matters.
               </p>
 
               {/* CTA bar */}
@@ -1111,18 +1096,18 @@ description:
             Ensure both are protected with Clarivue.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-10 flex flex-col items-center gap-4">
             <a
               href="/book-demo"
-              className="inline-flex items-center justify-center h-14 px-8 rounded-2xl bg-[#003366] text-white text-base font-semibold shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:bg-[#02294f] hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5 min-w-[200px]"
+              className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#003366] text-white text-lg font-semibold shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:bg-[#02294f] hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5 min-w-[260px]"
             >
-              Request a demo
+              Book a demo
             </a>
             <a
               href="/roicalculator"
-              className="inline-flex items-center justify-center h-14 px-8 rounded-2xl bg-white text-[#003366] text-base font-semibold border border-[#003366]/15 shadow-sm transition-all duration-300 hover:border-[#003366]/30 hover:shadow-md hover:-translate-y-0.5 min-w-[200px]"
+              className="text-sm font-medium text-[#003366]/50 hover:text-[#003366]/80 transition-colors underline underline-offset-4 decoration-[#003366]/20 hover:decoration-[#003366]/40"
             >
-              Calculate your ROI
+              or estimate your ROI first →
             </a>
           </div>
 

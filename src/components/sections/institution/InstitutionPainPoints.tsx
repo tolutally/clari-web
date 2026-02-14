@@ -8,7 +8,7 @@ const painPoints = [
   {
     label: "PLACEMENT PRESSURE",
     quote: "Placement numbers start to wobble",
-    description: "When interview conversion slips and next cycle's enrollment feels exposed. You need signal before results decline.",
+    description: "When your rate dips, every conversation with leadership, funders, and employers gets harder. You don't need a post-mortem. You need to see it coming.",
     color: "from-amber-500/10 to-orange-500/10",
     iconBg: "bg-amber-50",
     iconColor: "text-amber-600",
@@ -17,7 +17,7 @@ const painPoints = [
   {
     label: "EMPLOYER CONFIDENCE",
     quote: "Employers slow referrals",
-    description: "When employer/partners question candidate quality and stop scaling hiring. You need better prepared candidates, not hope.",
+    description: "Partners rarely say why they're pulling back. They just get quieter. By the time you notice, the trust is already gone.",
     color: "from-rose-500/10 to-pink-500/10",
     iconBg: "bg-rose-50",
     iconColor: "text-rose-600",
@@ -26,7 +26,7 @@ const painPoints = [
   {
     label: "COACHING CAPACITY",
     quote: "Advisors are overwhelmed",
-    description: "When mock interviews pile up and depth drops. You need structure without adding headcount.",
+    description: "Back-to-back mocks, shrinking depth, and the learners who need the most help are the hardest to spot. More effort isn't the answer.",
     color: "from-emerald-500/10 to-teal-500/10",
     iconBg: "bg-emerald-50",
     iconColor: "text-emerald-600",
@@ -35,7 +35,7 @@ const painPoints = [
   {
     label: "READINESS VISIBILITY",
     quote: "You only find gaps after rejection",
-    description: "When learners reach final rounds and fail for avoidable reasons. You need intervention before exposure.",
+    description: "A learner reaches the final round and falls apart on a question they should have owned. You find out after. The gap was always there.",
     color: "from-indigo-500/10 to-purple-500/10",
     iconBg: "bg-indigo-50",
     iconColor: "text-indigo-600",
