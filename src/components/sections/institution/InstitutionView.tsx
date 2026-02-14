@@ -640,13 +640,93 @@ export function InstitutionView() {
         </div>
       </div>
 
-      {/* Pain Points */}
+      {/* Pain Points / Use Cases */}
       <InstitutionPainPoints />
 
-      {/* Complete Career Infrastructure */}
+      {/* Comparison — side-by-side paired rows */}
+      <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center space-y-2 mb-10">
+            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#003366]/70 border-[#003366]/15 bg-white/80">
+              WHY CLARIVUE MATTERS
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
+             Your learners are counting on this.
+            </h2>
+            <p className="text-sm sm:text-base text-[#003366]/70 max-w-3xl mx-auto">
+              They showed up. They did the work. The least they deserve is to walk into that interview genuinely prepared — not just practiced. Clarivue gives your team the visibility to make sure no one slips through.
+            </p>
+          </div>
+
+          <div ref={comparisonRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* ── Without Clarivue ── */}
+            <div className="compare-slide-left relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-[#003366]">Without Clarivue</h3>
+                <span className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200/60 flex items-center justify-center">
+                  <X className="h-4 w-4 text-rose-500" strokeWidth={2.5} />
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                {comparisonRows.map((row, i) => (
+                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
+                    <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
+                      <X className="h-3 w-3" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-sm font-semibold text-[#003366]/90">
+                      {row.without}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-rose-400/80 mt-4 font-semibold leading-relaxed">
+                Gaps you find after it&apos;s too late.
+              </p>
+            </div>
+
+            {/* ── With Clarivue ── */}
+            <div className="compare-slide-right relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-[#003366]">With Clarivue</h3>
+                <span className="w-9 h-9 rounded-full bg-sky-100 border border-sky-200/60 flex items-center justify-center">
+                  <ArrowRight className="h-4 w-4 text-sky-600" strokeWidth={2.5} />
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                {comparisonRows.map((row, i) => (
+                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
+                    <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
+                      <Check className="h-3 w-3" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-sm font-semibold text-[#003366]/90">
+                      {row.with}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-sky-600/80 mt-4 font-semibold leading-relaxed">
+                Proof you control before it matters.
+              </p>
+
+              {/* CTA bar */}
+              <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
+                <a href="/roicalculator" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
+                  See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features + Feature Details (bundled, no gaps) */}
       <section
         id="institutions-features"
-        className="md:px-10 md:pt-8 max-w-6xl mx-auto pt-8 px-6"
+        className="md:px-10 max-w-6xl mx-auto px-6"
       >
         {/* SECTION PILL */}
         <div className="flex justify-center">
@@ -658,11 +738,11 @@ export function InstitutionView() {
 
         {/* SECTION TITLE */}
         <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366] text-center mt-6">
-          The tool that keeps your
-          <span className="block">career center interview-ready.</span>
+         See every learner's readiness. 
+          <span className="block">Before the interview. Before the damage.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-lg font-normal text-[#003366]/70">
-          See who is ready, who needs coaching, and how your grads move from practice to placement.
+          Know who's ready, who needs coaching, and who's at risk — before employers find out first.
         </p>
 
         {(() => {
@@ -970,105 +1050,14 @@ description:
         })()}
       </section>
 
-      {/* Calculator Teaser */}
-      <CalculatorTeaser />
-
       {/* Benefits — Security, Stats, Readiness */}
       <InstitutionBenefits />
 
-      {/* How it works (disabled for now)
-      <HowItWorksInstitutions />
-      */}
+      {/* Stats */}
+      <StatsConfidence />
 
-      {/* Trust showcase (disabled for now)
-      <section id="institutions-testimonial" className="pt-10 md:pt-12">
-        <TrustShowcase />
-      </section>
-      */}
-
-      <div className="-mt-8">
-        <StatsConfidence />
-      </div>
-
-      {/* Comparison — side-by-side paired rows */}
-      <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center space-y-2 mb-10">
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#003366]/70 border-[#003366]/15 bg-white/80">
-              WHY CLARIVUE MATTERS
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
-              Move from guesswork to measurable readiness
-            </h2>
-            <p className="text-sm sm:text-base text-[#003366]/70 max-w-3xl mx-auto">
-              Instead of hoping students are interview-ready, Clarivue gives you proof, visibility, early risk detection, and scalable support.
-            </p>
-          </div>
-
-          <div ref={comparisonRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* ── Without Clarivue ── */}
-            <div className="compare-slide-left relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-[#003366]">Without Clarivue</h3>
-                <span className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200/60 flex items-center justify-center">
-                  <X className="h-4 w-4 text-rose-500" strokeWidth={2.5} />
-                </span>
-              </div>
-
-              <div className="space-y-1">
-                {comparisonRows.map((row, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
-                    <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
-                      <X className="h-3 w-3" strokeWidth={2.5} />
-                    </span>
-                    <span className="text-sm font-semibold text-[#003366]/90">
-                      {row.without}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs text-rose-400/80 mt-4 font-semibold leading-relaxed">
-                Gaps you find after it&apos;s too late.
-              </p>
-            </div>
-
-            {/* ── With Clarivue ── */}
-            <div className="compare-slide-right relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-[#003366]">With Clarivue</h3>
-                <span className="w-9 h-9 rounded-full bg-sky-100 border border-sky-200/60 flex items-center justify-center">
-                  <ArrowRight className="h-4 w-4 text-sky-600" strokeWidth={2.5} />
-                </span>
-              </div>
-
-              <div className="space-y-1">
-                {comparisonRows.map((row, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
-                    <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
-                      <Check className="h-3 w-3" strokeWidth={2.5} />
-                    </span>
-                    <span className="text-sm font-semibold text-[#003366]/90">
-                      {row.with}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs text-sky-600/80 mt-4 font-semibold leading-relaxed">
-                Proof you control before it matters.
-              </p>
-
-              {/* CTA bar */}
-              <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
-                <a href="/roicalculator" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
-                  See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ROI Calculator */}
+      <CalculatorTeaser />
 
       {/* Blog Insights */}
       <BlogInsights />
@@ -1099,9 +1088,9 @@ description:
           <div className="mt-10 flex flex-col items-center gap-4">
             <a
               href="/book-demo"
-              className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#003366] text-white text-lg font-semibold shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:bg-[#02294f] hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5 min-w-[260px]"
+              className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#003366] text-white text-lg font-semibold shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:bg-[#ff686c] hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5 min-w-[260px]"
             >
-              Book a demo
+              Talk to us
             </a>
             <a
               href="/roicalculator"

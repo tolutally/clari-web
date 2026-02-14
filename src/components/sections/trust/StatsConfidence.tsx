@@ -65,8 +65,8 @@ const stats = [
 
 export function StatsConfidence() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const { count: minutesCount } = useCountUp(120, 2000, sectionRef);
-  const { count: conversionCount } = useCountUp(83, 2000, sectionRef);
+  const { count: minutesCount } = useCountUp(120, 1200, sectionRef);
+  const { count: conversionCount } = useCountUp(83, 1200, sectionRef);
 
   return (
     <section id="institutions-stats" className="w-full text-[#003366]">

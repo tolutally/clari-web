@@ -202,17 +202,9 @@ export function InstitutionBenefits() {
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70">
               <Sparkles className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-              <span className="text-sm text-[#003366]">LOVED BY CAREER DEVELOPMENT TEAMS</span>
+              <span className="text-sm text-[#003366]">BUILT FOR HOW YOUR PROGRAM ACTUALLY WORKS</span>
             </div>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#003366]">
-            Excellent career teams deserve excellent interview prep tools
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-[#003366]/70">
-            Clarivue gives you structured practice, consistent scoring, 
-            and a live readiness signal — so you reduce rework, protect employer trust, and improve conversion 
-            without adding advisor load.
-          </p>
         </div>
         <div className="grid gap-5 lg:gap-6 grid-cols-1 lg:grid-cols-2">
 

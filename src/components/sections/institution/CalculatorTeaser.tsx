@@ -198,7 +198,7 @@ export function CalculatorTeaser() {
         </h2>
 
         <p className="text-lg md:text-xl font-medium text-[#003366]/70">
-          Most institutions never price it, but high program placements protect enrollment, referrals, and funding.
+          Most programs never price it. But placements protect enrollment, referrals, and funding.
         </p>
       </div>
 

@@ -115,10 +115,6 @@ export default function InstitutionPainPoints() {
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#003366] mb-3">
           Interview prep usually feels fine, until something breaks.
         </h2>
-        
-        <p className="text-base text-[#003366]/70">
-          These are the moments teams realize they need more than workshops.
-        </p>
       </div>
 
       {/* Cards grid */}

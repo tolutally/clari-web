@@ -81,7 +81,7 @@ export function BlogInsights() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
-            Explore Clarivue insights
+            Guides & Resources
           </h2>
           <Link
             href="/blog"
