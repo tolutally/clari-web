@@ -312,13 +312,26 @@ body {
 .hero-card-float {
   animation: heroFloat 5s ease-in-out infinite;
 }
+.hero-card-enter.hero-card-float {
+  animation: heroCardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+             heroFloat 5s ease-in-out infinite;
+}
 
 .hero-card-float-alt {
   animation: heroFloatAlt 6s ease-in-out 0.5s infinite;
 }
+.hero-card-enter.hero-card-float-alt {
+  animation: heroCardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+             heroFloatAlt 6s ease-in-out 0.5s infinite;
+}
 
 .hero-card-glow {
   animation: heroPulseGlow 4s ease-in-out infinite;
+}
+.hero-card-enter.hero-card-float-alt.hero-card-glow {
+  animation: heroCardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+             heroFloatAlt 6s ease-in-out 0.5s infinite,
+             heroPulseGlow 4s ease-in-out infinite;
 }
 
 .hero-score-pop {
