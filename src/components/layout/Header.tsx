@@ -23,9 +23,9 @@ interface HeaderProps {
 }
 
 const institutionLinks = [
-  { href: "#institutions-hero", icon: Home, label: "Home" },
-  { href: "#institutions-features", icon: LayoutDashboard, label: "Features" },
-  { href: "#institutions-roi", icon: Activity, label: "ROI Calculator" },
+  { href: "/", icon: Home, label: "Home" },
+  { href: "/#institutions-features", icon: LayoutDashboard, label: "Features" },
+  { href: "/roicalculator", icon: Activity, label: "ROI Calculator" },
   { href: "/blog", icon: PenLine, label: "Blog" },
 ];
 

@@ -53,7 +53,7 @@ export default function BlogPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-24 pb-16 relative overflow-x-clip">
+      <main className="min-h-screen pt-24 pb-16 relative overflow-x-clip font-[family-name:var(--font-jakarta)]">
         {/* Decorative Element - Top Right */}
         <div className="absolute top-16 right-4 sm:right-8 lg:right-16 pointer-events-none" aria-hidden="true">
           <svg
@@ -85,7 +85,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-8" style={{ fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>Blog</h1>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-8">Blog</h1>
             
             {/* Category Filter */}
             <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">

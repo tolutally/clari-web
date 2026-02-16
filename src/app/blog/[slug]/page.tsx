@@ -285,7 +285,7 @@ export default async function BlogPostPage({ params }: Props) {
 
               {/* Article Body */}
               {post.body && (
-                <div className="prose prose-lg max-w-none 
+                <div className="prose prose-lg max-w-none font-[family-name:var(--font-jakarta)]
                   prose-headings:font-bold prose-headings:text-[#0a2140]
                   prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:scroll-mt-24
                   prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:scroll-mt-24
@@ -751,15 +751,15 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Bottom CTA */}
         <div className="bg-gradient-to-br from-[#0a2140] to-[#1a4060] text-white py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to ace your next interview?</h2>
+            <h2 className="text-3xl font-bold mb-4">Stop guessing who&apos;s interview-ready.</h2>
             <p className="text-lg text-gray-300 mb-8">
-              Join thousands of job seekers using Clarivue to practice smarter and land offers faster.
+              See how Clarivue gives career centers the visibility, structure, and proof they need to improve placement outcomes.
             </p>
             <Link
-              href="/"
+              href="/book-demo"
               className="inline-flex items-center gap-2 bg-[#ff686c] text-white px-8 py-4 rounded-full font-medium hover:bg-[#ff686c]/90 transition-all shadow-lg"
             >
-              Get Started Free
+              Book a Demo
               <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
