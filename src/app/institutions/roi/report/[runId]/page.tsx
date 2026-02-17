@@ -355,7 +355,7 @@ function V3Report({ run }: { run: any }) {
                 Schedule a walkthrough to validate these projections with your specific program data.
               </p>
               <a
-                href="/roicalculator#institutions-contact"
+                href="/book-demo"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all shadow-lg shadow-[#ff686c]/25"
               >
                 Schedule Walkthrough <ArrowRight className="w-5 h-5" />
@@ -647,7 +647,7 @@ function V2Report({ run }: { run: any }) {
                 Schedule a walkthrough to validate these projections with your specific program data.
               </p>
               <a
-                href="/roicalculator#institutions-contact"
+                href="/book-demo"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all shadow-lg shadow-[#ff686c]/25"
               >
                 Schedule Walkthrough <ArrowRight className="w-5 h-5" />
@@ -762,7 +762,7 @@ function V1Report({ run }: { run: any }) {
               <h3 className="text-2xl font-semibold text-white mb-3">Ready to close the gap?</h3>
               <p className="text-white/60 mb-6 max-w-md mx-auto">Schedule a walkthrough to validate these projections.</p>
               <a
-                href="/roicalculator#institutions-contact"
+                href="/book-demo"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all shadow-lg shadow-[#ff686c]/25"
               >
                 Schedule Walkthrough <ArrowRight className="w-5 h-5" />
