@@ -1,9 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Check, Plus } from 'lucide-react';
+
+/* ── Blocked email domains (mirrors server-side list) ── */
+const BLOCKED_DOMAINS = new Set([
+  "gmail.com","googlemail.com","yahoo.com","yahoo.co.uk","yahoo.ca",
+  "hotmail.com","hotmail.co.uk","outlook.com","outlook.co.uk",
+  "live.com","live.co.uk","msn.com","aol.com","icloud.com","me.com",
+  "mac.com","mail.com","email.com","usa.com","protonmail.com",
+  "proton.me","zoho.com","yandex.com","gmx.com","gmx.net",
+  "fastmail.com","tutanota.com","tuta.io","hushmail.com",
+  "qq.com","163.com","126.com","sina.com","naver.com",
+  "rediffmail.com","web.de","t-online.de","libero.it",
+  "laposte.net","free.fr","wanadoo.fr","orange.fr",
+  "mailinator.com","guerrillamail.com","tempmail.com","throwaway.email",
+  "yopmail.com","sharklasers.com","guerrillamailblock.com",
+  "grr.la","dispostable.com","trashmail.com","10minutemail.com",
+  "temp-mail.org","fakeinbox.com","mailnesia.com","maildrop.cc",
+  "getnada.com","emailondeck.com",
+]);
+
+function isInstitutionalEmail(email: string): boolean {
+  const domain = email.split("@")[1]?.toLowerCase();
+  if (!domain) return false;
+  return !BLOCKED_DOMAINS.has(domain);
+}
 
 export default function BookDemoPage() {
   const [formData, setFormData] = useState({
@@ -17,16 +41,45 @@ export default function BookDemoPage() {
   const [showComment, setShowComment] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const formLoadedAt = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
+    setEmailError('');
+
+    // Client-side institutional email check
+    const trimmedEmail = formData.email.trim().toLowerCase();
+    if (!isInstitutionalEmail(trimmedEmail)) {
+      setEmailError('Please use your institutional or work email address.');
+      return;
+    }
+
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
+
+    try {
+      const res = await fetch('/api/book-demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          _ts: formLoadedAt.current, // timestamp for bot detection
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.error || `Request failed (${res.status})`);
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setFormError(err?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -103,15 +156,26 @@ export default function BookDemoPage() {
                 </div>
 
                 {/* Email */}
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email address *"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all"
-                />
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Work email address *"
+                    required
+                    value={formData.email}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setEmailError('');
+                      setFormError('');
+                    }}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all ${
+                      emailError ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                  />
+                  {emailError && (
+                    <p className="text-xs text-red-600 mt-1">{emailError}</p>
+                  )}
+                </div>
 
                 {/* Phone */}
                 <input
@@ -155,16 +219,17 @@ export default function BookDemoPage() {
                   />
                 )}
 
-                {/* reCAPTCHA placeholder */}
-                <div className="bg-gray-50 border border-gray-300 rounded-lg p-3 flex items-center gap-3">
-                  <div className="w-6 h-6 border-2 border-gray-300 rounded"></div>
-                  <span className="text-sm text-gray-600">I'm not a robot</span>
-                  <div className="ml-auto">
-                    <svg width="32" height="32" viewBox="0 0 32 32" className="text-gray-400">
-                      <path fill="currentColor" d="M16 0C7.163 0 0 7.163 0 16s7.163 16 16 16 16-7.163 16-16S24.837 0 16 0zm0 30C8.268 30 2 23.732 2 16S8.268 2 16 2s14 6.268 14 14-6.268 14-14 14z"/>
-                    </svg>
-                  </div>
-                </div>
+                {/* Honeypot — hidden from humans, bots fill it */}
+                <input
+                  type="text"
+                  name="_hp"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="absolute opacity-0 h-0 w-0 overflow-hidden pointer-events-none"
+                  value=""
+                  onChange={() => {}}
+                />
 
                 {/* Submit Button */}
                 <button
@@ -184,6 +249,10 @@ export default function BookDemoPage() {
                     'Submit'
                   )}
                 </button>
+
+                {formError && (
+                  <p className="text-xs text-red-600">{formError}</p>
+                )}
 
                 {/* Privacy Notice */}
                 <p className="text-xs text-gray-500 leading-relaxed">
