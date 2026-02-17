@@ -3,10 +3,9 @@
 import { useState, useMemo, useCallback } from "react";
 import { calculateRoi } from "@/lib/institution-roi/calculator";
 import {
-  suggestLeakDefaults,
+  suggestPrepCostDefaults,
   suggestChangeDefaults,
   suggestInvestment,
-  suggestEconomics,
   suggestBaseline,
 } from "@/lib/institution-roi/defaults";
 import type {
@@ -25,7 +24,7 @@ const fmt$ = (v: number) =>
     : `$${Math.round(v).toLocaleString("en-US")}`;
 
 const fmtPct = (v: number | null) =>
-  v == null ? "—" : `${Math.round(v)}%`;
+  v == null ? "—" : `+${v.toFixed(1)}%`;
 
 const fmtMonths = (v: number | null) =>
   v == null ? "—" : v < 1 ? "< 1 month" : `${Math.round(v)} months`;
@@ -121,11 +120,11 @@ function ResultCard({
   accent: string;
 }) {
   return (
-    <div className="rounded overflow-hidden shadow-sm border border-gray-100">
-      <div className={`${accent} px-3 py-1.5`}>
-        <span className="text-xs font-semibold text-white">{label}</span>
+    <div className="rounded overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
+      <div className={`${accent} px-3 py-1.5 min-h-[2.75rem] flex items-center`}>
+        <span className="text-xs font-semibold text-white leading-tight">{label}</span>
       </div>
-      <div className="bg-white px-3 py-2.5">
+      <div className="bg-white px-3 py-2.5 flex-1 flex items-center">
         <span className="text-xl font-bold text-[#003366]">
           {value}
         </span>
@@ -144,7 +143,7 @@ export default function ClarivueImpactCalculator() {
   const [programType, setProgramType] = useState<ProgramType>("bootcamp");
   const [interviewsPerLearner, setInterviewsPerLearner] = useState(0);
   const [learnersNeedingCoaching, setLearnersNeedingCoaching] = useState(0);
-  const [annualPrepSpend, setAnnualPrepSpend] = useState(0);
+  const [advisorHourlyCost, setAdvisorHourlyCost] = useState(0);
 
   /* ── Lead capture ────────────────────────────────── */
   const [email, setEmail] = useState("");
@@ -155,37 +154,32 @@ export default function ClarivueImpactCalculator() {
   const roiRequest = useMemo<RoiRequest | null>(() => {
     if (learnersPerYear <= 0 || interviewsPerLearner <= 0) return null;
 
-    const leak = suggestLeakDefaults(programType);
+    const prepCostDefaults = suggestPrepCostDefaults(programType);
     const change = suggestChangeDefaults(programType);
-    const economics = suggestEconomics(programType);
     const baseline = suggestBaseline(programType);
 
-    // Derive unready % from the coaching count the director entered
-    const unreadyPct =
+    // Derive remediation % from the coaching count the director entered
+    const remediationPct =
       learnersPerYear > 0
         ? Math.min(100, (learnersNeedingCoaching / learnersPerYear) * 100)
-        : 0;
+        : prepCostDefaults.remediationRatePct;
 
     return {
       context: {
         programType,
         cohortSize: learnersPerYear,
+        ...(advisorHourlyCost > 0 && { avgAdvisorHourlyCost: advisorHourlyCost }),
       },
       baseline,
-      economics, // revenuePerPlacement auto-filled from program-type defaults
-      leak: {
-        ...leak,
-        employerInterviewsPerLearner: interviewsPerLearner,
-        unreadyAtInterviewRatePct: unreadyPct,
+      prepCost: {
+        ...prepCostDefaults,
+        mocksPerLearner: interviewsPerLearner,
+        remediationRatePct: remediationPct,
       },
       change,
-      investment: {
-        annualChangeInvestment: annualPrepSpend > 0
-          ? annualPrepSpend
-          : suggestInvestment(learnersPerYear, economics.revenuePerPlacement).annualChangeInvestment,
-      },
+      investment: suggestInvestment(learnersPerYear),
     };
-  }, [learnersPerYear, programType, interviewsPerLearner, learnersNeedingCoaching, annualPrepSpend]);
+  }, [learnersPerYear, programType, interviewsPerLearner, learnersNeedingCoaching, advisorHourlyCost]);
 
   /* ── Live calculation ────────────────────────────── */
   const result: RoiResult | null = useMemo(() => {
@@ -213,26 +207,37 @@ export default function ClarivueImpactCalculator() {
     setSendError("");
 
     try {
-      // 1. Run the server-side calculation (generates narrative + stores)
+      // 1. Run the server-side calculation (stores run in DB)
       const calcRes = await fetch("/api/institutions/roi/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(roiRequest),
       });
-      if (!calcRes.ok) throw new Error("Calculation failed");
+      if (!calcRes.ok) {
+        const body = await calcRes.json().catch(() => ({}));
+        console.error("[ROI] calculate failed:", calcRes.status, body);
+        throw new Error(body?.error || `Calculation failed (${calcRes.status})`);
+      }
       const { runId } = await calcRes.json();
+      if (!runId) throw new Error("No runId returned from server");
 
       // 2. Gate pass (captures email)
-      await fetch("/api/institutions/roi/gate", {
+      const gateRes = await fetch("/api/institutions/roi/gate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ runId, email: trimmed }),
       });
+      if (!gateRes.ok) {
+        const body = await gateRes.json().catch(() => ({}));
+        console.error("[ROI] gate failed:", gateRes.status, body);
+        // Don't block — the report can still be viewed even if gate fails
+      }
 
       // 3. Open report
       window.open(`/institutions/roi/report/${runId}`, "_blank");
-    } catch {
-      setSendError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      console.error("[ROI] handleGetReport error:", err);
+      setSendError(err?.message || "Something went wrong. Please try again.");
     } finally {
       setSending(false);
     }
@@ -270,11 +275,12 @@ export default function ClarivueImpactCalculator() {
             tip="Your best estimate — even a rough number works"
           />
           <NumberField
-            label="Annual spend on interview prep?"
-            value={annualPrepSpend}
-            onChange={setAnnualPrepSpend}
+            label="What does one advisor cost per hour?"
+            value={advisorHourlyCost}
+            onChange={setAdvisorHourlyCost}
             prefix="$"
-            tip="Staff time, tools, mock interview costs"
+            placeholder="60"
+            tip="Fully loaded — salary + benefits. $60 is typical"
           />
         </div>
       </section>
@@ -282,28 +288,28 @@ export default function ClarivueImpactCalculator() {
       {/* ── Results ──────────────────────────────────── */}
       <section className="space-y-2">
         <h2 className="text-sm font-semibold text-[#003366] uppercase tracking-wide">
-          Calculate savings
+          Your interview prep snapshot
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <ResultCard
-            label="Annual cost of doing nothing"
-            value={hasResult ? fmt$(s!.costOfDoingNothing) : "$0"}
+            label="Current prep cost"
+            value={hasResult ? fmt$(s!.currentPrepCost) : "$0"}
             accent="bg-[#ff686c]"
           />
           <ResultCard
-            label="Value recovered annually"
-            value={hasResult ? fmt$(s!.valueRecovered) : "$0"}
+            label="Advisor time recovered"
+            value={hasResult ? fmt$(s!.advisorTimeRecovered) : "$0"}
             accent="bg-emerald-500"
           />
           <ResultCard
-            label="Payback period"
-            value={hasResult ? fmtMonths(s!.paybackMonths) : "—"}
+            label="Additional learners served"
+            value={hasResult ? `+${s!.additionalLearnersServed}` : "0"}
             accent="bg-blue-500"
           />
           <ResultCard
-            label="Return on investment"
-            value={hasResult ? fmtPct(s!.roiPct) : "—"}
+            label="Placement rate lift"
+            value={hasResult ? fmtPct(s!.placementRateLiftPct) : "—"}
             accent="bg-violet-500"
           />
         </div>
@@ -315,7 +321,7 @@ export default function ClarivueImpactCalculator() {
           Want the full breakdown? Get a detailed report — free.
         </p>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="email"
             placeholder="Work email"
@@ -329,7 +335,7 @@ export default function ClarivueImpactCalculator() {
           <button
             onClick={handleGetReport}
             disabled={!hasResult || sending}
-            className="rounded bg-[#003366] px-4 py-1.5 text-xs font-semibold text-white hover:bg-[#002244] disabled:opacity-40 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+            className="rounded bg-[#003366] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002244] disabled:opacity-40 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
           >
             {sending ? "Generating…" : "Get detailed report"}
           </button>

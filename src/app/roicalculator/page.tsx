@@ -4,7 +4,7 @@ import ClarivueImpactCalculator from "@/components/sections/institution/Clarivue
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useState, useEffect } from "react";
-import { RefreshCcw, TrendingDown, UserX } from "lucide-react";
+import { DollarSign, Clock, Users, TrendingUp } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home", href: "/" },
@@ -84,55 +84,61 @@ function StepPill({
 /* ── Benefit descriptions & How-it-works step content ─────────────────── */
 const BENEFITS = [
   {
-    icon: <RefreshCcw className="w-5 h-5" />,
-    title: "Rework Loop Tax",
+    icon: <DollarSign className="w-5 h-5" />,
+    title: "Current Prep Cost",
     description:
-      "How many staff hours go into re-coaching learners after failed interviews? The calculator surfaces the hidden remediation cycle your team absorbs — so you can price it, not just feel it.",
+      "How much is your team actually spending on mock interviews, coaching sessions, and remediation? The calculator totals the real cost of your current interview prep operation — most teams underestimate it by 2–3x.",
   },
   {
-    icon: <TrendingDown className="w-5 h-5" />,
-    title: "Outcome Leakage",
+    icon: <Clock className="w-5 h-5" />,
+    title: "Advisor Time Recovered",
     description:
-      "Revenue lost when candidates reach employer interviews but do not convert. The calculator shows how much placement income slips away each year because learners weren't ready when it mattered.",
+      "Your advisors spend hours running mock interviews and re-coaching learners who aren't ready. The calculator shows how much of that time you could reclaim — and what it's worth in dollars.",
   },
   {
-    icon: <UserX className="w-5 h-5" />,
-    title: "Employer Confidence Tax",
+    icon: <Users className="w-5 h-5" />,
+    title: "Additional Learners Served",
     description:
-      "Roles and interviews that never come back after weak candidate performance. The calculator estimates the compounding cost of declining employer engagement over time.",
+      "When advisors aren't stuck in remediation loops, they can serve more learners. See exactly how many additional students your team could support with the time recovered.",
+  },
+  {
+    icon: <TrendingUp className="w-5 h-5" />,
+    title: "Placement Rate Lift",
+    description:
+      "Better interview readiness means more learners convert employer conversations into offers. The calculator estimates the placement rate improvement based on your program's current readiness gap.",
   },
 ];
 
 const STEPS = [
   {
     pill: "Your Program",
-    title: "Cohort size, program type, mock interviews per learner",
+    title: "Cohort size & program type",
     description:
-      "Start with numbers you already know — how many learners you serve, what kind of program you run, and how many mock interviews each learner typically gets on average.",
+      "Start with numbers you already know — how many learners complete your program each year and what kind of program you run. This sets the baseline for everything else.",
   },
   {
-    pill: "Interview Exposure",
-    title: "How many learners aren't interview-ready?",
+    pill: "Mock Interviews",
+    title: "How many mocks does each learner get?",
     description:
-      "Estimate how many learners need extra coaching before they're ready for interviews. A rough count is fine — the calculator does the math from there.",
+      "Enter the average number of mock interviews per learner. This drives the prep cost calculation — even a rough estimate works.",
   },
   {
-    pill: "Coaching Load",
-    title: "What you spend on remediation",
+    pill: "Readiness Gap",
+    title: "How many learners need extra coaching?",
     description:
-      "Enter your annual spend on interview prep — coaching hours, mock interviews, tools. This tells the calculator what you're already investing to close the readiness gap.",
+      "Estimate how many learners need additional coaching before they're interview-ready. This shapes the remediation cost and time recovery calculations.",
   },
   {
     pill: "Prep Spend",
-    title: "What you currently invest in interview readiness",
+    title: "What you invest in interview readiness",
     description:
-      "Give a rough estimate of how much you spend annually trying to get your grads ready for jobs and interviews — coaching, mock interviews, workshops, tools. The calculator uses this to measure your return.",
+      "Enter your annual spend on interview prep — staff time, tools, mock sessions. The calculator uses this to show your return.",
   },
   {
-    pill: "Your Results",
-    title: "Cost, value recovered, and payback — instantly",
+    pill: "Your Snapshot",
+    title: "Four metrics, instantly",
     description:
-      "Results update as you type. You'll see the annual cost of doing nothing, the value you could recover, your payback period, and your ROI — all in real time. Then generate a report to share with leadership.",
+      "Results update as you type. You'll see your current prep cost, advisor time recovered, additional learners you could serve, and your expected placement rate lift. Then generate a detailed report.",
   },
 ];
 
@@ -211,18 +217,15 @@ export default function RoiCalculatorPage() {
         </div>
 
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-[#003366] leading-tight mb-5">
-          Cost of Graduating Interview-Unready Candidates
+          What Is Interview Prep Actually Costing Your Program?
         </h1>
 
         <p className="text-sm text-[#003366]/60 leading-relaxed mb-6">
-          Most programs know some learners struggle in interviews. Few know what
-          that struggle costs the organization. Weak interview readiness creates
-          three leaks across your program. It drives rework loops your team
-          absorbs through repeated coaching and remediation. It reduces outcome
-          revenue when candidates reach employer interviews but fail to convert.
-          It erodes employer confidence, leading to fewer repeat interviews and
-          fewer shared roles. Enter your numbers. See the annual cost of doing
-          nothing.
+          Most career teams know interview readiness is a challenge. Few know
+          what it costs in real dollars — advisor hours, remediation cycles,
+          and learners who never get served. Enter five numbers about your
+          program. See your current prep cost, the advisor time you could
+          recover, and the impact on placement rates — instantly.
         </p>
 
         <ul className="inline-flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[#003366]/70">
@@ -232,11 +235,11 @@ export default function RoiCalculatorPage() {
           </li>
           <li className="flex items-center gap-1.5">
             <span className="text-[#ff686c] font-bold">✓</span>
-            Explore without sign up
+            No sign-up required
           </li>
           <li className="flex items-center gap-1.5">
             <span className="text-[#ff686c] font-bold">✓</span>
-            Get a board ready report
+            Generate a shareable report
           </li>
         </ul>
       </section>
@@ -310,20 +313,13 @@ export default function RoiCalculatorPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-semibold text-[#003366] mb-4">
-              Why run this calculator?
+              What the calculator reveals
             </h2>
             <p className="text-sm text-[#003366]/60 leading-relaxed">
-              Most career teams track activities — coaching sessions delivered,
-              mock interviews completed, workshops held. This calculator asks a
-              different question: what is weak interview readiness actually
-              costing your program?
+              Four metrics that turn interview prep from a line item into a
+              measurable operation. Each one maps to a number your leadership
+              team can act on.
             </p>
-          </div>
-
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h3 className="text-lg font-semibold text-[#003366] mb-2">
-              What it reveals
-            </h3>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -369,7 +365,7 @@ export default function RoiCalculatorPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="text-2xl md:text-3xl font-semibold text-[#003366] mb-4">
-              Stop tracking effort. Start pricing impact.
+              Stop counting sessions. Start measuring outcomes.
             </h2>
           </div>
 
@@ -407,26 +403,26 @@ export default function RoiCalculatorPage() {
               <ul className="space-y-3 text-sm text-white/80">
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 text-[#ff686c] font-bold">→</span>
-                  Cost of re-coaching after failed interviews
+                  Actual cost of running mock interviews & coaching
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 text-[#ff686c] font-bold">→</span>
-                  Revenue lost from unconverted placements
+                  Advisor hours recoverable through better tools
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 text-[#ff686c] font-bold">→</span>
-                  Employer interviews lost to weak performance
+                  Extra learners your team could serve
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5 text-[#ff686c] font-bold">→</span>
-                  Annual cost of the readiness gap
+                  Expected lift in placement rates
                 </li>
               </ul>
             </div>
           </div>
 
           <p className="text-center text-xs text-[#003366]/40 mt-6">
-            This calculator prices the second column.
+            This calculator quantifies the second column.
           </p>
         </div>
       </section>
@@ -439,11 +435,11 @@ export default function RoiCalculatorPage() {
           {/* Left: copy */}
           <div className="flex-1 space-y-4">
             <h2 className="text-2xl md:text-3xl font-semibold text-white leading-tight">
-              Try the calculator
+              See your numbers
             </h2>
             <p className="text-sm text-white/70 leading-relaxed max-w-lg">
-              See the annual cost of weak interview readiness in your program.
-              Then generate a report you can share with leadership.
+              Five inputs. Four metrics. One shareable report for leadership.
+              Takes under two minutes.
             </p>
             <a
               href="#"
@@ -453,7 +449,7 @@ export default function RoiCalculatorPage() {
               }}
               className="coral-btn inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white"
             >
-              Price the Cost
+              Run the Calculator
               <svg
                 width="16"
                 height="16"
@@ -508,31 +504,32 @@ export default function RoiCalculatorPage() {
             What this is really about
           </h2>
           <p className="text-sm text-[#003366]/60 leading-relaxed">
-            Interview readiness isn&apos;t a soft skill issue. It&apos;s an operating risk.
-            When learners aren&apos;t ready for employer conversations, your program
-            absorbs the cost — in rework, in lost placements, and in employer
-            relationships that silently erode.
+            Interview prep isn&apos;t just a student problem — it&apos;s a program
+            operations question. Every hour an advisor spends running mock
+            interviews is an hour they can&apos;t spend advising new learners.
+            Every learner who isn&apos;t interview-ready is a placement that
+            could slip.
           </p>
           <ul className="inline-block text-left space-y-2 text-sm text-[#003366]/70">
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-[#ff686c] font-bold">•</span>
-              Staff hours go to remediation instead of new learners
+              Know the real cost of your current prep operation
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-[#ff686c] font-bold">•</span>
-              Placement revenue drops when candidates don&apos;t convert
+              See how much advisor time you could recover
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-[#ff686c] font-bold">•</span>
-              Employers reduce engagement after poor interview experiences
+              Understand capacity gains in learners served
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 text-[#ff686c] font-bold">•</span>
-              The readiness gap compounds year after year
+              Estimate the placement rate improvement
             </li>
           </ul>
           <p className="text-sm font-semibold text-[#003366] pt-2">
-            Run it. Share it. Fix the leak upstream.
+            Run it. Share the report. Make the case.
           </p>
           <div>
             <a

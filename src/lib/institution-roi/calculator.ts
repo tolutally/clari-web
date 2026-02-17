@@ -1,5 +1,4 @@
-import type { RoiRequest, RoiResult, ChallengerScenarioBreakdown } from "./types";
-import { FAIL_CONVERSION_VALUE_FACTOR, PLACEMENT_RATE_PROXY } from "./defaults";
+﻿import type { RoiRequest, RoiResult, RoiScenarioBreakdown } from "./types";
 
 const clampPct = (v: number | undefined, min = 0, max = 100) =>
   Math.min(max, Math.max(min, Number.isFinite(v ?? NaN) ? (v as number) : 0));
@@ -9,73 +8,81 @@ const safe = (v: number | undefined, floor = 0) =>
 
 /**
  * Compute one scenario.
- * `multiplier` is applied ONLY to the change assumptions (not the leak inputs).
- *   low  = 0.8
- *   expected = 1.0
- *   high = 1.2
+ * `multiplier` applies ONLY to change assumptions (not status-quo costs).
+ *   low = 0.8, expected = 1.0, high = 1.2
  */
 function computeScenario(
   input: RoiRequest,
   multiplier = 1,
-): ChallengerScenarioBreakdown {
-  // ── Inputs ─────────────────────────────────────────────────────────────
+): RoiScenarioBreakdown {
+  //  Inputs (status-quo) 
   const L = safe(input.context.cohortSize);
-  const V = safe(input.economics.revenuePerPlacement);
   const W = safe(input.context.avgAdvisorHourlyCost) || 60;
-  const I = safe(input.leak.employerInterviewsPerLearner);
-  const U = clampPct(input.leak.unreadyAtInterviewRatePct) / 100;
-  const Rm = clampPct(input.leak.remediationRatePct) / 100;
-  const Hx = safe(input.leak.extraCoachingHoursPerRemediationLearner);
-  const Or = clampPct(input.leak.employerOpportunityRationingPct) / 100;
+  const sessionDuration = safe(input.context.avgSessionDurationHours) || 1;
 
-  // ── Change assumptions (scaled by multiplier) ──────────────────────────
-  const dU = (clampPct(input.change.reductionInUnreadyRatePct) / 100) * multiplier;
-  const dRm = (clampPct(input.change.reductionInRemediationRatePct) / 100) * multiplier;
-  const recOr = (clampPct(input.change.recoveryOfRationedOpportunityPct) / 100) * multiplier;
+  const mocks = safe(input.prepCost.mocksPerLearner);
+  const costPerSession = safe(input.prepCost.costPerSession);
+  const adminMin = safe(input.prepCost.adminOverheadMinutesPerSession);
+  const remPct = clampPct(input.prepCost.remediationRatePct) / 100;
+  const extraHrs = safe(input.prepCost.extraCoachingHoursPerRemediationLearner);
 
-  // ── Investment ─────────────────────────────────────────────────────────
+  //  Change assumptions (scaled by multiplier) 
+  const autoRate = (clampPct(input.change.automationRatePct) / 100) * multiplier;
+  const remReduction = (clampPct(input.change.reductionInRemediationRatePct) / 100) * multiplier;
+  const liftFactor = Math.min(1, safe(input.change.placementLiftConversionFactor) * multiplier);
+
+  //  Investment 
   const Inv = safe(input.investment.annualChangeInvestment);
 
-  // ── Block 1: Rework loop tax ───────────────────────────────────────────
-  const reworkCost = L * Rm * Hx * W;
-  const reworkSaved = reworkCost * dRm;
+  //  Block 1: Current Prep Cost (status-quo annual cost) 
+  const totalMocks = L * mocks;
+  const mockSessionCost = totalMocks * costPerSession;
+  const adminOverheadCost = totalMocks * (adminMin / 60) * W;
+  const remediationLearners = L * remPct;
+  const remediationCost = remediationLearners * extraHrs * W;
+  const currentPrepCost = mockSessionCost + adminOverheadCost + remediationCost;
 
-  // ── Block 2: Outcome leakage from unready interviews ───────────────────
-  const failFactor =
-    FAIL_CONVERSION_VALUE_FACTOR[input.context.programType] ??
-    FAIL_CONVERSION_VALUE_FACTOR.other;
-  const outcomeLeak = L * I * U * failFactor * V;
-  const outcomeRecovered = outcomeLeak * dU;
+  //  Block 2: Advisor Time Recovered (hours saved in dollar terms) 
+  const mockTimeSaved = totalMocks * autoRate * sessionDuration * W;
+  const adminTimeSaved = totalMocks * autoRate * (adminMin / 60) * W;
+  const remediationSaved = remediationCost * remReduction;
+  const advisorTimeRecovered = mockTimeSaved + adminTimeSaved + remediationSaved;
 
-  // ── Block 3: Employer confidence tax ───────────────────────────────────
-  const placementProxy =
-    input.baseline?.offerRatePct != null && Number.isFinite(input.baseline.offerRatePct)
-      ? clampPct(input.baseline.offerRatePct) / 100
-      : PLACEMENT_RATE_PROXY[input.context.programType] ?? PLACEMENT_RATE_PROXY.other;
+  //  Block 3: Additional Learners Served 
+  const hoursSaved =
+    totalMocks * autoRate * sessionDuration +
+    totalMocks * autoRate * (adminMin / 60) +
+    remediationLearners * extraHrs * remReduction;
+  const hoursPerLearner = mocks * sessionDuration + mocks * (adminMin / 60);
+  const additionalLearnersServed =
+    hoursPerLearner > 0 ? Math.floor(hoursSaved / hoursPerLearner) : 0;
 
-  const confidenceLeak = L * placementProxy * Or * V;
-  const confidenceRecovered = confidenceLeak * recOr;
+  //  Block 4: Placement Rate Lift 
+  // unreadyRate  reduction  conversionFactor  100
+  const unreadyRate = remPct; // proxy: remediation rate  unready rate
+  const placementRateLiftPct = unreadyRate * remReduction * liftFactor * 100;
 
-  // ── Totals ─────────────────────────────────────────────────────────────
-  const costOfDoingNothing = reworkCost + outcomeLeak + confidenceLeak;
-  const valueRecovered = reworkSaved + outcomeRecovered + confidenceRecovered;
-  const netAnnual = valueRecovered - Inv;
-  const roiPct = Inv <= 0 ? null : (netAnnual / Inv) * 100;
+  //  Financial summary 
+  const netAnnualSavings = advisorTimeRecovered - Inv;
   const paybackMonths =
-    valueRecovered <= 0 ? null : (Inv / valueRecovered) * 12;
+    advisorTimeRecovered <= 0 ? null : (Inv / advisorTimeRecovered) * 12;
 
   return {
-    costOfDoingNothing,
-    valueRecovered,
-    netAnnual,
-    roiPct,
+    currentPrepCost,
+    advisorTimeRecovered,
+    additionalLearnersServed,
+    placementRateLiftPct,
+
+    mockSessionCost,
+    adminOverheadCost,
+    remediationCost,
+    mockTimeSaved,
+    adminTimeSaved,
+    remediationSaved,
+    hoursPerLearner,
+
+    netAnnualSavings,
     paybackMonths,
-    reworkCost,
-    reworkSaved,
-    outcomeLeak,
-    outcomeRecovered,
-    confidenceLeak,
-    confidenceRecovered,
   };
 }
 
@@ -85,27 +92,28 @@ export function calculateRoi(input: RoiRequest): RoiResult {
   const high = computeScenario(input, 1.2);
 
   const L = safe(input.context.cohortSize);
-  const I = safe(input.leak.employerInterviewsPerLearner);
-  const U = clampPct(input.leak.unreadyAtInterviewRatePct) / 100;
+  const mocks = safe(input.prepCost.mocksPerLearner);
+  const remPct = clampPct(input.prepCost.remediationRatePct) / 100;
+  const sessionDuration = safe(input.context.avgSessionDurationHours) || 1;
+  const adminMin = safe(input.prepCost.adminOverheadMinutesPerSession);
 
-  const placementProxy =
-    input.baseline?.offerRatePct != null && Number.isFinite(input.baseline.offerRatePct)
-      ? clampPct(input.baseline.offerRatePct) / 100
-      : PLACEMENT_RATE_PROXY[input.context.programType] ?? PLACEMENT_RATE_PROXY.other;
+  const totalMocks = L * mocks;
+  const remediationLearners = L * remPct;
+  const totalAdvisorHoursOnPrep =
+    totalMocks * sessionDuration +
+    totalMocks * (adminMin / 60) +
+    remediationLearners * safe(input.prepCost.extraCoachingHoursPerRemediationLearner);
 
   return {
-    resultVersion: 2,
+    resultVersion: 3,
     summary: expected,
     baselineSignals: {
-      placementProxyUsed: placementProxy,
-      interviewsPerYear: L * I,
-      unreadyInterviewsPerYear: L * I * U,
+      totalMockSessions: totalMocks,
+      remediationLearners,
+      totalAdvisorHoursOnPrep,
+      unreadyRatePct: remPct * 100,
     },
-    sensitivity: {
-      low,
-      expected,
-      high,
-    },
+    sensitivity: { low, expected, high },
     assumptions: input,
   };
 }

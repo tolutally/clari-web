@@ -1,4 +1,4 @@
-export type ProgramType = "bootcamp" | "university" | "workforce" | "other";
+﻿export type ProgramType = "bootcamp" | "university" | "workforce" | "other";
 
 export type ProgramContext = {
   institutionName?: string;
@@ -11,46 +11,38 @@ export type ProgramContext = {
   location?: string;
 };
 
-/** Optional reference fields — kept for backward compat and guided defaults */
+/** Optional reference fields  kept for backward compat and guided defaults */
 export type BaselinePerformance = {
   readinessRatePct?: number; // 0-100, optional reference
-  offerRatePct?: number; // 0-100, optional — used as placementRateProxy if provided
+  offerRatePct?: number; // 0-100, optional
   avgTimeToReadyWeeks?: number;
   avgTimeToOfferWeeks?: number;
   mockInterviewsPerLearner?: number;
   sessionsPerLearner?: number;
 };
 
-/** Status-quo leak inputs — the "readiness debt" observed today */
-export type LeakInputs = {
-  employerInterviewsPerLearner: number;
-  unreadyAtInterviewRatePct: number; // 0-100
+/** Status-quo cost inputs  what the career center spends today on interview prep */
+export type PrepCostInputs = {
+  mocksPerLearner: number;
+  costPerSession: number;
+  adminOverheadMinutesPerSession: number;
   remediationRatePct: number; // 0-100
   extraCoachingHoursPerRemediationLearner: number;
-  employerOpportunityRationingPct: number; // 0-100
 };
 
-/** Assumptions about what changes under a verified-readiness operating model */
+/** Assumptions about what changes with Clarivue */
 export type ChangeAssumptions = {
-  reductionInUnreadyRatePct: number; // 0-100
+  automationRatePct: number; // 0-100  % of manual mocks Clarivue replaces
   reductionInRemediationRatePct: number; // 0-100
-  recoveryOfRationedOpportunityPct: number; // 0-100
+  placementLiftConversionFactor: number; // 0-1
 };
 
-/** One-number annual investment to adopt the approach */
+/** One-number annual investment to adopt Clarivue */
 export type Investment = {
   annualChangeInvestment: number;
 };
 
-export type Economics = {
-  revenuePerPlacement: number;
-  costPerSession?: number;
-  fundingPerOutcome?: number;
-  tuitionPerLearner?: number;
-  enrollmentCredibilityUpliftPct?: number;
-};
-
-// ── Legacy types kept so old "v1" reports still parse ────────────────────
+//  Legacy types kept so old reports still parse 
 export type UpliftAssumptions = {
   mockInterviewUpliftPct?: number;
   readinessUpliftPctPoints?: number;
@@ -60,7 +52,7 @@ export type UpliftAssumptions = {
   timeToOfferImprovementWeeks?: number;
 };
 
-/** @deprecated v1 scenario shape — kept for backward compat */
+/** @deprecated v1 scenario shape */
 export type ScenarioBreakdown = {
   totalValueImpact: number;
   revenueImpact: number;
@@ -72,17 +64,24 @@ export type ScenarioBreakdown = {
   newTimeToOfferWeeks: number | null;
 };
 
-// ── V2 Challenger types ──────────────────────────────────────────────────
-
-export type RoiRequest = {
-  context: ProgramContext;
-  baseline?: BaselinePerformance; // optional reference
-  economics: Economics;
-  leak: LeakInputs;
-  change: ChangeAssumptions;
-  investment: Investment;
+/** @deprecated v2 old types  kept for stored report compat */
+export type Economics = {
+  revenuePerPlacement: number;
+  costPerSession?: number;
+  fundingPerOutcome?: number;
+  tuitionPerLearner?: number;
+  enrollmentCredibilityUpliftPct?: number;
 };
 
+export type LeakInputs = {
+  employerInterviewsPerLearner: number;
+  unreadyAtInterviewRatePct: number;
+  remediationRatePct: number;
+  extraCoachingHoursPerRemediationLearner: number;
+  employerOpportunityRationingPct: number;
+};
+
+/** @deprecated Old v2 result type */
 export type ChallengerScenarioBreakdown = {
   costOfDoingNothing: number;
   valueRecovered: number;
@@ -97,18 +96,53 @@ export type ChallengerScenarioBreakdown = {
   confidenceRecovered: number;
 };
 
+//  V3 Realistic ROI types 
+
+export type RoiRequest = {
+  context: ProgramContext;
+  baseline?: BaselinePerformance;
+  prepCost: PrepCostInputs;
+  change: ChangeAssumptions;
+  investment: Investment;
+};
+
+export type RoiScenarioBreakdown = {
+  /** Red card: total current annual cost of manual interview prep */
+  currentPrepCost: number;
+  /** Green card: advisor hours freed in dollar terms */
+  advisorTimeRecovered: number;
+  /** Blue card: additional learners the team can serve with freed capacity */
+  additionalLearnersServed: number;
+  /** Violet card: expected placement rate lift in percentage points */
+  placementRateLiftPct: number;
+
+  // Breakdown sub-components
+  mockSessionCost: number;
+  adminOverheadCost: number;
+  remediationCost: number;
+  mockTimeSaved: number;
+  adminTimeSaved: number;
+  remediationSaved: number;
+  hoursPerLearner: number;
+
+  // Financial summary
+  netAnnualSavings: number;
+  paybackMonths: number | null;
+};
+
 export type RoiResult = {
-  resultVersion: 2;
-  summary: ChallengerScenarioBreakdown;
+  resultVersion: 3;
+  summary: RoiScenarioBreakdown;
   baselineSignals: {
-    placementProxyUsed: number;
-    interviewsPerYear: number;
-    unreadyInterviewsPerYear: number;
+    totalMockSessions: number;
+    remediationLearners: number;
+    totalAdvisorHoursOnPrep: number;
+    unreadyRatePct: number;
   };
   sensitivity: {
-    low: ChallengerScenarioBreakdown;
-    expected: ChallengerScenarioBreakdown;
-    high: ChallengerScenarioBreakdown;
+    low: RoiScenarioBreakdown;
+    expected: RoiScenarioBreakdown;
+    high: RoiScenarioBreakdown;
   };
   assumptions: RoiRequest;
 };
@@ -117,7 +151,7 @@ export type RoiRunRow = {
   id: string;
   request: RoiRequest;
   result: RoiResult;
-  result_version: number; // 1 = legacy feature ROI, 2 = challenger ROI
+  result_version: number;
   narrative?: string;
   gate_passed: boolean;
   created_at?: string;

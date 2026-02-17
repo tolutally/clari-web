@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/db/supabaseAdmin";
+import { getSupabaseAdmin } from "@/lib/db/supabaseAdmin";
 import { setGatePassed } from "@/lib/institution-roi/storage";
 
 function sha256(v: string) {
@@ -14,7 +14,9 @@ export async function GET(_req: Request, ctx: { params: Promise<{ token: string 
   const tokenHash = sha256(token);
   const nowIso = new Date().toISOString();
 
-  const { data: link, error } = await supabaseAdmin
+  const db = getSupabaseAdmin();
+
+  const { data: link, error } = await db
     .from("institution_roi_magic_links")
     .select("run_id, expires_at, used_at")
     .eq("token_hash", tokenHash)
@@ -26,7 +28,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ token: string 
     return NextResponse.json({ error: "Invalid or expired link" }, { status: 400 });
   }
 
-  await supabaseAdmin
+  await db
     .from("institution_roi_magic_links")
     .update({ used_at: new Date().toISOString() })
     .eq("token_hash", tokenHash);

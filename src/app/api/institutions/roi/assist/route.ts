@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { buildNarrative } from "@/lib/institution-roi/narrative";
 import {
   suggestBaseline,
-  suggestEconomics,
-  suggestLeakDefaults,
+  suggestPrepCostDefaults,
   suggestChangeDefaults,
   suggestInvestment,
 } from "@/lib/institution-roi/defaults";
@@ -23,15 +22,13 @@ export async function POST(req: Request) {
   if (body.mode === "suggest") {
     const programType = body.request?.context.programType ?? "other";
     const cohortSize = body.request?.context.cohortSize ?? 100;
-    const revenuePerPlacement = body.request?.economics?.revenuePerPlacement ?? 9500;
 
     const baseline = suggestBaseline(programType);
-    const economics = suggestEconomics(programType);
-    const leak = suggestLeakDefaults(programType);
+    const prepCost = suggestPrepCostDefaults(programType);
     const change = suggestChangeDefaults(programType);
-    const investment = suggestInvestment(cohortSize, revenuePerPlacement);
+    const investment = suggestInvestment(cohortSize);
 
-    return NextResponse.json({ baseline, economics, leak, change, investment });
+    return NextResponse.json({ baseline, prepCost, change, investment });
   }
 
   // mode === "narrative"

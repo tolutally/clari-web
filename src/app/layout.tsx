@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -48,6 +49,9 @@ export default function RootLayout({
       <body className={`${jakarta.variable} antialiased`}>
         {children}
         <Analytics />
+        <Script id="apollo-tracker" strategy="afterInteractive">
+          {`(function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n;o.async=!0;o.defer=!0;o.onload=function(){window.trackingFunctions.onLoad({appId:"66e07159271247019bd8555a"})};document.head.appendChild(o)})();`}
+        </Script>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { supabaseAdmin } from "@/lib/db/supabaseAdmin";
+import { getSupabaseAdmin } from "@/lib/db/supabaseAdmin";
 import type { RoiRequest, RoiResult, RoiRunRow } from "./types";
 
 const tableRuns = "institution_roi_runs";
@@ -16,7 +16,7 @@ export async function insertRun({
   narrative?: string;
   result_version?: number;
 }): Promise<{ id: string }> {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from(tableRuns)
     .insert({
       request,
@@ -33,7 +33,7 @@ export async function insertRun({
 }
 
 export async function getRun(runId: string): Promise<RoiRunRow | null> {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from(tableRuns)
     .select("id,request,result,narrative,gate_passed,result_version,created_at,updated_at")
     .eq("id", runId)
@@ -48,7 +48,7 @@ export async function getRun(runId: string): Promise<RoiRunRow | null> {
 }
 
 export async function setGatePassed(runId: string) {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from(tableRuns)
     .update({ gate_passed: true, updated_at: new Date().toISOString() })
     .eq("id", runId);
@@ -60,7 +60,7 @@ export async function createMagicLink(runId: string, email: string, baseUrl: str
   const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-  const { error } = await supabaseAdmin.from(tableLinks).insert({
+  const { error } = await getSupabaseAdmin().from(tableLinks).insert({
     run_id: runId,
     email: email.trim().toLowerCase(),
     token_hash: tokenHash,
@@ -73,7 +73,7 @@ export async function createMagicLink(runId: string, email: string, baseUrl: str
 
   // Optional fast-unlock for in-app flow
   await setGatePassed(runId).catch(() => {});
-  await supabaseAdmin.from(tableLinks).update({ used_at: new Date().toISOString() }).eq("token_hash", tokenHash);
+  await getSupabaseAdmin().from(tableLinks).update({ used_at: new Date().toISOString() }).eq("token_hash", tokenHash);
 
   return { link };
 }
