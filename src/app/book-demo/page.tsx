@@ -124,7 +124,7 @@ export default function BookDemoPage() {
       <div className="max-w-7xl mx-auto px-4 pt-20 pb-8 lg:pt-12 lg:pb-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start min-h-[calc(100vh-4rem)]">
           {/* Left: Form */}
-          <div className="flex justify-center lg:justify-start pt-8 lg:pt-16">
+          <div className="flex flex-col items-center lg:items-start pt-8 lg:pt-16">
             <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
               <h1 className="text-3xl font-bold text-[#003366] mb-6">Get a demo</h1>
 
@@ -265,119 +265,37 @@ export default function BookDemoPage() {
                 </p>
               </form>
             </div>
+
+            {/* Brand partner strip */}
+            <div className="hidden lg:block w-full max-w-md mt-6">
+              <p className="text-center text-[10px] uppercase tracking-widest text-[#003366]/40 font-semibold mb-4">Backed by</p>
+              <div className="flex items-center justify-center gap-8 opacity-60">
+                <Image src="/partners/Volta-Logo.png" alt="Volta" width={80} height={32} className="object-contain h-8 w-auto" />
+                <Image src="/partners/Invest-Nova-Scotia-Logo.png" alt="Invest Nova Scotia" width={100} height={32} className="object-contain h-8 w-auto" />
+                <Image src="/partners/tribe_logo.png" alt="Tribe" width={80} height={32} className="object-contain h-8 w-auto" />
+              </div>
+            </div>
           </div>
 
-          {/* Right: Floating UI Cards - matching reference layout */}
+          {/* Right: Photo frame with floating UI cards */}
           <div className="hidden lg:flex flex-col items-center pt-4">
             <div className="relative w-full h-[700px]">
 
-              {/* === Signal Flow Connectors === */}
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-                style={{ zIndex: 2 }}
-              >
-                <defs>
-                  <filter id="glowNormal" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="0.6" result="blur" />
-                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                  </filter>
-                  <filter id="glowRisk" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="0.8" result="blur" />
-                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                  </filter>
-                  <linearGradient id="flowNormal" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0.5" />
-                  </linearGradient>
-                  <linearGradient id="flowDown" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.85" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0.45" />
-                  </linearGradient>
-                  <linearGradient id="flowRisk" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#ff686c" stopOpacity="0.6" />
-                  </linearGradient>
-                </defs>
-
-                {/*
-                  Card positions as % of container:
-                  Engine:  left=52%, top=0%, right=100%, bottom=22%, left-center=(52,11)
-                  Profile: left=0%, top=21%, right=42%, bottom=57%, right-center=(42,39)
-                  Actions: left=2%, top=69%, right=44%, bottom=87%, top-center=(23,69)
-                  Board:   left=46%, top=37%, right=100%, bottom=77%, top-center=(73,37), left-center=(46,57)
-                */}
-
-                {/* Flow 1: Engine left-center → Profile right-center */}
-                <path
-                  d="M 52 11 C 47 11, 42 22, 42 39"
-                  stroke="url(#flowNormal)"
-                  fill="none"
-                  strokeLinecap="round"
-                  filter="url(#glowNormal)"
-                  className="signal-line"
-                  vectorEffect="non-scaling-stroke"
-                  style={{ strokeWidth: '2px' }}
-                />
-                <circle cx="52" cy="11" r="0.6" fill="white" opacity="0.9" filter="url(#glowNormal)" />
-
-                {/* Flow 2: Engine bottom-center → Board top-center */}
-                <path
-                  d="M 76 22 C 76 28, 73 32, 73 37"
-                  stroke="url(#flowDown)"
-                  fill="none"
-                  strokeLinecap="round"
-                  filter="url(#glowNormal)"
-                  className="signal-line"
-                  vectorEffect="non-scaling-stroke"
-                  style={{ strokeWidth: '2px' }}
-                />
-                <circle cx="76" cy="22" r="0.6" fill="white" opacity="0.9" filter="url(#glowNormal)" />
-
-                {/* Flow 3: Profile bottom-center → Actions top-center */}
-                <path
-                  d="M 21 57 C 21 62, 23 65, 23 69"
-                  stroke="url(#flowDown)"
-                  fill="none"
-                  strokeLinecap="round"
-                  filter="url(#glowNormal)"
-                  className="signal-line"
-                  vectorEffect="non-scaling-stroke"
-                  style={{ strokeWidth: '2px' }}
-                />
-                <circle cx="21" cy="57" r="0.6" fill="white" opacity="0.9" filter="url(#glowNormal)" />
-
-                {/* Flow 4: Board internal — cohort rows → risk metrics (dashed risk) */}
-                <path
-                  d="M 73 66 C 73 69, 73 71, 73 73"
-                  stroke="url(#flowRisk)"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeDasharray="0.8 0.5"
-                  filter="url(#glowRisk)"
-                  className="signal-line-risk"
-                  vectorEffect="non-scaling-stroke"
-                  style={{ strokeWidth: '1.5px' }}
-                />
-
-                {/* Animated signal pulses */}
-                <circle r="0.5" fill="white" opacity="0.95" filter="url(#glowNormal)">
-                  <animateMotion dur="3s" repeatCount="indefinite" path="M 52 11 C 47 11, 42 22, 42 39" />
-                </circle>
-                <circle r="0.5" fill="white" opacity="0.95" filter="url(#glowNormal)">
-                  <animateMotion dur="2.5s" repeatCount="indefinite" path="M 76 22 C 76 28, 73 32, 73 37" begin="0.8s" />
-                </circle>
-                <circle r="0.5" fill="white" opacity="0.95" filter="url(#glowNormal)">
-                  <animateMotion dur="2.8s" repeatCount="indefinite" path="M 21 57 C 21 62, 23 65, 23 69" begin="1.5s" />
-                </circle>
-                <circle r="0.4" fill="#ff686c" opacity="0.8" filter="url(#glowRisk)">
-                  <animateMotion dur="2s" repeatCount="indefinite" path="M 73 66 C 73 69, 73 71, 73 73" begin="2s" />
-                </circle>
-              </svg>
+              {/* Center photo frame */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[504px] h-[380px] z-[5]">
+                <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border-[3px] border-white/60 ring-1 ring-[#003366]/10">
+                  <Image
+                    src="/hero-image-3.png"
+                    alt="Career advisors using Clarivue"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
 
               {/* Card 1: Interview Readiness Engine - top right */}
-              <div className="absolute top-0 right-0 bg-white rounded-xl shadow-lg p-5 w-[240px] z-10 animate-[fadeSlideDown_0.6s_ease-out_0.2s_both,breathe_4s_ease-in-out_1s_infinite]">
+              <div className="absolute top-0 right-0 bg-white rounded-xl shadow-lg p-5 w-[220px] z-10 animate-[fadeSlideDown_0.6s_ease-out_0.2s_both,breathe_4s_ease-in-out_1s_infinite]">
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-bold text-[#003366] text-sm">Interview Readiness Engine</span>
                   <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-semibold rounded-full">Live Scoring</span>
@@ -402,27 +320,24 @@ export default function BookDemoPage() {
                 </div>
               </div>
 
-              {/* Card 2: Student Profile - left middle */}
-              <div className="absolute top-[150px] left-0 bg-white rounded-xl shadow-lg p-4 w-[210px] z-10 animate-[fadeSlideRight_0.6s_ease-out_0.5s_both,breathe_4s_ease-in-out_1.5s_infinite]">
+              {/* Card 2: Student Profile - left */}
+              <div className="absolute top-[110px] left-[-10%] bg-white rounded-xl shadow-lg p-4 w-[200px] z-10 animate-[fadeSlideRight_0.6s_ease-out_0.5s_both,breathe_4s_ease-in-out_1.5s_infinite]">
                 <div className="flex flex-col items-center text-center mb-2">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#003366] to-[#1a5276] rounded-full flex items-center justify-center mb-2">
-                    <span className="text-white font-bold text-sm">DT</span>
-                  </div>
+                  <Image src="/avatars/avatar-1.jpg" alt="Daniel Thompson" width={40} height={40} className="w-10 h-10 rounded-full object-cover mb-2" />
                   <p className="font-semibold text-[#003366] text-sm">Daniel Thompson</p>
                   <span className="px-2 py-0.5 bg-blue-50 text-[#003366] text-[10px] font-medium rounded-full mt-1">Software Engineering</span>
                 </div>
-                <div className="flex justify-center mb-3">
-                  <span className="px-2.5 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-lg">Interview Score: 72</span>
+                <div className="flex justify-center mb-2">
+                  <span className="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-semibold rounded-lg">Interview Score: 72</span>
                 </div>
-                <div className="space-y-1.5 text-left">
-                  <p className="text-[10px] text-gray-500">Role Target: <span className="text-[#003366] font-medium">Backend Developer</span></p>
-                  <p className="text-[10px] text-gray-500">Last Simulation: <span className="text-[#003366] font-medium">System Design Round</span></p>
-                  <p className="text-[10px] text-gray-500">Confidence Gap: <span className="text-[#ff686c] font-medium">Behavioral Storytelling</span></p>
+                <div className="space-y-1 text-left">
+                  <p className="text-[10px] text-gray-500">Role: <span className="text-[#003366] font-medium">Backend Developer</span></p>
+                  <p className="text-[10px] text-gray-500">Gap: <span className="text-[#ff686c] font-medium">Behavioral Storytelling</span></p>
                 </div>
               </div>
 
               {/* Card 3: Readiness Actions - bottom left */}
-              <div className="absolute top-[480px] left-[10px] bg-white rounded-xl shadow-lg p-4 w-[210px] z-10 animate-[fadeSlideUp_0.6s_ease-out_0.8s_both,breathe_4s_ease-in-out_2s_infinite]">
+              <div className="absolute bottom-[40px] left-0 bg-white rounded-xl shadow-lg p-4 w-[200px] z-10 animate-[fadeSlideUp_0.6s_ease-out_0.8s_both,breathe_4s_ease-in-out_2s_infinite]">
                 <p className="text-xs font-bold text-[#003366] mb-3">Readiness Actions</p>
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2.5">
@@ -446,42 +361,42 @@ export default function BookDemoPage() {
                 </div>
               </div>
 
-              {/* Card 4: Cohort Performance Board - right lower */}
-              <div className="absolute top-[260px] right-0 bg-white rounded-xl shadow-lg p-5 w-[270px] z-10 animate-[fadeSlideLeft_0.6s_ease-out_1.1s_both,breathe_4s_ease-in-out_2.5s_infinite]">
-                <h4 className="font-bold text-[#003366] text-sm mb-4">Cohort Performance Board</h4>
-                <div className="space-y-3">
+              {/* Card 4: Cohort Performance Board - bottom right */}
+              <div className="absolute bottom-[20px] right-0 bg-white rounded-xl shadow-lg p-4 w-[240px] z-10 animate-[fadeSlideLeft_0.6s_ease-out_1.1s_both,breathe_4s_ease-in-out_2.5s_infinite]">
+                <h4 className="font-bold text-[#003366] text-sm mb-3">Cohort Performance Board</h4>
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center text-[10px] font-semibold text-green-700">VP</div>
+                    <div className="flex items-center gap-2">
+                      <Image src="/avatars/avatar-2.jpg" alt="Vikram Patel" width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
                       <div>
                         <p className="text-xs text-gray-800 font-medium">Vikram Patel</p>
                         <p className="text-[10px] text-gray-400">Score: 84</p>
                       </div>
                     </div>
-                    <span className="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-semibold rounded-full">Verified Ready</span>
+                    <span className="px-1.5 py-0.5 bg-green-100 text-green-700 text-[9px] font-semibold rounded-full">Ready</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 bg-amber-50 rounded-full flex items-center justify-center text-[10px] font-semibold text-amber-700">ZW</div>
+                    <div className="flex items-center gap-2">
+                      <Image src="/avatars/avatar-3.jpg" alt="Zhang Wei" width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
                       <div>
                         <p className="text-xs text-gray-800 font-medium">Zhang Wei</p>
                         <p className="text-[10px] text-gray-400">Score: 63</p>
                       </div>
                     </div>
-                    <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-semibold rounded-full">At Risk</span>
+                    <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 text-[9px] font-semibold rounded-full">At Risk</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 bg-red-50 rounded-full flex items-center justify-center text-[10px] font-semibold text-red-700">LC</div>
+                    <div className="flex items-center gap-2">
+                      <Image src="/avatars/avatar-4.jpg" alt="Luciana Correia" width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
                       <div>
                         <p className="text-xs text-gray-800 font-medium">Luciana Correia</p>
                         <p className="text-[10px] text-gray-400">Score: 48</p>
                       </div>
                     </div>
-                    <span className="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-semibold rounded-full">High Risk</span>
+                    <span className="px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-semibold rounded-full">High Risk</span>
                   </div>
                 </div>
-                <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5">
+                <div className="mt-3 pt-2 border-t border-gray-100 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] text-gray-500">Conversion Risk</span>
                     <span className="text-xs text-red-500 font-bold">27%</span>
@@ -494,15 +409,6 @@ export default function BookDemoPage() {
               </div>
             </div>
 
-            {/* Brand partner strip */}
-            <div className="w-full mt-12">
-              <p className="text-center text-[10px] uppercase tracking-widest text-[#003366]/40 font-semibold mb-4">Backed by</p>
-              <div className="flex items-center justify-center gap-8 opacity-60">
-                <Image src="/partners/Volta-Logo.png" alt="Volta" width={80} height={32} className="object-contain h-8 w-auto" />
-                <Image src="/partners/Invest-Nova-Scotia-Logo.png" alt="Invest Nova Scotia" width={100} height={32} className="object-contain h-8 w-auto" />
-                <Image src="/partners/tribe_logo.png" alt="Tribe" width={80} height={32} className="object-contain h-8 w-auto" />
-              </div>
-            </div>
           </div>
         </div>
 

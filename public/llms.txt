@@ -1,0 +1,55 @@
+# Clarivue
+
+> Interview readiness platform for career centers, workforce programs, and post-secondary institutions.
+
+Clarivue helps workforce programs and bootcamps detect interview readiness gaps before learners fail real interviews — reducing remediation cycles, protecting employer trust, and enabling institutions to scale enrollment profitably without expanding advisor headcount.
+
+## What Clarivue Does
+
+- **Interview Readiness Engine**: AI-powered mock interviews that score learners on role-specific competencies, behavioral storytelling, and technical fluency.
+- **Cohort Performance Board**: Real-time dashboard showing which learners are interview-ready, at risk, or critical — across an entire cohort.
+- **Readiness Actions**: Automated remediation workflows that assign targeted practice based on each learner's specific breakdown patterns.
+- **ROI Calculator**: Model the financial impact of structured interview preparation on advisor hours, failed placement costs, and employer confidence.
+
+##Detailed description (one-pager lead):
+Workforce development programs face a scaling paradox: they need higher placement rates to unlock funding and protect 
+employer partnerships, but detecting interview skill gaps late means endless remediation cycles that burn advisor time 
+and prevent growth. Clarivue solves this by surfacing readiness gaps early through AI-powered interview intelligence 
+— so institutions can intervene before learners fail real interviews, maintain the employer trust that drives repeat 
+hiring, and scale program capacity without proportional increases in coaching staff.
+
+## Who It's For
+
+- Career services teams at colleges and universities
+- Workforce development programs (WDBs, nonprofits, government-funded)
+- Employer-connected training programs and bootcamps
+- Any institution that refers learners to employer interviews
+
+## Key Pages
+
+- Homepage: https://clarivue.io
+- ROI Calculator: https://clarivue.io/roicalculator
+- Book a Demo: https://clarivue.io/book-demo
+- Blog: https://clarivue.io/blog
+- Privacy Policy: https://clarivue.io/privacy
+- Terms of Service: https://clarivue.io/terms
+
+## Core Value Proposition
+
+hen learners fail interviews, institutions pay the price in three ways: advisor teams spend 6–10 unplanned hours per learner 
+on remediation, employer partners lose trust and stop sending opportunities, and low placement rates put grant renewals 
+and accreditation at risk.Clarivue helps institutions detect interview readiness gaps early — before learners meet 
+employers — so they can protect recruiter relationships, scale placement support efficiently, and maintain the outcomes that unlock continued funding
+
+## Company
+
+- Founded: 2024
+- Headquarters: Halifax, Nova Scotia, Canada
+- Backed by: Volta, Invest Nova Scotia, Tribe Network
+- Website: https://clarivue.io
+- Contact: Book a demo at https://clarivue.io/book-demo
+
+## Technical Details
+
+- Platform: Web application (SaaS)
+

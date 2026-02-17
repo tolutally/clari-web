@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://clarivue.ai";
+  const baseUrl = "https://clarivue.io";
 
   return {
     rules: [
