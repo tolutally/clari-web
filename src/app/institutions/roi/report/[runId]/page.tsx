@@ -151,7 +151,7 @@ function V3Report({ run }: { run: any }) {
             <MetricCard
               icon={<TrendingUp className="w-5 h-5 text-violet-400" />}
               iconBg="bg-violet-500/20"
-              value={summary.placementRateLiftPct != null ? `+${Number(summary.placementRateLiftPct).toFixed(1)}pp` : "—"}
+              value={summary.placementRateLiftPct != null ? `+${Number(summary.placementRateLiftPct).toFixed(1)}%` : "—"}
               label="Placement Rate Lift"
             />
             <MetricCard
@@ -231,7 +231,7 @@ function V3Report({ run }: { run: any }) {
                 <div className="flex flex-col justify-center items-center text-center">
                   <p className="text-xs text-violet-600/70 uppercase tracking-wider mb-2">Placement Rate Lift</p>
                   <p className="text-5xl font-bold text-violet-600">
-                    {summary.placementRateLiftPct != null ? `+${Number(summary.placementRateLiftPct).toFixed(1)}pp` : "N/A"}
+                    {summary.placementRateLiftPct != null ? `+${Number(summary.placementRateLiftPct).toFixed(1)}%` : "N/A"}
                   </p>
                   <p className="text-sm text-emerald-600/60 mt-2">
                     {summary.paybackMonths != null
