@@ -494,16 +494,26 @@ export default function BookDemoPage() {
               </div>
             </div>
 
-            {/* Signal tagline below cards */}
-            <div className="w-full mt-12 text-center">
-              <p className="text-xs text-[#003366]/60 font-medium">Signal before employer exposure. Performance, not activity.</p>
+            {/* Brand partner strip */}
+            <div className="w-full mt-12">
+              <p className="text-center text-[10px] uppercase tracking-widest text-[#003366]/40 font-semibold mb-4">Backed by</p>
+              <div className="flex items-center justify-center gap-8 opacity-60">
+                <Image src="/partners/Volta-Logo.png" alt="Volta" width={80} height={32} className="object-contain h-8 w-auto" />
+                <Image src="/partners/Invest-Nova-Scotia-Logo.png" alt="Invest Nova Scotia" width={100} height={32} className="object-contain h-8 w-auto" />
+                <Image src="/partners/tribe_logo.png" alt="Tribe" width={80} height={32} className="object-contain h-8 w-auto" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Mobile: Signal tagline */}
+        {/* Mobile: Brand partner strip */}
         <div className="lg:hidden mt-8">
-          <p className="text-center text-xs text-[#003366]/60 font-medium">Signal before employer exposure. Performance, not activity.</p>
+          <p className="text-center text-[10px] uppercase tracking-widest text-[#003366]/40 font-semibold mb-3">Backed by</p>
+          <div className="flex items-center justify-center gap-6 opacity-60">
+            <Image src="/partners/Volta-Logo.png" alt="Volta" width={64} height={24} className="object-contain h-6 w-auto" />
+            <Image src="/partners/Invest-Nova-Scotia-Logo.png" alt="Invest Nova Scotia" width={80} height={24} className="object-contain h-6 w-auto" />
+            <Image src="/partners/tribe_logo.png" alt="Tribe" width={64} height={24} className="object-contain h-6 w-auto" />
+          </div>
         </div>
       </div>
     </div>
