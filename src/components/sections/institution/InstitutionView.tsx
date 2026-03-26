@@ -448,20 +448,17 @@ export function InstitutionView() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff686c]" />
                 </span>
                 <span className="text-xs font-semibold text-[#003366] uppercase tracking-[0.12em]">
-                 For Career Centers & Workforce Programs
+                 For Training & Workforce Development Programs
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-[#003366] mb-6 leading-[1.08]">
-                Know who is interview-ready{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#102c64] via-[#b8ccf4] to-[#ff686c]">
-                   before employers do.
-                </span>
+                Move more people from training into jobs
               </h1>
 
               <p className="text-lg md:text-xl text-[#003366]/70 max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
-                See readiness before employer exposure. Intervene early.
-                Defend outcomes.
+                AI agents that show who is progressing, flag who is stuck, and
+                help you fix it early.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
@@ -481,7 +478,7 @@ export function InstitutionView() {
               </div>
               <p className="mt-3 text-sm text-[#003366]/50 text-center lg:text-left flex items-center justify-center lg:justify-start gap-1.5">
                 <Gift className="w-4 h-4 text-[#ff686c]" />
-                Get 30 minutes free after sign up — no credit card required
+                30 minutes free. Test with a few learners and see the gaps. No credit card.
               </p>
             </div>
 
