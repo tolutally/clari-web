@@ -7,17 +7,17 @@ const painPoints = [
 
   {
     label: "PLACEMENT PRESSURE",
-    quote: "Placement numbers start to wobble",
-    description: "When your rate dips, every conversation with leadership, funders, and employers gets harder. You don't need a post-mortem. You need to see it coming.",
+    quote: "48% feel unprepared",
+    description: "You don’t see it until outcomes drop.",
     color: "from-amber-500/10 to-orange-500/10",
     iconBg: "bg-amber-50",
     iconColor: "text-amber-600",
     borderColor: "border-amber-200/50",
   },
   {
-    label: "EMPLOYER CONFIDENCE",
-    quote: "Employers slow referrals",
-    description: "Partners rarely say why they're pulling back. They just get quieter. By the time you notice, the trust is already gone.",
+    label: "PROGRESS GAP",
+    quote: "1 in 3 drop off",
+    description: "People fall off between touchpoints and no one sees it.",
     color: "from-rose-500/10 to-pink-500/10",
     iconBg: "bg-rose-50",
     iconColor: "text-rose-600",
@@ -25,17 +25,17 @@ const painPoints = [
   },
   {
     label: "COACHING CAPACITY",
-    quote: "Advisors are overwhelmed",
-    description: "Back-to-back mocks, shrinking depth, and the learners who need the most help are the hardest to spot. More effort isn't the answer.",
+    quote: "1,000+:1 caseloads",
+    description: "Staff cannot give every participant the attention they need.",
     color: "from-emerald-500/10 to-teal-500/10",
     iconBg: "bg-emerald-50",
     iconColor: "text-emerald-600",
     borderColor: "border-emerald-200/50",
   },
   {
-    label: "READINESS VISIBILITY",
-    quote: "You only find gaps after rejection",
-    description: "A learner reaches the final round and falls apart on a question they should have owned. You find out after. The gap was always there.",
+    label: "MANUAL WORK OVERLOAD",
+    quote: "60+ hours/month lost to admin",
+    description: "Notes and admin tasks take time away from people, replacing actual support.",
     color: "from-indigo-500/10 to-purple-500/10",
     iconBg: "bg-indigo-50",
     iconColor: "text-indigo-600",
@@ -108,13 +108,16 @@ export default function InstitutionPainPoints() {
       <div className="max-w-3xl mx-auto text-center mb-12 px-6">
         <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70 mb-4">
           <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#003366]">
-            USE CASES
+            THE REAL COST OF DOING NOTHING
           </span>
         </div>
         
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#003366] mb-3">
-          Interview prep usually feels fine, until something breaks.
+          These numbers are already in your program. You&apos;re just finding out too late.
         </h2>
+        <p className="text-base md:text-lg text-[#003366]/70 max-w-2xl mx-auto">
+          Every card is a leak. Most programs don&apos;t see them until funder season.
+        </p>
       </div>
 
       {/* Cards grid */}

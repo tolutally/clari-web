@@ -185,7 +185,7 @@ export function CalculatorTeaser() {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#ff686c]/5 blur-[80px] rounded-full pointer-events-none -z-10" />
 
       {/* ── Centered Header ── */}
-      <div className="text-center mb-12 space-y-4">
+      <div className="text-center mb-10 space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#003366]/15 bg-white/70 backdrop-blur-md group hover:bg-white transition-colors">
           <span className="flex h-2 w-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.4)]" />
           <span className="text-[11px] font-semibold text-[#003366] tracking-[0.2em] uppercase">
@@ -194,69 +194,51 @@ export function CalculatorTeaser() {
         </div>
 
         <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-[#003366] leading-[1.1]">
-          Weak interview readiness has a cost.
+          What is the training-to-employment gap actually costing your program?
         </h2>
 
-        <p className="text-lg md:text-xl font-medium text-[#003366]/70">
-          Most programs never price it. But placements protect enrollment, referrals, and funding.
+        <p className="text-base md:text-lg text-[#003366]/60 leading-relaxed max-w-3xl mx-auto">
+          Most programs absorb these costs without ever calculating them. Run your numbers. The answer is usually worse than expected.
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center">
-        {/* ── Left: Copy ── */}
-        <div className="w-full lg:w-5/12 space-y-6">
+      {/* ── Calculator (75% width) ── */}
+      <div className="w-full max-w-[75%] mx-auto">
+        <div className="relative">
+          {/* Glow behind container */}
+          <div className="absolute -inset-1 bg-gradient-to-b from-sky-500/10 to-transparent rounded-2xl blur opacity-40" />
 
-          <p className="text-sm text-[#003366]/60 leading-relaxed">
-            When candidates underperform in employer interviews, the impact shows up as:
-          </p>
-
-          <ul className="space-y-2.5 text-sm text-[#003366]/70">
-            <li className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
-              Rework your team absorbs
-            </li>
-            <li className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
-              Outcomes that slip
-            </li>
-            <li className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff686c] shrink-0" />
-              Employer trust that tightens
-            </li>
-          </ul>
-
-          <p className="text-sm text-[#003366]/60 leading-relaxed">
-           See the estimated annual cost of unreadiness in your program —
-            and what becomes recoverable when readiness is verified before exposure.
-          </p>
-
-          {/* CTA */}
-          <div className="pt-2 space-y-2">
-            <a
-              href="/roicalculator"
-              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5"
-            >
-              <span>Price Your Cost</span>
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
-            </a>
-            <p className="text-[11px] text-[#003366]/40">
-              Open the full readiness impact calculator.
-            </p>
+          {/* Calculator Card */}
+          <div className="relative glass-panel rounded-2xl border border-[#003366]/10 p-1 overflow-hidden shadow-2xl shadow-blue-900/10">
+            <div className="bg-white/90 rounded-xl border border-[#003366]/5 overflow-hidden p-5 md:p-6">
+              <CalculatorAnimation />
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* ── Right: Animated Calculator Preview ── */}
-        <div className="w-full lg:w-7/12">
-          <div className="relative">
-            {/* Glow behind container */}
-            <div className="absolute -inset-1 bg-gradient-to-b from-sky-500/10 to-transparent rounded-2xl blur opacity-40" />
-
-            {/* Calculator Card */}
-            <div className="relative glass-panel rounded-2xl border border-[#003366]/10 p-1 overflow-hidden shadow-2xl shadow-blue-900/10">
-              <div className="bg-white/90 rounded-xl border border-[#003366]/5 overflow-hidden p-5 md:p-6">
-                <CalculatorAnimation />
-              </div>
-            </div>
+      {/* ── CTA Below Calculator ── */}
+      <div className="mt-8 flex justify-center">
+        <div
+          className="relative rounded-3xl border border-white/50 bg-white/60 backdrop-blur-xl px-8 py-6 text-center transition-all duration-300 hover:bg-white/80 hover:shadow-2xl hover:shadow-[#003366]/10"
+          style={{
+            boxShadow: "0 8px 32px rgba(0, 51, 102, 0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
+          }}
+        >
+          {/* Subtle gradient overlay for depth */}
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/40 via-transparent to-transparent pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col items-center gap-3">
+            <a
+              href="/placement-cost-calculator"
+              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5"
+            >
+              <span>Run your numbers</span>
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
+            </a>
+            <p className="text-[11px] text-[#003366]/50">
+              Open the full placement cost calculator.
+            </p>
           </div>
         </div>
       </div>

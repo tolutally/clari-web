@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Improve Placement Outcomes & Calculate Interview Readiness ROI | Clarivue",
+    "Placement Cost Calculator for Career & Workforce Programs | Clarivue",
   description:
-    "See how early interview gap detection reduces failed placements, saves advisor hours, and improves employer outcomes. Use Clarivue's ROI calculator to model your impact.",
+    "Calculate the cost of the training-to-employment gap in your program. Quantify failed placements, advisor overtime, and employer churn with hard numbers.",
   openGraph: {
     title:
-      "Interview Readiness ROI Calculator for Career & Workforce Programs",
+      "Placement Cost Calculator for Career & Workforce Programs",
     description:
-      "Model the cost savings of early interview gap detection. Reduce failed interviews, save advisor time, and improve placement outcomes.",
+      "Run your numbers to estimate the true cost of failed placements, advisor overtime, and employer churn.",
     type: "website",
     siteName: "Clarivue",
-    url: "https://clarivue.io/roi-calculator",
+    url: "https://clarivue.io/placement-cost-calculator",
     images: [
       {
         url: "https://clarivue.io/images/roi-calculator-preview.png",
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Interview Readiness ROI Calculator",
+    title: "Placement Cost Calculator",
     description:
-      "See the measurable impact of improving interview readiness before employer referrals go out.",
+      "See the measurable cost of the training-to-employment gap before it compounds.",
     images: ["https://clarivue.io/images/roi-calculator-preview.png"],
   },
   alternates: {
-    canonical: "https://clarivue.io/roi-calculator",
+    canonical: "https://clarivue.io/placement-cost-calculator",
   },
 };
 
