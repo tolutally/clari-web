@@ -479,7 +479,7 @@ export function InstitutionView() {
 
           {/* Subheadline */}
           <p className="animate-fade-in-up delay-200 mt-8 text-lg sm:text-xl md:text-2xl text-slate-500 max-w-3xl leading-relaxed font-normal">
-            AI agents that show who is progressing, flag who is stuck, and help you fix it early.
+            More placements. Less admin. Proof that funders believe. From enrollment to employment, covered.
           </p>
 
           {/* Buttons */}
