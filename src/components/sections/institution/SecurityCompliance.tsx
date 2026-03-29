@@ -31,7 +31,7 @@ export function SecurityCompliance() {
               {[
                 { src: "/pipeda-logo.png", alt: "PIPEDA" },
                 { src: "/iso2001-logo.png", alt: "ISO 27001" },
-                { src: "/ferpa-logo.png", alt: "FERPA (US)" },
+                { src: "/ferpa.png", alt: "FERPA (US)" },
                 { src: "/soc2-icon.jpg", alt: "SOC 2" },
               ].map((badge, i) => (
                 <div

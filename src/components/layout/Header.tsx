@@ -24,8 +24,8 @@ interface HeaderProps {
 
 const institutionLinks = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/#institutions-features", icon: LayoutDashboard, label: "Features" },
-  { href: "/placement-cost-calculator", icon: Activity, label: "Placement Cost Calculator" },
+  { href: "/#institutions-features", icon: LayoutDashboard, label: "Platform" },
+  { href: "/hidden-gap", icon: Activity, label: "The Hidden Gap" },
   { href: "/blog", icon: PenLine, label: "Blog" },
 ];
 

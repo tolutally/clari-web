@@ -704,7 +704,7 @@ export function InstitutionView() {
               </div>
 
               {/* Right: Image area with overlapping UI card */}
-              <div className="w-full lg:w-7/12">
+              <div className="hidden lg:block w-full lg:w-7/12">
                 <div className="relative min-h-[420px] lg:min-h-[480px]">
                   {/* GIF image area — sits to the right */}
                   <div className="absolute right-0 top-4 bottom-4 w-[75%] rounded-3xl overflow-hidden">
@@ -1065,7 +1065,7 @@ export function InstitutionView() {
 
               {/* CTA bar */}
               <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
-                <a href="/placement-cost-calculator" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
+                <a href="/hidden-gap" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
                   See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </a>
               </div>
@@ -1097,10 +1097,10 @@ export function InstitutionView() {
               Talk to us
             </a>
             <a
-              href="/placement-cost-calculator"
+              href="/hidden-gap"
               className="text-xl font-semibold text-white/60 hover:text-white/90 transition-colors underline underline-offset-4 decoration-white/30 hover:decoration-white/50"
             >
-              or run your numbers →
+              or find your hidden gap →
             </a>
           </div>
 

@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Placement Cost Calculator for Career & Workforce Programs | Clarivue",
+    "The Hidden Gap | What's the training-to-employment gap costing you? | Clarivue",
   description:
-    "Calculate the cost of the training-to-employment gap in your program. Quantify failed placements, advisor overtime, and employer churn with hard numbers.",
+    "Calculate the cost of the training-to-employment gap in your program. Quantify lost time, wasted money, and missing placements.",
   openGraph: {
     title:
-      "Placement Cost Calculator for Career & Workforce Programs",
+      "The Hidden Gap | Clarivue",
     description:
-      "Run your numbers to estimate the true cost of failed placements, advisor overtime, and employer churn.",
+      "See what the gap between training and employment is actually costing your program.",
     type: "website",
     siteName: "Clarivue",
-    url: "https://clarivue.io/placement-cost-calculator",
+    url: "https://clarivue.io/hidden-gap",
     images: [
       {
         url: "https://clarivue.io/images/roi-calculator-preview.png",
@@ -21,13 +21,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Placement Cost Calculator",
+    title: "The Hidden Gap",
     description:
-      "See the measurable cost of the training-to-employment gap before it compounds.",
+      "See what the gap is costing your program before it compounds.",
     images: ["https://clarivue.io/images/roi-calculator-preview.png"],
   },
   alternates: {
-    canonical: "https://clarivue.io/placement-cost-calculator",
+    canonical: "https://clarivue.io/hidden-gap",
   },
 };
 
