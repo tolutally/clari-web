@@ -985,15 +985,6 @@ export function InstitutionView() {
       {/* Stats */}
       <StatsConfidence />
 
-      {/* Security & Compliance + Responsible AI */}
-      <SecurityCompliance />
-
-      {/* Placement Cost Calculator */}
-      <CalculatorTeaser />
-
-      {/* Blog Insights */}
-      <BlogInsights />
-
       {/* Comparison — side-by-side paired rows */}
       <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -1073,6 +1064,15 @@ export function InstitutionView() {
           </div>
         </div>
       </section>
+
+      {/* Security & Compliance + Responsible AI */}
+      <SecurityCompliance />
+
+      {/* Placement Cost Calculator */}
+      <CalculatorTeaser />
+
+      {/* Blog Insights */}
+      <BlogInsights />
 
       {/* CTA Banner */}
       <section className="relative w-full bg-[#003366] py-14 md:py-20 overflow-hidden">
