@@ -83,7 +83,7 @@ export function StatsConfidence() {
             Programs are already seeing the difference.
           </h2>
            <p className="text-center text-sm sm:text-base text-[#003366]/70 max-w-lg mx-auto mb-8">
-          We&apos;re early. But the numbers are real — and they&apos;re moving in the right direction.
+          The numbers are real — and they&apos;re moving in the right direction.
         </p>
 
         </div>

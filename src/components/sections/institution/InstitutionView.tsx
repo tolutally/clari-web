@@ -611,7 +611,7 @@ export function InstitutionView() {
 
         {/* SECTION TITLE */}
         <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366] text-center mt-6">
-         One platform covers the 
+         One platform covers
           <span className="block">the gap between trained and hired.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-lg font-normal text-[#003366]/70">

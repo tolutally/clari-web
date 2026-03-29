@@ -189,7 +189,7 @@ export function CalculatorTeaser() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#003366]/15 bg-white/70 backdrop-blur-md group hover:bg-white transition-colors">
           <span className="flex h-2 w-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.4)]" />
           <span className="text-[11px] font-semibold text-[#003366] tracking-[0.2em] uppercase">
-            Value for money
+            PLACEMENT COST CALCULATOR
           </span>
         </div>
 
