@@ -6,6 +6,7 @@ import { groq } from 'next-sanity';
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
   _id,
   _createdAt,
+  eyebrow,
   title,
   slug,
   excerpt,
@@ -21,6 +22,7 @@ export const POSTS_QUERY = groq`*[_type == "post" && defined(slug.current)] | or
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0] {
   _id,
   _createdAt,
+  eyebrow,
   title,
   slug,
   excerpt,

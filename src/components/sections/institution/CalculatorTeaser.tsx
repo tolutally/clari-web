@@ -208,7 +208,7 @@ export function CalculatorTeaser() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#003366]/15 bg-white/70 backdrop-blur-md group hover:bg-white transition-colors">
           <span className="flex h-2 w-2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.4)]" />
           <span className="text-[11px] font-semibold text-[#003366] tracking-[0.2em] uppercase">
-            THE HIDDEN GAP
+            THE HIDDEN COST
           </span>
         </div>
 
@@ -249,10 +249,10 @@ export function CalculatorTeaser() {
           
           <div className="relative z-10 flex flex-col items-center gap-3">
             <a
-              href="/hidden-gap"
+              href="/hidden-cost"
               className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white text-sm font-semibold hover:bg-[#ff5b5f] transition-all duration-300 shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5"
             >
-              <span>Find your hidden gap</span>
+              <span>Find your hidden cost</span>
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
             </a>
             <p className="text-[11px] text-[#003366]/50">

@@ -269,7 +269,7 @@ export default function PlacementGapCalculatorPage() {
         <section className="max-w-4xl mx-auto px-6 pt-20 pb-12 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#003366]/15 bg-white/80 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-[#003366]/70 mb-6">
             <span className="w-2 h-2 rounded-full bg-[#ff686c] animate-pulse" />
-            The Hidden Gap
+            The Hidden Cost
           </div>
 
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#003366] leading-tight mb-6">

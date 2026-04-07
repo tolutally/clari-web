@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { FileText, CheckCircle2, Accessibility, Sparkles } from "lucide-react";
 
@@ -42,8 +40,11 @@ export function SecurityCompliance() {
                     <Image
                       src={badge.src}
                       alt={badge.alt}
-                      fill
-                      className="object-contain"
+                      width={32}
+                      height={32}
+                      loading="lazy"
+                      sizes="32px"
+                      className="object-contain w-full h-full"
                     />
                   </div>
                   <span className="text-[10px] font-semibold text-[#003366]/70 text-center">

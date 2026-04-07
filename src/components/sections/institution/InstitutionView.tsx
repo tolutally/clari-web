@@ -714,6 +714,7 @@ export function InstitutionView() {
                       loop
                       muted
                       playsInline
+                      preload="metadata"
                       className="w-full h-full object-cover transition-opacity duration-500"
                       key={activeFeature}
                     />
@@ -1056,7 +1057,7 @@ export function InstitutionView() {
 
               {/* CTA bar */}
               <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
-                <a href="/hidden-gap" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
+                <a href="/hidden-cost" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
                   See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </a>
               </div>
@@ -1097,10 +1098,10 @@ export function InstitutionView() {
               Talk to us
             </a>
             <a
-              href="/hidden-gap"
+              href="/hidden-cost"
               className="text-xl font-semibold text-white/60 hover:text-white/90 transition-colors underline underline-offset-4 decoration-white/30 hover:decoration-white/50"
             >
-              or find your hidden gap →
+              or find your hidden cost →
             </a>
           </div>
 

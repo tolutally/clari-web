@@ -35,6 +35,7 @@ export type Category = {
 export type Post = {
   _id: string;
   _createdAt: string;
+  eyebrow?: string;
   title: string;
   slug: {
     current: string;

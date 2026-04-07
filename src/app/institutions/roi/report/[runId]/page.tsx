@@ -42,7 +42,7 @@ export default async function RoiReportPage({
           <h1 className="text-2xl font-semibold text-white mb-3">Report not found</h1>
           <p className="text-white/60 mb-8">This report may not exist or may not be ready.</p>
           <a
-            href="/hidden-gap"
+            href="/hidden-cost"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#003366] font-semibold hover:bg-white/90 transition-all"
           >
             Back to Calculator
@@ -64,7 +64,7 @@ export default async function RoiReportPage({
           <h1 className="text-3xl font-semibold text-white mb-3">Unlock the full report</h1>
           <p className="text-white/60 mb-8">Submit your email in the calculator to view the complete analysis.</p>
           <a
-            href="/hidden-gap"
+            href="/hidden-cost"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ff686c] text-white font-semibold hover:bg-[#ff686c]/90 transition-all"
           >
             Complete Calculator <ArrowRight className="w-4 h-4" />
@@ -405,7 +405,7 @@ function V4Report({ run }: { run: any }) {
 
           {/* Footer */}
           <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
-            <a href="/hidden-gap" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
+            <a href="/hidden-cost" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
               &larr; Back to Calculator
             </a>
             <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
@@ -695,7 +695,7 @@ function V3Report({ run }: { run: any }) {
 
           {/* Footer */}
           <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
-            <a href="/hidden-gap" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
+            <a href="/hidden-cost" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
               &larr; Back to Calculator
             </a>
             <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
@@ -987,7 +987,7 @@ function V2Report({ run }: { run: any }) {
 
           {/* Footer */}
           <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
-            <a href="/hidden-gap" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
+            <a href="/hidden-cost" className="text-[#003366]/60 hover:text-[#003366] transition-colors">
               &larr; Back to Calculator
             </a>
             <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
@@ -1101,7 +1101,7 @@ function V1Report({ run }: { run: any }) {
           </section>
 
           <footer className="pt-6 border-t border-[#003366]/10 flex items-center justify-between text-sm">
-            <a href="/hidden-gap" className="text-[#003366]/60 hover:text-[#003366] transition-colors">&larr; Back to Calculator</a>
+            <a href="/hidden-cost" className="text-[#003366]/60 hover:text-[#003366] transition-colors">&larr; Back to Calculator</a>
             <p className="text-[#003366]/40 text-xs">Report generated {fmtDateTime(run.created_at)}</p>
           </footer>
         </div>
