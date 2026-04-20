@@ -5,13 +5,14 @@ export function Footer() {
   return (
     <footer id="site-footer" className="w-full bg-[#003366] text-white py-10 px-6 relative z-10">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-4">
           <Image
             src="/clarivue-logo-lite.png"
             alt="Clarivue"
             width={138}
             height={42}
             className="h-8 w-auto object-contain"
+            loading="lazy"
           />
 
           {/* Insights Hub links */}

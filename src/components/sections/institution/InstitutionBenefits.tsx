@@ -1,365 +1,330 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Users, Code2, Phone, Target, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
-const JD_LINES = [
-  "Product Manager — Series B SaaS",
-  "Cross-functional leadership required",
-  "3-5 years experience",
-];
-const EN_TEXT = "Tell me about a time you led a cross-functional team through a tight deadline.";
-const FR_TEXT = "Parlez-moi d'une situation o\u00f9 vous avez dirig\u00e9 une \u00e9quipe interfonctionnelle sous pression.";
-
-function MultilingualAnimation() {
-  const [phase, setPhase] = useState<0 | 1 | 2 | 3>(0);
-  // 0=typing EN, 1=EN done pause, 2=typing FR, 3=both shown pause
-  const [chars, setChars] = useState(0);
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION: Funnel — Shows leaks being sealed, conversions improving
+// ─────────────────────────────────────────────────────────────────────────────
+function FunnelAnimation() {
+  const [phase, setPhase] = useState<0 | 1 | 2>(0);
 
   useEffect(() => {
-    if (phase === 0) {
-      if (chars < EN_TEXT.length) {
-        const t = setTimeout(() => setChars((c) => c + 1), 22);
-        return () => clearTimeout(t);
-      }
-      const t = setTimeout(() => { setPhase(1); setChars(0); }, 500);
-      return () => clearTimeout(t);
-    }
-    if (phase === 1) {
-      const t = setTimeout(() => setPhase(2), 400);
-      return () => clearTimeout(t);
-    }
-    if (phase === 2) {
-      if (chars < FR_TEXT.length) {
-        const t = setTimeout(() => setChars((c) => c + 1), 22);
-        return () => clearTimeout(t);
-      }
-      const t = setTimeout(() => setPhase(3), 500);
-      return () => clearTimeout(t);
-    }
-    if (phase === 3) {
-      const t = setTimeout(() => { setPhase(0); setChars(0); }, 3500);
-      return () => clearTimeout(t);
-    }
-  }, [phase, chars]);
-
-  const enVisible = phase === 0 ? EN_TEXT.slice(0, chars) : phase >= 1 ? EN_TEXT : "";
-  const frVisible = phase === 2 ? FR_TEXT.slice(0, chars) : phase >= 3 ? FR_TEXT : "";
-  const showEn = phase >= 0;
-  const showFr = phase >= 2;
-  const showDivider = phase === 3;
+    const cycle = () => {
+      setPhase(0);
+      setTimeout(() => setPhase(1), 1500);
+      setTimeout(() => setPhase(2), 3000);
+    };
+    cycle();
+    const interval = setInterval(cycle, 5500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="mt-4 space-y-2.5 min-h-[140px]">
-      {/* English bubble */}
-      <div className={`flex items-start gap-2 transition-all duration-500 ${showEn ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}`}>
-        <div className="shrink-0 w-7 h-7 rounded-full bg-[#003366]/15 flex items-center justify-center text-[10px] font-bold text-[#003366]/70">
-          EN
-        </div>
-        <div className="rounded-2xl rounded-tl-sm bg-white/40 backdrop-blur-sm border border-[#003366]/10 px-3 py-2 max-w-[85%]">
-          <p className="text-[10px] text-[#003366]/50 font-medium mb-0.5">Mock Interview \u00b7 English</p>
-          <p className="text-xs text-[#003366]/90 leading-snug">
-            &ldquo;{enVisible}
-            {phase === 0 && (
-              <span className="inline-block w-[4px] h-[12px] bg-[#003366]/50 ml-0.5 animate-pulse align-middle" />
-            )}
-            {phase >= 1 && <>&rdquo;</>}
-          </p>
-        </div>
+    <div className="mt-4 flex items-center justify-center gap-6">
+      <div className="relative">
+        <svg width="80" height="70" viewBox="0 0 80 70">
+          <path d="M5 5 L75 5 L55 35 L55 65 L25 65 L25 35 Z" fill="none" stroke="#10b981" strokeWidth="2" opacity={0.3} />
+          <path d="M10 10 L70 10 L52 35 L52 60 L28 60 L28 35 Z" fill="#10b981" opacity={0.15} />
+          <g className={`transition-opacity duration-500 ${phase === 0 ? "opacity-100" : "opacity-0"}`}>
+            <circle cx="18" cy="25" r="3" fill="#ef4444" />
+            <circle cx="62" cy="25" r="3" fill="#ef4444" />
+            <circle cx="40" cy="50" r="3" fill="#ef4444" />
+          </g>
+          <g className={`transition-opacity duration-500 ${phase >= 1 ? "opacity-100" : "opacity-0"}`}>
+            <circle cx="18" cy="25" r="4" fill="#10b981" />
+            <circle cx="62" cy="25" r="4" fill="#10b981" />
+            <circle cx="40" cy="50" r="4" fill="#10b981" />
+            <path d="M16 25 L18 27 L21 23" stroke="white" strokeWidth="1.5" fill="none" />
+            <path d="M60 25 L62 27 L65 23" stroke="white" strokeWidth="1.5" fill="none" />
+            <path d="M38 50 L40 52 L43 48" stroke="white" strokeWidth="1.5" fill="none" />
+          </g>
+        </svg>
       </div>
-
-      {/* French bubble */}
-      <div className={`flex items-start gap-2 justify-end transition-all duration-500 ${showFr ? "opacity-100 translate-x-0" : "opacity-0 translate-x-3"}`}>
-        <div className="rounded-2xl rounded-tr-sm bg-white/30 backdrop-blur-sm border border-[#003366]/10 px-3 py-2 max-w-[85%]">
-          <p className="text-[10px] text-[#003366]/50 font-medium mb-0.5">Entrevue simul\u00e9e \u00b7 Fran\u00e7ais</p>
-          <p className="text-xs text-[#003366]/90 leading-snug">
-            &ldquo;{frVisible}
-            {phase === 2 && (
-              <span className="inline-block w-[4px] h-[12px] bg-[#003366]/50 ml-0.5 animate-pulse align-middle" />
-            )}
-            {phase >= 3 && <>&rdquo;</>}
-          </p>
+      <div className="space-y-2">
+        <div className="text-center">
+          <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-medium">Budget</p>
+          <p className="text-sm font-bold text-[#003366]">$100K</p>
         </div>
-        <div className="shrink-0 w-7 h-7 rounded-full bg-[#003366]/15 flex items-center justify-center text-[10px] font-bold text-[#003366]/70">
-          FR
+        <div className="h-px w-8 bg-[#003366]/10 mx-auto" />
+        <div className="text-center">
+          <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-medium">Placements</p>
+          <div className="flex items-center justify-center gap-1">
+            <span className={`text-sm font-bold transition-all duration-500 ${phase === 2 ? "text-[#10b981]" : "text-[#003366]"}`}>
+              {phase === 2 ? "18" : "12"}
+            </span>
+            {phase === 2 && <span className="text-[10px] text-[#10b981] font-semibold">↑50%</span>}
+          </div>
         </div>
-      </div>
-
-      {/* Scoring note */}
-      <div className={`flex items-center gap-2 transition-all duration-700 ${showDivider ? "opacity-100" : "opacity-0"}`}>
-        <div className="h-px flex-1 bg-[#003366]/10" />
-        <span className="text-[10px] font-medium text-[#003366]/40 uppercase tracking-wider">Same rubric \u00b7 Same scoring</span>
-        <div className="h-px flex-1 bg-[#003366]/10" />
       </div>
     </div>
   );
 }
-function JdFlowAnimation() {
-  const [step, setStep] = useState<0 | 1 | 2>(0); // 0=typing, 1=processing, 2=output
-  const [typedChars, setTypedChars] = useState(0);
 
-  // Cycle: type → process → output → reset
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION: Caseload — One advisor expanding to cover more clients
+// ─────────────────────────────────────────────────────────────────────────────
+function CaseloadAnimation() {
+  const [expanded, setExpanded] = useState(false);
+
   useEffect(() => {
-    if (step === 0) {
-      const fullText = JD_LINES.join("\n");
-      if (typedChars < fullText.length) {
-        const t = setTimeout(() => setTypedChars((c) => c + 1), 28);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setStep(1), 600);
-        return () => clearTimeout(t);
-      }
-    }
-    if (step === 1) {
-      const t = setTimeout(() => setStep(2), 1800);
-      return () => clearTimeout(t);
-    }
-    if (step === 2) {
-      const t = setTimeout(() => {
-        setStep(0);
-        setTypedChars(0);
-      }, 4000);
-      return () => clearTimeout(t);
-    }
-  }, [step, typedChars]);
+    const cycle = () => {
+      setExpanded(false);
+      setTimeout(() => setExpanded(true), 1500);
+    };
+    cycle();
+    const interval = setInterval(cycle, 4500);
+    return () => clearInterval(interval);
+  }, []);
 
-  const fullText = JD_LINES.join("\n");
-  const visibleText = fullText.slice(0, typedChars);
-  const visibleLines = visibleText.split("\n");
+  const clientCount = expanded ? 8 : 4;
 
   return (
-    <div className="mt-3 rounded-xl bg-[#0a1628] p-3 text-white overflow-hidden">
-      {/* Terminal header */}
-      <div className="flex items-center gap-1.5 mb-2.5">
-        <span className="w-2 h-2 rounded-full bg-[#ff5f57]" />
-        <span className="w-2 h-2 rounded-full bg-[#febc2e]" />
-        <span className="w-2 h-2 rounded-full bg-[#28c840]" />
-        <span className="ml-2 text-[9px] text-white/30 font-mono">clarivue — interview engine</span>
-      </div>
-
-      {/* Step 1: JD Input (typing) */}
-      <div className={`transition-opacity duration-500 ${step >= 0 ? "opacity-100" : "opacity-0"}`}>
-        <div className="flex items-center gap-1.5 mb-1">
-          <svg className="w-3 h-3 text-[#0ea5e9]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-          <span className="text-[9px] font-semibold text-[#0ea5e9] uppercase tracking-wider">JD Input</span>
+    <div className="mt-4 flex items-center justify-center gap-5">
+      <div className="flex flex-col items-center">
+        <div className="w-10 h-10 rounded-full bg-[#6366f1]/20 border-2 border-[#6366f1] flex items-center justify-center">
+          <svg className="w-5 h-5 text-[#6366f1]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
         </div>
-        <div className="font-mono text-[10px] leading-relaxed text-white/60 min-h-[42px]">
-          {visibleLines.map((line, i) => (
-            <p key={i}>
-              <span className="text-white/25 mr-1">&gt;</span>
-              {line}
-              {step === 0 && i === visibleLines.length - 1 && (
-                <span className="inline-block w-[5px] h-[11px] bg-[#0ea5e9] ml-0.5 animate-pulse" />
-              )}
-            </p>
+        <p className="text-[9px] font-semibold text-[#6366f1] mt-1">1 Advisor</p>
+      </div>
+      <svg className="w-6 h-6 text-[#003366]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+      <div className="flex flex-col items-center">
+        <div className="grid grid-cols-4 gap-1">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold transition-all duration-500 ${
+              i < clientCount ? "bg-[#6366f1]/20 text-[#6366f1] scale-100 opacity-100" : "bg-[#6366f1]/5 text-[#6366f1]/30 scale-75 opacity-40"
+            }`}>
+              {i < clientCount ? "✓" : ""}
+            </div>
           ))}
         </div>
+        <p className={`text-[9px] font-semibold mt-1 transition-colors duration-500 ${expanded ? "text-[#6366f1]" : "text-[#003366]/50"}`}>
+          {expanded ? "100 clients" : "50 clients"}
+        </p>
+        {expanded && <p className="text-[8px] text-[#10b981] font-medium">2x capacity</p>}
       </div>
+    </div>
+  );
+}
 
-      {/* Step 2: Processing */}
-      <div className={`mt-2 transition-all duration-500 ${step >= 1 ? "opacity-100 max-h-20" : "opacity-0 max-h-0"} overflow-hidden`}>
-        <div className="flex items-center gap-2 py-1.5">
-          <div className="flex gap-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-bounce" style={{ animationDelay: "0ms" }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] animate-bounce" style={{ animationDelay: "150ms" }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-bounce" style={{ animationDelay: "300ms" }} />
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION: Report Auto-generating — Lines typing, charts filling
+// ─────────────────────────────────────────────────────────────────────────────
+function ReportAnimation() {
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
+
+  useEffect(() => {
+    const cycle = () => {
+      setStep(0);
+      setTimeout(() => setStep(1), 800);
+      setTimeout(() => setStep(2), 1600);
+      setTimeout(() => setStep(3), 2400);
+      setTimeout(() => setStep(4), 3200);
+    };
+    cycle();
+    const interval = setInterval(cycle, 5500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="mt-4 rounded-lg bg-white border border-[#f59e0b]/20 p-3 mx-auto max-w-[200px]">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-4 rounded bg-[#f59e0b]/15 flex items-center justify-center">
+            <svg className="w-2.5 h-2.5 text-[#f59e0b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
           </div>
-          <span className="text-[9px] text-white/40 font-mono">
-            {step === 1 ? "Extracting role context & generating interview..." : "Complete ✓"}
-          </span>
+          <span className="text-[8px] font-semibold text-[#003366]/60 uppercase">Q1 Report</span>
         </div>
+        {step >= 4 && <span className="text-[8px] font-bold text-[#10b981] bg-[#10b981]/10 px-1.5 py-0.5 rounded">Ready</span>}
       </div>
-
-      {/* Step 3: Output */}
-      <div className={`mt-1.5 transition-all duration-700 ${step === 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
-        <div className="flex items-center gap-1.5 mb-1">
-          <svg className="w-3 h-3 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-          <span className="text-[9px] font-semibold text-[#10b981] uppercase tracking-wider">Generated Interview</span>
+      <div className="space-y-1.5">
+        <div className={`h-2 bg-[#003366]/10 rounded transition-all duration-500 ${step >= 1 ? "w-full" : "w-0"}`} />
+        <div className={`h-2 bg-[#003366]/10 rounded transition-all duration-500 ${step >= 2 ? "w-3/4" : "w-0"}`} />
+        <div className="flex items-end gap-0.5 h-6 pt-1">
+          {[30, 45, 35, 55, 50, 70].map((h, i) => (
+            <div key={i} className="flex-1 bg-[#f59e0b] rounded-t-sm transition-all duration-500" style={{ height: step >= 3 ? `${h}%` : "0%", transitionDelay: `${i * 80}ms` }} />
+          ))}
         </div>
-        <div className="space-y-1">
-          {[
-            "How would you align engineering and design on a compressed sprint?",
-            "Describe a time you navigated competing stakeholder priorities.",
-          ].map((q, i) => (
-            <div key={i} className="flex items-start gap-1.5 pl-1">
-              <span className="shrink-0 w-3.5 h-3.5 rounded bg-[#10b981]/20 text-[#10b981] text-[8px] font-bold flex items-center justify-center mt-px">Q{i + 1}</span>
-              <p className="text-[9px] text-white/55 leading-snug italic">{q}</p>
+        <div className={`h-2 bg-[#003366]/10 rounded transition-all duration-500 ${step >= 4 ? "w-1/2" : "w-0"}`} />
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-1">
+        {step < 4 ? (
+          <>
+            <div className="w-2 h-2 rounded-full bg-[#f59e0b] animate-pulse" />
+            <span className="text-[8px] text-[#f59e0b] font-medium">Generating...</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-3 h-3 text-[#10b981]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-[8px] text-[#10b981] font-medium">Auto-generated</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION: Employer Pipeline — Single referral → repeat partners
+// ─────────────────────────────────────────────────────────────────────────────
+function PipelineAnimation() {
+  const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
+
+  useEffect(() => {
+    const cycle = () => {
+      setStep(0);
+      setTimeout(() => setStep(1), 1200);
+      setTimeout(() => setStep(2), 2400);
+      setTimeout(() => setStep(3), 3600);
+    };
+    cycle();
+    const interval = setInterval(cycle, 5800);
+    return () => clearInterval(interval);
+  }, []);
+
+  const employers = [
+    { initials: "TC", name: "TechCorp" },
+    { initials: "FS", name: "FinServ" },
+    { initials: "MH", name: "MedHealth" },
+  ];
+
+  return (
+    <div className="mt-4 space-y-3">
+      <div className="flex items-center justify-center gap-2">
+        <div className={`flex flex-col items-center transition-all duration-500 ${step >= 1 ? "opacity-100" : "opacity-40"}`}>
+          <div className="w-8 h-8 rounded-full bg-[#0ea5e9]/20 border border-[#0ea5e9] flex items-center justify-center">
+            <svg className="w-4 h-4 text-[#0ea5e9]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <span className="text-[8px] text-[#003366]/50 mt-0.5">1 referral</span>
+        </div>
+        <svg className={`w-5 h-5 transition-all duration-500 ${step >= 2 ? "text-[#0ea5e9]" : "text-[#003366]/20"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+        <div className="flex items-center -space-x-2">
+          {employers.map((emp, i) => (
+            <div key={emp.initials} className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold transition-all duration-500 ${
+              step >= 2 + Math.floor(i / 2) ? "bg-[#0ea5e9] text-white scale-100 opacity-100" : "bg-[#0ea5e9]/10 text-[#0ea5e9]/40 scale-75 opacity-50"
+            }`} style={{ transitionDelay: `${i * 200}ms`, zIndex: 3 - i }}>
+              {emp.initials}
             </div>
           ))}
         </div>
       </div>
+      <div className="flex items-center justify-center gap-4">
+        <div className="text-center">
+          <p className={`text-lg font-bold transition-colors duration-500 ${step >= 3 ? "text-[#0ea5e9]" : "text-[#003366]/40"}`}>
+            {step >= 3 ? "94%" : "—"}
+          </p>
+          <p className="text-[8px] text-[#003366]/50 uppercase">Repeat rate</p>
+        </div>
+        <div className="h-6 w-px bg-[#003366]/10" />
+        <div className="text-center">
+          <p className={`text-lg font-bold transition-colors duration-500 ${step >= 3 ? "text-[#10b981]" : "text-[#003366]/40"}`}>
+            {step >= 3 ? "↑ 3x" : "—"}
+          </p>
+          <p className="text-[8px] text-[#003366]/50 uppercase">Pipeline</p>
+        </div>
+      </div>
     </div>
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN COMPONENT: InstitutionBenefits
+// ─────────────────────────────────────────────────────────────────────────────
 export function InstitutionBenefits() {
   return (
     <section className="w-full text-[#003366]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="text-center mb-10 max-w-3xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70">
-              <Sparkles className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-              <span className="text-sm text-[#003366]">BUILT FOR HOW YOUR PROGRAM ACTUALLY WORKS</span>
-            </div>
-          </div>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-40 pb-6">
+        {/* Section header */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+            Moving people from training to jobs is not a program goal.
+          </h2>
+          <p className="text-lg sm:text-xl text-[#003366]/70 max-w-2xl mx-auto">
+            It is the only metric that matters.
+          </p>
         </div>
-        <div className="grid gap-5 lg:gap-6 grid-cols-1 lg:grid-cols-2">
 
-          {/* Card 1 — Multilingual support (large left) */}
-          <article className="rounded-3xl px-5 py-5 sm:px-6 sm:py-6 shadow-sm border border-[#b8ccf4]/50 flex flex-col bg-[#b8ccf4] text-[#003366]">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.18em] uppercase mb-2 text-[#c7535a]">
-                MULTILINGUAL SUPPORT
-              </p>
-              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#003366]">
-                Serve diverse cohorts without splitting systems.
-              </h3>
-            </div>
-
-            {/* Animated language preview bubbles */}
-            <MultilingualAnimation />
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {["English interview sessions", "French interview sessions", "Localized scoring standards"].map(
-                (tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#003366]/70"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#003366]/30" />
-                    {tag}
-                  </span>
-                )
-              )}
-            </div>
-          </article>
-
-          {/* Card 2 — Job-description powered interviews */}
-          <article className="rounded-3xl bg-white px-5 py-5 sm:px-6 sm:py-6 border flex flex-col border-[#003366]/15">
-            {/* Header */}
-            <p className="text-xs font-semibold tracking-[0.18em] uppercase mb-1.5 text-[#003366]/80">
-              JOB-DESCRIPTION POWERED
-            </p>
-            <h3 className="text-base sm:text-lg font-semibold tracking-tight text-[#003366] leading-snug">
-              Every session is generated from real job descriptions and real employer expectations.
+        {/* 2x2 Card Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Card 1: Funnel — Emerald accent */}
+          <div className="rounded-2xl bg-gradient-to-br from-[#10b981]/5 to-[#10b981]/10 border border-[#10b981]/20 p-6">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded-full mb-3">
+              ROI
+            </span>
+            <h3 className="text-lg font-bold text-[#003366] mb-1">
+              More placements from the same program budget
             </h3>
+            <p className="text-sm text-[#003366]/60">
+              AI seals funnel leaks — fewer dropouts, faster conversions, higher throughput.
+            </p>
+            <FunnelAnimation />
+          </div>
 
-            {/* Feature pills — 2x2 */}
-            <div className="mt-2 grid grid-cols-2 gap-1.5">
-              {[
-                "No question banks.",
-                "No recycled prompts.",
-                "Context-aware follow-ups",
-                "Scenario-based practice",
-              ].map((item) => (
-                <div key={item} className="rounded-lg bg-[#f5f7fb] border border-[#003366]/8 px-2 py-1.5 flex items-center gap-1.5">
-                  <svg className="w-3 h-3 text-[#0ea5e9] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                  <span className="text-[10px] font-medium text-[#003366]/65 leading-tight">{item}</span>
-                </div>
-              ))}
-            </div>
+          {/* Card 2: Caseload — Indigo accent */}
+          <div className="rounded-2xl bg-gradient-to-br from-[#6366f1]/5 to-[#6366f1]/10 border border-[#6366f1]/20 p-6">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#6366f1] bg-[#6366f1]/10 px-2 py-0.5 rounded-full mb-3">
+              Capacity
+            </span>
+            <h3 className="text-lg font-bold text-[#003366] mb-1">
+              Advisor capacity doubles without adding headcount
+            </h3>
+            <p className="text-sm text-[#003366]/60">
+              Automation handles routine check-ins so staff focus on high-impact moments.
+            </p>
+            <CaseloadAnimation />
+          </div>
 
-            {/* Animated JD → Interview flow */}
-            <JdFlowAnimation />
-          </article>
+          {/* Card 3: Reports — Amber accent */}
+          <div className="rounded-2xl bg-gradient-to-br from-[#f59e0b]/5 to-[#f59e0b]/10 border border-[#f59e0b]/20 p-6">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#f59e0b] bg-[#f59e0b]/10 px-2 py-0.5 rounded-full mb-3">
+              Compliance
+            </span>
+            <h3 className="text-lg font-bold text-[#003366] mb-1">
+              Funder reports that write themselves
+            </h3>
+            <p className="text-sm text-[#003366]/60">
+              Real-time data collection auto-generates WIOA, SNAP E&T, and grant narratives.
+            </p>
+            <ReportAnimation />
+          </div>
 
-          {/* Card 3 — Interview format coverage */}
-          <article className="rounded-3xl bg-white px-6 py-7 sm:px-7 sm:py-8 border flex flex-col justify-between border-[#003366]/15">
-            <div>
-              <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase mb-3 text-[#003366]/80">
-                FORMAT COVERAGE
-              </p>
-              <h3 className="text-lg sm:text-xl font-semibold tracking-tight text-[#003366]">
-                Prepare learners for the formats employers actually use.
-              </h3>
-            </div>
-
-            {/* Format type cards */}
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              {[
-                { label: "Panel", Icon: Users, desc: "Multi-interviewer rounds", accent: "#6366f1" },
-                { label: "Technical", Icon: Code2, desc: "Skills-based challenges", accent: "#0ea5e9" },
-                { label: "Phone Screen", Icon: Phone, desc: "First-round gatekeepers", accent: "#10b981" },
-                { label: "Behavioral", Icon: Target, desc: "STAR-method scenarios", accent: "#f59e0b" },
-              ].map((fmt) => (
-                <div
-                  key={fmt.label}
-                  className="group rounded-xl bg-[#f5f7fb] border border-[#003366]/8 px-3.5 py-3 flex items-start gap-3 transition-all duration-300 hover:shadow-md hover:border-[#003366]/15 hover:-translate-y-0.5 cursor-default"
-                >
-                  <div
-                    className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${fmt.accent}15` }}
-                  >
-                    <fmt.Icon className="w-4 h-4 transition-colors duration-300" style={{ color: fmt.accent }} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-[#003366]">{fmt.label}</p>
-                    <p className="text-[10px] text-[#003366]/55 leading-snug">{fmt.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-3 flex items-center gap-2">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#003366]/10 to-transparent" />
-              <span className="text-[10px] font-medium text-[#003366]/40 uppercase tracking-wider">All formats · One platform</span>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#003366]/10 to-transparent" />
-            </div>
-          </article>
-
-          {/* Card 4 — Security & Compliance (spans right 2 cols) */}
-          <article className="rounded-3xl bg-white px-6 py-7 sm:px-7 sm:py-8 border flex flex-col justify-between border-[#003366]/15">
-            <div>
-              <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase mb-3 text-[#003366]/80">
-                SECURITY &amp; COMPLIANCE
-              </p>
-              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#003366]">
-                Built for privacy-first institutions.
-              </h3>
-              <p className="mt-3 text-sm text-[#003366]/70 max-w-lg">
-                Clarivue supports PIPEDA and GDPR requirements, follows SOC 2–aligned security controls,
-                and provides audit-ready reporting, role-based access, and institution-owned data governance.
-              </p>
-            </div>
-            <div className="mt-5 grid grid-cols-4 gap-3 max-w-md">
-              {[
-                { src: "/pipeda-logo.png", alt: "PIPEDA" },
-                { src: "/iso2001-logo.png", alt: "ISO 27001" },
-                { src: "/pipeda-logo.png", alt: "PIPEDA" },
-                { src: "/soc2-icon.jpg", alt: "SOC 2" },
-              ].map((badge, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-center gap-2 rounded-2xl bg-[#b8ccf4]/30 border border-[#003366]/10 px-3 py-3"
-                >
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={badge.src}
-                      alt={badge.alt}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-[10px] font-semibold text-[#003366]/70 text-center">
-                    {badge.alt}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </article>
+          {/* Card 4: Pipeline — Sky accent */}
+          <div className="rounded-2xl bg-gradient-to-br from-[#0ea5e9]/5 to-[#0ea5e9]/10 border border-[#0ea5e9]/20 p-6">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#0ea5e9] bg-[#0ea5e9]/10 px-2 py-0.5 rounded-full mb-3">
+              Employers
+            </span>
+            <h3 className="text-lg font-bold text-[#003366] mb-1">
+              Employer partners that keep coming back
+            </h3>
+            <p className="text-sm text-[#003366]/60">
+              Job-ready candidates matched to roles, tracked post-placement for retention signals.
+            </p>
+            <PipelineAnimation />
+          </div>
         </div>
 
         {/* CTA */}
         <div className="mt-10 flex justify-center">
           <Link
             href="/book-demo"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#003366] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#003366]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[#003366]/30 hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-2 bg-[#003366] hover:bg-[#00264d] text-white font-semibold px-6 py-3 rounded-full transition-all shadow-lg hover:shadow-xl"
           >
-            Learn more
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <Sparkles className="w-4 h-4" />
+            <span>See it in action</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

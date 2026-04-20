@@ -1,10 +1,146 @@
-﻿import type { RoiRequest, RoiResult, RoiScenarioBreakdown } from "./types";
+﻿import type {
+  RoiRequest,
+  RoiResult,
+  RoiScenarioBreakdown,
+  GapCalculatorRequest,
+  GapCalculatorResult,
+  GapScenarioBreakdown,
+  GapLosses,
+} from "./types";
 
-const clampPct = (v: number | undefined, min = 0, max = 100) =>
-  Math.min(max, Math.max(min, Number.isFinite(v ?? NaN) ? (v as number) : 0));
+import {
+  ACTIVITY_HOURS,
+  ADVISOR_HOURLY_COST,
+  BASE_DROP_OFF_RATE,
+  PLACEMENT_VALUE,
+  CLARIVUE_RECOVERY_RATES,
+  getCaseloadStrainMultiplier,
+} from "./defaults";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// V4: Placement Gap Calculator
+// ═══════════════════════════════════════════════════════════════════════════
 
 const safe = (v: number | undefined, floor = 0) =>
   Math.max(floor, Number.isFinite(v ?? NaN) ? (v as number) : 0);
+
+/**
+ * Compute one V4 scenario.
+ * @param input - The 4 user inputs
+ * @param recoveryMultiplier - 0.55 (conservative), 0.65 (expected), 0.75 (optimistic)
+ */
+function computeGapScenario(
+  input: GapCalculatorRequest,
+  recoveryRate: number,
+): GapScenarioBreakdown {
+  const { learnersPerYear, programType, currentCaseload } = input;
+  
+  // Get defaults for this program type
+  const hoursPerLearner = ACTIVITY_HOURS[programType];
+  const hourlyRate = ADVISOR_HOURLY_COST[programType];
+  const baseDropOff = BASE_DROP_OFF_RATE[programType];
+  const placementValue = PLACEMENT_VALUE[programType];
+  
+  // Calculate caseload strain
+  const strainMultiplier = getCaseloadStrainMultiplier(safe(currentCaseload, 30));
+  
+  // ─────────────────────────────────────────────────────────────────────────
+  // TIME LOST: Total advisor hours spent on last-mile activities
+  // ─────────────────────────────────────────────────────────────────────────
+  const L = safe(learnersPerYear, 1);
+  const hoursBreakdown = {
+    resumePrep: L * hoursPerLearner.resumePrep,
+    checkIns: L * hoursPerLearner.checkIns,
+    sessionNotes: L * hoursPerLearner.sessionNotes,
+    interviewPrep: L * hoursPerLearner.interviewPrep,
+    employerFollowUp: L * hoursPerLearner.employerFollowUp,
+    total: L * hoursPerLearner.total,
+  };
+  const timeLostHours = hoursBreakdown.total;
+  
+  // ─────────────────────────────────────────────────────────────────────────
+  // MONEY LOST: Dollar cost of that time
+  // ─────────────────────────────────────────────────────────────────────────
+  const moneyLost = timeLostHours * hourlyRate;
+  
+  // ─────────────────────────────────────────────────────────────────────────
+  // PEOPLE LOST: Learners who don't place due to the gap
+  // ─────────────────────────────────────────────────────────────────────────
+  const effectiveDropOff = baseDropOff * strainMultiplier;
+  const peopleLost = Math.round(L * effectiveDropOff);
+  
+  // ─────────────────────────────────────────────────────────────────────────
+  // AGGREGATE GAP COST: Money lost + value of lost placements
+  // ─────────────────────────────────────────────────────────────────────────
+  const aggregateGapCost = moneyLost + (peopleLost * placementValue);
+  
+  // ─────────────────────────────────────────────────────────────────────────
+  // ADDITIONAL PLACEMENTS: What Clarivue recovers
+  // ─────────────────────────────────────────────────────────────────────────
+  const additionalPlacements = Math.round(peopleLost * recoveryRate);
+  
+  // Build losses object
+  const losses: GapLosses = {
+    timeLost: {
+      hours: timeLostHours,
+      breakdown: hoursBreakdown,
+    },
+    moneyLost: {
+      amount: moneyLost,
+      hourlyRate,
+    },
+    peopleLost: {
+      count: peopleLost,
+      baseDropOffRate: baseDropOff,
+      strainMultiplier,
+      effectiveDropOffRate: effectiveDropOff,
+    },
+  };
+  
+  return {
+    aggregateGapCost,
+    losses,
+    additionalPlacements,
+    recoveryRate,
+    placementValue,
+  };
+}
+
+/**
+ * Calculate V4 Gap Cost with sensitivity analysis.
+ */
+export function calculateGapCost(input: GapCalculatorRequest): GapCalculatorResult {
+  const { programType } = input;
+  
+  // Compute three scenarios
+  const conservative = computeGapScenario(input, CLARIVUE_RECOVERY_RATES.conservative);
+  const expected = computeGapScenario(input, CLARIVUE_RECOVERY_RATES.expected);
+  const optimistic = computeGapScenario(input, CLARIVUE_RECOVERY_RATES.optimistic);
+  
+  return {
+    resultVersion: 4,
+    summary: expected,
+    sensitivity: {
+      conservative,
+      expected,
+      optimistic,
+    },
+    programDefaults: {
+      hoursPerLearner: ACTIVITY_HOURS[programType],
+      advisorHourlyCost: ADVISOR_HOURLY_COST[programType],
+      baseDropOffRate: BASE_DROP_OFF_RATE[programType],
+      placementValue: PLACEMENT_VALUE[programType],
+    },
+    request: input,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Legacy V3 Calculator (kept for backward compatibility)
+// ═══════════════════════════════════════════════════════════════════════════
+
+const clampPct = (v: number | undefined, min = 0, max = 100) =>
+  Math.min(max, Math.max(min, Number.isFinite(v ?? NaN) ? (v as number) : 0));
 
 /**
  * Compute one scenario.

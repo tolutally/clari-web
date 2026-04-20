@@ -110,7 +110,7 @@ export function TrustShowcase() {
                     className="flex items-center justify-center h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-white/85 ring-1 ring-[#cbd5e1] shadow-[0_10px_35px_-18px_rgba(0,0,0,0.35)] text-[10px] sm:text-xs font-semibold text-[#111827]"
                   >
                     <div className="relative h-10 w-10 sm:h-12 sm:w-12">
-                      <Image src={badge.src} alt={badge.label} fill className="object-contain" sizes="48px" />
+                      <Image src={badge.src} alt={badge.label} fill loading="lazy" className="object-contain" sizes="48px" />
                     </div>
                   </div>
                 ))}

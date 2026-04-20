@@ -3,17 +3,17 @@ import { ApolloScripts } from "@/components/ApolloScripts";
 
 export const metadata: Metadata = {
   title:
-    "Improve Placement Outcomes & Calculate Interview Readiness ROI | Clarivue",
+    "The Hidden Cost | What's the training-to-employment gap costing you? | Clarivue",
   description:
-    "See how early interview gap detection reduces failed placements, saves advisor hours, and improves employer outcomes. Use Clarivue's ROI calculator to model your impact.",
+    "Calculate the cost of the training-to-employment gap in your program. Quantify lost time, wasted money, and missing placements.",
   openGraph: {
     title:
-      "Interview Readiness ROI Calculator for Career & Workforce Programs",
+      "The Hidden Cost | Clarivue",
     description:
-      "Model the cost savings of early interview gap detection. Reduce failed interviews, save advisor time, and improve placement outcomes.",
+      "See what the gap between training and employment is actually costing your program.",
     type: "website",
     siteName: "Clarivue",
-    url: "https://clarivue.io/roi-calculator",
+    url: "https://clarivue.io/hidden-cost",
     images: [
       {
         url: "https://clarivue.io/images/roi-calculator-preview.png",
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Interview Readiness ROI Calculator",
+    title: "The Hidden Cost",
     description:
-      "See the measurable impact of improving interview readiness before employer referrals go out.",
+      "See what the gap is costing your program before it compounds.",
     images: ["https://clarivue.io/images/roi-calculator-preview.png"],
   },
   alternates: {
-    canonical: "https://clarivue.io/roi-calculator",
+    canonical: "https://clarivue.io/hidden-cost",
   },
 };
 

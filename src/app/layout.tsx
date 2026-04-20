@@ -10,9 +10,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Interview Readiness Platform for Career Centers | Clarivue",
+  title: "Clarivue | AI infrastructure for workforce and employment training programs",
   description:
-    "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
+    "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
   icons: {
     icon: [
       { url: "/clarivue-favicon/favicon.ico", sizes: "any" },
@@ -23,18 +23,18 @@ export const metadata: Metadata = {
   },
   manifest: "/clarivue-favicon/site.webmanifest",
   openGraph: {
-    title: "Interview Readiness Platform for Career Centers | Clarivue",
+    title: "Clarivue | AI infrastructure for workforce and employment training programs",
     description:
-      "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
+      "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
     type: "website",
     siteName: "Clarivue",
     url: "https://clarivue.io",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Interview Readiness Platform for Career Centers | Clarivue",
+    title: "Clarivue | AI infrastructure for workforce and employment training programs",
     description:
-      "Stop guessing interview readiness. Clarivue helps institutions track performance, reduce remediation, and strengthen employer confidence.",
+      "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
   },
 };
 

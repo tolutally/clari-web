@@ -16,6 +16,7 @@ export async function getPostBySlug(slug: string) {
     `*[_type == "post" && slug.current == $slug][0] {
       _id,
       _createdAt,
+      eyebrow,
       title,
       subtitle,
       slug,

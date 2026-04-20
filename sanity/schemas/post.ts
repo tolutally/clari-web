@@ -15,6 +15,14 @@ export const post = defineType({
   fields: [
     // ===== CONTENT GROUP =====
     defineField({
+      name: 'eyebrow',
+      title: 'Eyebrow Label',
+      type: 'string',
+      group: 'content',
+      description: 'Optional small label above the title (e.g., "FEATURED", "INDUSTRY NEWS", "NEW")',
+      validation: (Rule) => Rule.max(30).warning('Keep eyebrow labels short'),
+    }),
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',

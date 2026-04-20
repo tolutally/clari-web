@@ -213,11 +213,11 @@ export default function RoiCalculatorPage() {
          ═══════════════════════════════════════════════ */}
       <section id="top" className="max-w-3xl mx-auto px-6 pt-16 pb-10 text-center scroll-mt-16">
         <div className="inline-flex items-center gap-2 rounded-full border border-[#003366]/15 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#003366]/70 backdrop-blur mb-5">
-          ROI Calculator
+          Placement Cost Calculator
         </div>
 
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-[#003366] leading-tight mb-5">
-          What Is Interview Prep Actually Costing Your Program?
+          What is the training-to-employment gap actually costing your program?
         </h1>
 
         <p className="text-sm text-[#003366]/60 leading-relaxed mb-6">

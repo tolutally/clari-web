@@ -31,8 +31,8 @@ interface HeaderProps {
 
 const institutionLinks = [
   { href: "/", icon: Home, label: "Home" },
-  { href: "/#institutions-features", icon: LayoutDashboard, label: "Features" },
-  { href: "/roicalculator", icon: Activity, label: "ROI Calculator" },
+  { href: "/#institutions-features", icon: LayoutDashboard, label: "Platform" },
+  { href: "/hidden-cost", icon: Activity, label: "The Hidden Cost" },
   { href: "/blog", icon: PenLine, label: "Blog" },
 ];
 

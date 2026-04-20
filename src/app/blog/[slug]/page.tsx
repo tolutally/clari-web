@@ -195,7 +195,12 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               )}
 
-              {/* Title */}
+              {/* Eyebrow + Title */}
+              {post.eyebrow && (
+                <span className="inline-block px-3 py-1 bg-[#ff686c] text-white text-xs sm:text-sm font-semibold uppercase tracking-wider rounded-full mb-4">
+                  {post.eyebrow}
+                </span>
+              )}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
                 {post.title}
               </h1>
