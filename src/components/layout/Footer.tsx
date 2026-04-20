@@ -7,7 +7,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-center gap-4">
           <Image
-            src="/clarivue-logo-lite.png"
+            src="/clarivue-logo-light.png"
             alt="Clarivue"
             width={138}
             height={42}
@@ -15,7 +15,7 @@ export function Footer() {
             loading="lazy"
           />
 
-          {/* Insights Hub links */}
+          {/* Insights Hub links — hidden for now
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-white/50">
             <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Insights</span>
             <Link href="/mock-interview-scoring" className="hover:text-white transition-colors">Scoring</Link>
@@ -24,6 +24,7 @@ export function Footer() {
             <Link href="/cohort-reporting" className="hover:text-white transition-colors">Cohorts</Link>
             <Link href="/employer-confidence" className="hover:text-white transition-colors">Employers</Link>
           </div>
+          */}
 
           {/* Legal / contact */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/60">
