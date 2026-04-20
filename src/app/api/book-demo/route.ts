@@ -24,22 +24,17 @@ const BLOCKED_DOMAINS = new Set([
 ]);
 
 /* ─── Rate limit: max 3 submissions per IP per hour ─── */
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const MAX_SUBMISSIONS_PER_WINDOW = 3;
 
-// In-memory rate limiter (resets on cold start — good enough for serverless)
-const rateLimitMap = new Map<string, number[]>();
-
-function isRateLimited(ipHash: string): boolean {
-  const now = Date.now();
-  const timestamps = (rateLimitMap.get(ipHash) ?? []).filter(
-    (t) => now - t < RATE_LIMIT_WINDOW_MS
-  );
-  if (timestamps.length >= MAX_SUBMISSIONS_PER_WINDOW) return true;
-  timestamps.push(now);
-  rateLimitMap.set(ipHash, timestamps);
-  return false;
-}
+/* ─── Input length limits ─── */
+const MAX_LENGTHS = {
+  firstName: 100,
+  lastName: 100,
+  email: 254,
+  phone: 30,
+  company: 200,
+  comment: 2000,
+} as const;
 
 function hashIP(ip: string): string {
   return createHash("sha256").update(ip).digest("hex").slice(0, 16);
@@ -76,6 +71,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ── Input length limits ──
+    if (
+      firstName.length > MAX_LENGTHS.firstName ||
+      lastName.length > MAX_LENGTHS.lastName ||
+      email.length > MAX_LENGTHS.email ||
+      (phone && phone.length > MAX_LENGTHS.phone) ||
+      (company && company.length > MAX_LENGTHS.company) ||
+      (comment && comment.length > MAX_LENGTHS.comment)
+    ) {
+      return NextResponse.json(
+        { error: "One or more fields exceed the maximum allowed length." },
+        { status: 400 }
+      );
+    }
+
     // ── Email format ──
     const trimmedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
@@ -99,7 +109,15 @@ export async function POST(req: NextRequest) {
       ?? "unknown";
     const ipHash = hashIP(ip);
 
-    if (isRateLimited(ipHash)) {
+    const supabase = getSupabaseAdmin();
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: recentCount } = await supabase
+      .from("demo_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("ip_hash", ipHash)
+      .gte("created_at", oneHourAgo);
+
+    if ((recentCount ?? 0) >= MAX_SUBMISSIONS_PER_WINDOW) {
       return NextResponse.json(
         { error: "Too many submissions. Please try again later." },
         { status: 429 }
@@ -107,7 +125,6 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Duplicate check: same email in last 24h ──
-    const supabase = getSupabaseAdmin();
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: existing } = await supabase
       .from("demo_requests")

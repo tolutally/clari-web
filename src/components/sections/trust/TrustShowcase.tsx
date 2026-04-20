@@ -53,6 +53,7 @@ export function TrustShowcase() {
             loop
             muted
             playsInline
+            preload="metadata"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/55 to-black/20" />
 

@@ -59,6 +59,10 @@ export async function getPostBySlug(slug: string) {
         excerpt,
         mainImage,
         publishedAt
+      },
+      faqs[] {
+        question,
+        answer
       }
     }`,
     { slug }

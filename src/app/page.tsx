@@ -1,11 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { InstitutionView } from "@/components/sections/institution/InstitutionView";
-import { IndividualView } from "@/components/sections/individual/IndividualView";
+
+const InstitutionView = dynamic(
+  () => import("@/components/sections/institution/InstitutionView").then(m => m.InstitutionView),
+  { ssr: true }
+);
+const IndividualView = dynamic(
+  () => import("@/components/sections/individual/IndividualView").then(m => m.IndividualView),
+  { ssr: true }
+);
+const PageFAQLoader = dynamic(() => import("@/components/PageFAQLoader"), { ssr: true });
 
 type ViewType = "institutions" | "jobseekers";
 
@@ -32,6 +41,7 @@ export default function Home() {
 
       <main className="flex-grow w-full max-w-7xl mx-auto px-6 pb-32 pt-20">
         {view === "institutions" ? <InstitutionView /> : <IndividualView />}
+        {view === "institutions" && <PageFAQLoader page="homepage" />}
       </main>
 
       <Footer />

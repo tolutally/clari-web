@@ -18,6 +18,7 @@ import {
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ShareButtons } from '@/components/blog/ShareButtons';
+import FAQSection from '@/components/FAQSection';
 import type { Metadata } from 'next';
 
 export const revalidate = 60;
@@ -158,6 +159,8 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* FAQ JSON-LD (only if post has FAQs) — rendered via FAQSection below */}
 
       <article className="min-h-screen bg-white">
         {/* Breadcrumb */}
@@ -747,6 +750,17 @@ export default async function BlogPostPage({ params }: Props) {
             </aside>
           </div>
         </div>
+
+        {/* FAQ Section (if post has FAQs) */}
+        {post.faqs && post.faqs.length > 0 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FAQSection
+              faqs={post.faqs}
+              heading={`FAQs: ${post.title}`}
+              subtitle=""
+            />
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="bg-gradient-to-br from-[#0a2140] to-[#1a4060] text-white py-16">

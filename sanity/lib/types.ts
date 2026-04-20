@@ -46,6 +46,7 @@ export type Post = {
   categories?: string[];
   publishedAt: string;
   featured?: boolean;
+  faqs?: FAQItem[];
 };
 
 export type Testimonial = {
@@ -80,4 +81,15 @@ export type CaseStudy = {
   industry?: 'bootcamp' | 'university' | 'workforce' | 'other';
   publishedAt: string;
   published: boolean;
+};
+
+export type FAQItem = {
+  question: string;
+  answer: string;
+};
+
+export type PageFaq = {
+  _id: string;
+  page: string;
+  faqs: FAQItem[];
 };

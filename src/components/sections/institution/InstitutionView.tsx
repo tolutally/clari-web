@@ -18,13 +18,24 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 // import { TrustShowcase } from "@/components/sections/trust/TrustShowcase";
 import { StatsConfidence } from "@/components/sections/trust/StatsConfidence";
 import { CalculatorTeaser } from "@/components/sections/institution/CalculatorTeaser";
 import { InstitutionBenefits } from "@/components/sections/institution/InstitutionBenefits";
-import ClarivueImpactCalculator from "@/components/sections/institution/ClarivueImpactCalculator";
-import InstitutionPainPoints from "@/components/sections/institution/InstitutionPainPoints";
-import { BlogInsights } from "@/components/sections/institution/BlogInsights";
+
+const ClarivueImpactCalculator = dynamic(
+  () => import("@/components/sections/institution/ClarivueImpactCalculator"),
+  { ssr: true }
+);
+const InstitutionPainPoints = dynamic(
+  () => import("@/components/sections/institution/InstitutionPainPoints"),
+  { ssr: true }
+);
+const BlogInsights = dynamic(
+  () => import("@/components/sections/institution/BlogInsights").then(m => m.BlogInsights),
+  { ssr: true }
+);
 // import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
 import { useEffect, useRef, useState, FormEvent } from "react";
 
@@ -833,6 +844,7 @@ description:
                       loop
                       muted
                       playsInline
+                      preload="metadata"
                       className="w-full h-full object-cover transition-opacity duration-500"
                       key={activeFeature}
                     />

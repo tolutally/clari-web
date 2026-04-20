@@ -236,6 +236,17 @@ export const post = defineType({
       initialValue: false,
       description: 'Add noindex tag to prevent search engine indexing',
     }),
+
+    // ===== FAQ (optional — generates FAQPage rich snippet) =====
+    defineField({
+      name: 'faqs',
+      title: 'FAQs',
+      type: 'array',
+      group: 'meta',
+      of: [{ type: 'faqItem' }],
+      description:
+        'Optional FAQ section for this post. Renders a visible accordion and generates FAQPage JSON-LD structured data for Google rich results. Each post should have unique questions.',
+    }),
   ],
   orderings: [
     {

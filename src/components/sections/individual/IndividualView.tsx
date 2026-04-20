@@ -1,13 +1,27 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { BookOpen, Globe2, Sparkles, UploadCloud } from "lucide-react";
+import dynamic from "next/dynamic";
 import { PrepEngineSection } from "@/components/sections/individual/PrepEngineSection";
 import { TestimonialsMarquee } from "@/components/sections/individual/TestimonialsMarquee";
-import { UseCaseRotator } from "@/components/sections/individual/UseCaseRotator";
 import { JobSeekerCta } from "@/components/sections/individual/JobSeekerCta";
-import { ClarivueHeroOrbit } from "@/components/sections/individual/ClarivueHeroOrbit";
-import JobSeekerFeatures from "@/components/sections/individual/JobSeekerFeatures";
-import PainPointSection from "@/components/sections/individual/PainPointSection";
+
+const UseCaseRotator = dynamic(
+  () => import("@/components/sections/individual/UseCaseRotator").then(m => m.UseCaseRotator),
+  { ssr: true }
+);
+const ClarivueHeroOrbit = dynamic(
+  () => import("@/components/sections/individual/ClarivueHeroOrbit").then(m => m.ClarivueHeroOrbit),
+  { ssr: true }
+);
+const JobSeekerFeatures = dynamic(
+  () => import("@/components/sections/individual/JobSeekerFeatures"),
+  { ssr: true }
+);
+const PainPointSection = dynamic(
+  () => import("@/components/sections/individual/PainPointSection"),
+  { ssr: true }
+);
 
 const faq = [
   "Does it work for tech roles?",
