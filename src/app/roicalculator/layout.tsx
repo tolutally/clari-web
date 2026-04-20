@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ApolloScripts } from "@/components/ApolloScripts";
 
 export const metadata: Metadata = {
   title:
@@ -36,5 +37,10 @@ export default function ROICalculatorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      {children}
+      <ApolloScripts />
+    </>
+  );
 }

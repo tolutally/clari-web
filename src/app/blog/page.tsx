@@ -1,18 +1,19 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { getPosts } from '@/lib/sanity/api';
+import { urlForImage } from '../../../sanity/lib/image';
+import { BlogCategoryFilter } from './BlogCategoryFilter';
+
+export const revalidate = 60;
 
 // Helper to safely render content that might be plain text or portable text blocks
 function getPlainText(content: any): string {
   if (!content) return '';
   if (typeof content === 'string') return content;
   if (Array.isArray(content)) {
-    // It's a portable text array, extract text from blocks
     return content
       .filter((block) => block._type === 'block')
       .map((block) => block.children?.map((child: any) => child.text || '').join('') || '')
@@ -21,31 +22,17 @@ function getPlainText(content: any): string {
   return String(content);
 }
 
-// This would come from Sanity in production
-const CATEGORIES = ['All', 'Product Updates', 'Customer Stories', 'Interview Tips', 'Career Prep', 'Features'];
+export default async function BlogPage() {
+  const rawPosts = await getPosts();
 
-export default function BlogPage() {
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [posts, setPosts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Fetch posts from Sanity
-    async function fetchPosts() {
-      try {
-        const response = await fetch('/api/blog/posts');
-        if (response.ok) {
-          const data = await response.json();
-          setPosts(data);
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchPosts();
-  }, []);
+  const posts = rawPosts?.map((post: any) => ({
+    ...post,
+    mainImage: post.mainImage ? urlForImage(post.mainImage).width(800).height(600).url() : null,
+    author: post.author ? {
+      ...post.author,
+      image: post.author.image ? urlForImage(post.author.image).width(80).height(80).url() : null,
+    } : null,
+  })) || [];
 
   const featuredPost = posts[0];
   const regularPosts = posts.slice(1);
@@ -88,28 +75,10 @@ export default function BlogPage() {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground mb-8">Blog</h1>
             
             {/* Category Filter */}
-            <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
-              {CATEGORIES.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
-                    activeCategory === category
-                      ? 'bg-foreground text-white shadow-lg shadow-foreground/20'
-                      : 'bg-white text-foreground border border-gray-200 hover:border-foreground/30'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            <BlogCategoryFilter />
           </div>
 
-          {isLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="text-center py-20">
               <div className="mb-6">
                 <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center">

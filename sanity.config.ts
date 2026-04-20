@@ -99,6 +99,16 @@ const structure = (S: any) =>
                 .child(S.documentTypeList('caseStudy').title('Case Studies')),
             ])
         ),
+
+      S.divider(),
+
+      // SEO / Structured Data
+      S.listItem()
+        .title('Page FAQs')
+        .icon(DocumentTextIcon)
+        .child(
+          S.documentTypeList('pageFaq').title('Page FAQs')
+        ),
     ]);
 
 export default defineConfig({
@@ -126,7 +136,7 @@ export default defineConfig({
       // Filter document types based on context
       if (creationContext.type === 'global') {
         return prev.filter((item) => 
-          ['post', 'author', 'category', 'testimonial', 'caseStudy'].includes(item.templateId)
+          ['post', 'author', 'category', 'testimonial', 'caseStudy', 'pageFaq'].includes(item.templateId)
         );
       }
       return prev;

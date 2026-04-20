@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Check, Plus } from 'lucide-react';
+import { ApolloScripts } from '@/components/ApolloScripts';
 
 /* ── Blocked email domains (mirrors server-side list) ── */
 const BLOCKED_DOMAINS = new Set([
@@ -114,6 +115,7 @@ export default function BookDemoPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #d4eaf7 0%, #b8d4ec 25%, #a8cce0 50%, #9ac5d8 75%, #8cbfcf 100%)' }}>
+      <ApolloScripts />
       {/* Logo */}
       <div className="absolute top-6 left-6 z-10">
         <Link href="/">
@@ -137,6 +139,7 @@ export default function BookDemoPage() {
                       name="firstName"
                       placeholder="First name *"
                       required
+                      maxLength={100}
                       value={formData.firstName}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all"
@@ -148,6 +151,7 @@ export default function BookDemoPage() {
                       name="lastName"
                       placeholder="Last name *"
                       required
+                      maxLength={100}
                       value={formData.lastName}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all"
@@ -162,6 +166,7 @@ export default function BookDemoPage() {
                     name="email"
                     placeholder="Work email address *"
                     required
+                    maxLength={254}
                     value={formData.email}
                     onChange={(e) => {
                       handleChange(e);
@@ -182,6 +187,7 @@ export default function BookDemoPage() {
                   type="tel"
                   name="phone"
                   placeholder="Phone number"
+                  maxLength={30}
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all"
@@ -192,6 +198,7 @@ export default function BookDemoPage() {
                   type="text"
                   name="company"
                   placeholder="Company name"
+                  maxLength={200}
                   value={formData.company}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all"
@@ -215,6 +222,7 @@ export default function BookDemoPage() {
                     value={formData.comment}
                     onChange={handleChange}
                     rows={3}
+                    maxLength={2000}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] focus:border-transparent transition-all resize-none"
                   />
                 )}

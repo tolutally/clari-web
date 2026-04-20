@@ -1,7 +1,5 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -16,6 +14,18 @@ export function Footer() {
             className="h-8 w-auto object-contain"
             loading="lazy"
           />
+
+          {/* Insights Hub links */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-white/50">
+            <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Insights</span>
+            <Link href="/mock-interview-scoring" className="hover:text-white transition-colors">Scoring</Link>
+            <Link href="/placement-outcomes" className="hover:text-white transition-colors">Placements</Link>
+            <Link href="/advisor-workflow" className="hover:text-white transition-colors">Advisors</Link>
+            <Link href="/cohort-reporting" className="hover:text-white transition-colors">Cohorts</Link>
+            <Link href="/employer-confidence" className="hover:text-white transition-colors">Employers</Link>
+          </div>
+
+          {/* Legal / contact */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/60">
             <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy Policy

@@ -49,6 +49,17 @@ employers — so they can protect recruiter relationships, scale placement suppo
 - Website: https://clarivue.io
 - Contact: Book a demo at https://clarivue.io/book-demo
 
+## Frequently Asked Questions
+
+- **What is Clarivue?** — Clarivue is an interview readiness platform for career centers, workforce programs, and post-secondary institutions that uses AI-powered mock interviews to detect readiness gaps before learners fail real interviews.
+- **Who is Clarivue designed for?** — Career services teams at colleges and universities, workforce development programs, employer-connected training programs, bootcamps, and any institution that refers learners to employer interviews.
+- **How does the Interview Readiness Engine work?** — AI-powered mock interviews score learners on role-specific competencies, behavioral storytelling, and technical fluency, surfacing gaps early so advisors can intervene.
+- **What is the Cohort Performance Board?** — A real-time dashboard showing which learners are interview-ready, at risk, or critical across an entire cohort.
+- **How does Clarivue help reduce advisor workload?** — Automated Readiness Actions assign targeted practice based on each learner's breakdown patterns, reducing the 6–10 unplanned remediation hours per learner.
+- **Can I see Clarivue's ROI impact?** — Yes. Use the ROI Calculator at https://clarivue.io/roicalculator to model the financial impact for your program.
+- **How does Clarivue protect employer partnerships?** — By ensuring learners are interview-ready before they meet employers, preventing failed placements that erode recruiter trust.
+- **Does Clarivue offer a demo?** — Yes. Book one at https://clarivue.io/book-demo.
+
 ## Technical Details
 
 - Platform: Web application (SaaS)

@@ -59,3 +59,11 @@ export const CASE_STUDIES_QUERY = groq`*[_type == "caseStudy" && published == tr
   metrics,
   publishedAt
 }`;
+
+// Fetch FAQs for a specific page (homepage, roicalculator, etc.)
+export const PAGE_FAQS_QUERY = groq`*[_type == "pageFaq" && page == $page][0] {
+  faqs[] {
+    question,
+    answer
+  }
+}`;
