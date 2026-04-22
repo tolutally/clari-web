@@ -563,6 +563,70 @@
         ],
         "type": "object",
         "name": "pullQuote"
+      },
+      {
+        "fields": [
+          {
+            "rows": 3,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "quote",
+            "type": "text"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Centered",
+                  "value": "centered"
+                },
+                {
+                  "title": "Landscape Card",
+                  "value": "landscape"
+                }
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "landscape",
+            "name": "layout",
+            "type": "string"
+          },
+          {
+            "description": "Who said this?",
+            "name": "attribution",
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "type": "string",
+            "title": "Role/Title"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "name": "alt",
+                "type": "string",
+                "title": "Alt Text"
+              }
+            ],
+            "name": "authorImage",
+            "type": "image"
+          }
+        ],
+        "type": "object",
+        "name": "quoteCard"
       }
     ],
     "name": "richText",

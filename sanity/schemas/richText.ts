@@ -1,5 +1,67 @@
 import { defineType, defineArrayMember } from 'sanity';
 
+const quoteCardFields = [
+  {
+    name: 'quote',
+    type: 'text',
+    title: 'Quote',
+    rows: 3,
+    validation: (Rule: any) => Rule.required(),
+  },
+  {
+    name: 'layout',
+    type: 'string',
+    title: 'Layout',
+    options: {
+      list: [
+        { title: 'Centered', value: 'centered' },
+        { title: 'Landscape Card', value: 'landscape' },
+      ],
+      layout: 'radio',
+    },
+    initialValue: 'landscape',
+  },
+  {
+    name: 'attribution',
+    type: 'string',
+    title: 'Attribution',
+    description: 'Who said this?',
+  },
+  {
+    name: 'role',
+    type: 'string',
+    title: 'Role/Title',
+  },
+  {
+    name: 'authorImage',
+    type: 'image',
+    title: 'Author Image',
+    options: {
+      hotspot: true,
+    },
+    fields: [
+      {
+        name: 'alt',
+        type: 'string',
+        title: 'Alt Text',
+      },
+    ],
+  },
+];
+
+const quoteCardPreview = {
+  select: { quote: 'quote', attribution: 'attribution', layout: 'layout', media: 'authorImage' },
+  prepare({ quote, attribution, layout, media }: { quote?: string; attribution?: string; layout?: string; media?: any }) {
+    return {
+      title: `"${quote?.substring(0, 50)}..."`,
+      subtitle: [attribution ? `— ${attribution}` : undefined, layout === 'landscape' ? 'Landscape card' : 'Centered']
+        .filter(Boolean)
+        .join(' • '),
+      media,
+    };
+  },
+};
+
 /**
  * Enhanced Rich Text Schema with writing tools
  * Includes callouts, code blocks, embeds, and more
@@ -398,66 +460,16 @@ export const richText = defineType({
       type: 'object',
       name: 'pullQuote',
       title: 'Pull Quote',
-      fields: [
-        {
-          name: 'quote',
-          type: 'text',
-          title: 'Quote',
-          rows: 3,
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
-          name: 'layout',
-          type: 'string',
-          title: 'Layout',
-          options: {
-            list: [
-              { title: 'Centered', value: 'centered' },
-              { title: 'Landscape Card', value: 'landscape' },
-            ],
-            layout: 'radio',
-          },
-          initialValue: 'landscape',
-        },
-        {
-          name: 'attribution',
-          type: 'string',
-          title: 'Attribution',
-          description: 'Who said this?',
-        },
-        {
-          name: 'role',
-          type: 'string',
-          title: 'Role/Title',
-        },
-        {
-          name: 'authorImage',
-          type: 'image',
-          title: 'Author Image',
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: 'alt',
-              type: 'string',
-              title: 'Alt Text',
-            },
-          ],
-        },
-      ],
-      preview: {
-        select: { quote: 'quote', attribution: 'attribution', layout: 'layout', media: 'authorImage' },
-        prepare({ quote, attribution, layout, media }) {
-          return {
-            title: `"${quote?.substring(0, 50)}..."`,
-            subtitle: [attribution ? `— ${attribution}` : undefined, layout === 'landscape' ? 'Landscape card' : 'Centered']
-              .filter(Boolean)
-              .join(' • '),
-            media,
-          };
-        },
-      },
+      fields: quoteCardFields,
+      preview: quoteCardPreview,
+    }),
+
+    defineArrayMember({
+      type: 'object',
+      name: 'quoteCard',
+      title: 'Quote Card',
+      fields: quoteCardFields,
+      preview: quoteCardPreview,
     }),
   ],
 });
