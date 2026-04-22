@@ -519,6 +519,24 @@
             "type": "text"
           },
           {
+            "options": {
+              "list": [
+                {
+                  "title": "Centered",
+                  "value": "centered"
+                },
+                {
+                  "title": "Landscape Card",
+                  "value": "landscape"
+                }
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "centered",
+            "name": "layout",
+            "type": "string"
+          },
+          {
             "description": "Who said this?",
             "name": "attribution",
             "type": "string"
@@ -527,6 +545,20 @@
             "name": "role",
             "type": "string",
             "title": "Role/Title"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "fields": [
+              {
+                "name": "alt",
+                "type": "string",
+                "title": "Alt Text"
+              }
+            ],
+            "name": "authorImage",
+            "type": "image"
           }
         ],
         "type": "object",
@@ -538,6 +570,80 @@
   },
   {
     "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Question is required"
+          }
+        ],
+        "description": "The question as it appears on the site and in Google rich snippets.",
+        "name": "question",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 20
+              }
+            ],
+            "level": "error",
+            "message": "Answer must be at least 20 characters"
+          },
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 1000
+              }
+            ],
+            "level": "warning",
+            "message": "Answers over 1 000 characters may be truncated in search results"
+          }
+        ],
+        "description": "Plain-text answer. Keep it concise — Google may truncate long answers in rich snippets.",
+        "name": "answer",
+        "type": "text"
+      }
+    ],
+    "name": "faqItem",
+    "type": "object",
+    "title": "FAQ Item"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 30
+              }
+            ],
+            "level": "warning",
+            "message": "Keep eyebrow labels short"
+          }
+        ],
+        "description": "Optional small label above the title (e.g., \"FEATURED\", \"INDUSTRY NEWS\", \"NEW\")",
+        "name": "eyebrow",
+        "type": "string",
+        "title": "Eyebrow Label"
+      },
       {
         "validation": [
           {
@@ -896,6 +1002,18 @@
         "name": "hideFromSearch",
         "type": "boolean",
         "title": "Hide from Search Engines"
+      },
+      {
+        "description": "Optional FAQ section for this post. Renders a visible accordion and generates FAQPage JSON-LD structured data for Google rich results. Each post should have unique questions.",
+        "of": [
+          {
+            "type": "faqItem",
+            "title": "FAQ Item"
+          }
+        ],
+        "name": "faqs",
+        "type": "array",
+        "title": "FAQs"
       }
     ],
     "name": "post",
@@ -1568,5 +1686,80 @@
     ],
     "name": "caseStudy",
     "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Homepage",
+              "value": "homepage"
+            },
+            {
+              "title": "ROI Calculator",
+              "value": "roicalculator"
+            },
+            {
+              "title": "Book a Demo",
+              "value": "book-demo"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "homepage",
+                  "roicalculator",
+                  "book-demo"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Which page these FAQs belong to. One document per page.",
+        "name": "page",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error",
+            "message": "Add at least one FAQ"
+          }
+        ],
+        "description": "Add FAQ items. They render visually AND generate FAQPage structured data.",
+        "of": [
+          {
+            "type": "faqItem",
+            "title": "FAQ Item"
+          }
+        ],
+        "name": "faqs",
+        "type": "array",
+        "title": "FAQs"
+      }
+    ],
+    "name": "pageFaq",
+    "type": "document",
+    "title": "Page FAQs"
   }
 ]

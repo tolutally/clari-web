@@ -407,6 +407,19 @@ export const richText = defineType({
           validation: (Rule: any) => Rule.required(),
         },
         {
+          name: 'layout',
+          type: 'string',
+          title: 'Layout',
+          options: {
+            list: [
+              { title: 'Centered', value: 'centered' },
+              { title: 'Landscape Card', value: 'landscape' },
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'centered',
+        },
+        {
           name: 'attribution',
           type: 'string',
           title: 'Attribution',
@@ -417,13 +430,31 @@ export const richText = defineType({
           type: 'string',
           title: 'Role/Title',
         },
+        {
+          name: 'authorImage',
+          type: 'image',
+          title: 'Author Image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alt Text',
+            },
+          ],
+        },
       ],
       preview: {
-        select: { quote: 'quote', attribution: 'attribution' },
-        prepare({ quote, attribution }) {
+        select: { quote: 'quote', attribution: 'attribution', layout: 'layout', media: 'authorImage' },
+        prepare({ quote, attribution, layout, media }) {
           return {
             title: `"${quote?.substring(0, 50)}..."`,
-            subtitle: attribution ? `— ${attribution}` : undefined,
+            subtitle: [attribution ? `— ${attribution}` : undefined, layout === 'landscape' ? 'Landscape card' : 'Centered']
+              .filter(Boolean)
+              .join(' • '),
+            media,
           };
         },
       },
