@@ -532,7 +532,7 @@
               ],
               "layout": "radio"
             },
-            "initialValue": "centered",
+            "initialValue": "landscape",
             "name": "layout",
             "type": "string"
           },

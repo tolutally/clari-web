@@ -401,7 +401,8 @@ export default async function BlogPostPage({ params }: Props) {
 
                         // Pull quotes
                         pullQuote: ({ value }) => {
-                          const isLandscape = value.layout === 'landscape';
+                          const hasProfileContent = Boolean(value.authorImage || value.attribution || value.role);
+                          const isLandscape = value.layout === 'landscape' || (!value.layout && hasProfileContent);
 
                           if (isLandscape) {
                             return (

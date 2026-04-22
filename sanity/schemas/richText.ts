@@ -417,7 +417,7 @@ export const richText = defineType({
             ],
             layout: 'radio',
           },
-          initialValue: 'centered',
+          initialValue: 'landscape',
         },
         {
           name: 'attribution',
