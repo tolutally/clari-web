@@ -417,13 +417,29 @@ export const richText = defineType({
           type: 'string',
           title: 'Role/Title',
         },
+        {
+          name: 'authorImage',
+          type: 'image',
+          title: 'Author Image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alt Text',
+            },
+          ],
+        },
       ],
       preview: {
-        select: { quote: 'quote', attribution: 'attribution' },
-        prepare({ quote, attribution }) {
+        select: { quote: 'quote', attribution: 'attribution', media: 'authorImage' },
+        prepare({ quote, attribution, media }) {
           return {
             title: `"${quote?.substring(0, 50)}..."`,
             subtitle: attribution ? `— ${attribution}` : undefined,
+            media,
           };
         },
       },

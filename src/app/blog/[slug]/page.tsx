@@ -401,16 +401,27 @@ export default async function BlogPostPage({ params }: Props) {
 
                         // Pull quotes
                         pullQuote: ({ value }) => (
-                          <blockquote className="my-10 text-center not-italic border-none bg-transparent p-0">
-                            <p className="text-2xl font-medium text-[#0a2140] italic mb-4">
-                              "{value.quote}"
-                            </p>
-                            {value.attribution && (
-                              <footer className="text-gray-600">
-                                — <cite className="not-italic font-medium">{value.attribution}</cite>
-                                {value.role && <span className="text-gray-400">, {value.role}</span>}
-                              </footer>
-                            )}
+                          <blockquote className="my-10 not-italic border-none bg-transparent p-0">
+                            <div className="flex flex-col items-center text-center gap-4">
+                              {value.authorImage && (
+                                <Image
+                                  src={urlForImage(value.authorImage).width(96).height(96).url()}
+                                  alt={value.authorImage.alt || value.attribution || 'Quote author'}
+                                  width={96}
+                                  height={96}
+                                  className="h-16 w-16 rounded-full object-cover"
+                                />
+                              )}
+                              <p className="text-2xl font-medium text-[#0a2140] italic">
+                                "{value.quote}"
+                              </p>
+                              {value.attribution && (
+                                <footer className="text-gray-600">
+                                  — <cite className="not-italic font-medium">{value.attribution}</cite>
+                                  {value.role && <span className="text-gray-400">, {value.role}</span>}
+                                </footer>
+                              )}
+                            </div>
                           </blockquote>
                         ),
 
