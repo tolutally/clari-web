@@ -131,15 +131,15 @@ export default async function BlogPostPage({ params }: Props) {
       return (
         <blockquote className="my-10 not-italic border-none bg-transparent p-0">
           <div className="overflow-hidden rounded-[2rem] border border-[#7c6aa6]/14 bg-[linear-gradient(135deg,rgba(236,231,247,0.9),rgba(250,248,255,0.98)_32%,rgba(255,255,255,0.94)_100%)] shadow-[0_24px_70px_-42px_rgba(124,106,166,0.35)]">
-            <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[35%_65%] lg:items-center lg:gap-10 lg:p-10">
+            <div className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[30%_70%] lg:items-center lg:gap-6 lg:p-6">
               <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-                <div className="relative mb-5 h-28 w-28 overflow-hidden rounded-full border-4 border-white/90 shadow-[0_18px_36px_-24px_rgba(124,106,166,0.45)] sm:h-32 sm:w-32 lg:h-36 lg:w-36">
+                <div className="relative mb-3 h-32 w-32 overflow-hidden rounded-full border-4 border-white/90 shadow-[0_18px_36px_-24px_rgba(124,106,166,0.45)] sm:h-36 sm:w-36 lg:h-40 lg:w-40">
                   {value.authorImage ? (
                     <Image
-                      src={urlForImage(value.authorImage).width(288).height(288).url()}
+                      src={urlForImage(value.authorImage).width(320).height(320).url()}
                       alt={value.authorImage.alt || value.attribution || 'Quote author'}
                       fill
-                      sizes="144px"
+                      sizes="160px"
                       className="object-cover"
                     />
                   ) : (
@@ -150,11 +150,11 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
                 {value.attribution && (
                   <div className="max-w-xs">
-                    <div className="text-xl font-semibold tracking-tight text-[#0a2140] sm:text-2xl">
+                    <div className="text-lg font-semibold tracking-tight text-[#0a2140] sm:text-xl lg:text-[1.35rem]">
                       {value.attribution}
                     </div>
                     {value.role && (
-                      <div className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-[#8f79b8] sm:text-base">
+                      <div className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-[#8f79b8] sm:text-xs lg:text-sm">
                         {value.role}
                       </div>
                     )}
@@ -162,9 +162,9 @@ export default async function BlogPostPage({ params }: Props) {
                 )}
               </div>
 
-              <div className="relative border-t border-[#8f79b8]/16 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-                <span className="mb-4 block text-5xl leading-none text-[#8f79b8]/55 sm:text-6xl">“</span>
-                <p className="m-0 text-2xl font-medium leading-tight tracking-tight text-[#0a2140] sm:text-[2rem] lg:text-[2.35rem]">
+              <div className="relative border-t border-[#8f79b8]/16 pt-4 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+                <span className="mb-2 block text-3xl leading-none text-[#8f79b8]/55 sm:text-4xl lg:text-5xl">“</span>
+                <p className="m-0 text-base font-medium leading-snug tracking-tight text-[#0a2140] sm:text-lg lg:text-[1.15rem]">
                   {value.quote}
                 </p>
               </div>
