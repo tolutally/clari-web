@@ -519,6 +519,24 @@
             "type": "text"
           },
           {
+            "options": {
+              "list": [
+                {
+                  "title": "Centered",
+                  "value": "centered"
+                },
+                {
+                  "title": "Landscape Card",
+                  "value": "landscape"
+                }
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "centered",
+            "name": "layout",
+            "type": "string"
+          },
+          {
             "description": "Who said this?",
             "name": "attribution",
             "type": "string"
