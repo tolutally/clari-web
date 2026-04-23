@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { BlogPostAnalytics } from '@/components/blog/BlogPostAnalytics';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import FAQSection from '@/components/FAQSection';
 import type { Metadata } from 'next';
@@ -240,6 +241,8 @@ export default async function BlogPostPage({ params }: Props) {
       {/* FAQ JSON-LD (only if post has FAQs) — rendered via FAQSection below */}
 
       <article className="min-h-screen bg-white">
+        <BlogPostAnalytics slug={slug} title={post.title} />
+
         {/* Breadcrumb */}
         <div className="bg-gray-50 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
