@@ -28,14 +28,17 @@ export function Footer() {
 
           {/* Legal / contact */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/60">
+            <Link href="/hidden-cost" className="hover:text-white transition-colors">
+              Find your hidden cost
+            </Link>
+            <Link href="/book-demo" className="hover:text-white transition-colors">
+              Book a demo
+            </Link>
             <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
             <Link href="/terms" className="hover:text-white transition-colors">
               Terms of Service
-            </Link>
-            <Link href="/book-demo" className="hover:text-white transition-colors">
-              Contact Us
             </Link>
           </div>
           <p className="text-white/50 text-sm">© 2026 SkillConnect Technologies Ltd. All rights reserved.</p>

@@ -843,13 +843,21 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="text-lg text-gray-300 mb-8">
               See how Clarivue gives career centers the visibility, structure, and proof they need to improve placement outcomes.
             </p>
-            <Link
-              href="/book-demo"
-              className="inline-flex items-center gap-2 bg-[#ff686c] text-white px-8 py-4 rounded-full font-medium hover:bg-[#ff686c]/90 transition-all shadow-lg"
-            >
-              Book a Demo
-              <ChevronRight className="w-5 h-5" />
-            </Link>
+            <div className="flex flex-col items-center gap-4">
+              <Link
+                href="/book-demo"
+                className="inline-flex items-center gap-2 bg-[#ff686c] text-white px-8 py-4 rounded-full font-medium hover:bg-[#ff686c]/90 transition-all shadow-lg"
+              >
+                Book a demo
+                <ChevronRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/hidden-cost"
+                className="font-semibold text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white transition-colors"
+              >
+                Find your hidden cost
+              </Link>
+            </div>
           </div>
         </div>
       </article>

@@ -496,16 +496,16 @@ export function InstitutionView() {
           {/* Buttons */}
           <div className="animate-fade-in-up delay-300 mt-12 flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
             <a
-              href="https://app.clarivue.io/register"
+              href="/hidden-cost"
               className="w-full sm:w-auto rounded-full bg-white px-8 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
             >
-              Start for free
+              Find your hidden cost
             </a>
             <a
               href="/book-demo"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-8 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
             >
-              Speak to us
+              Book a demo
               <ArrowRight className="w-5 h-5 shrink-0" />
             </a>
           </div>
@@ -597,13 +597,21 @@ export function InstitutionView() {
             Not because of skills. Because of resumes that don&apos;t land, interviews no one prepared them for, momentum that dies between meetings, and systems held together by spreadsheets and memory. Clarivue closes that gap.
           </p>
 
-          <Link
-            href="/book-demo"
-            className="inline-flex items-center gap-2 bg-[#ff686c] hover:bg-[#e55d61] text-white font-semibold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-xl text-sm"
-          >
-            <span>See how it works</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-col items-center gap-4">
+            <Link
+              href="/book-demo"
+              className="inline-flex items-center gap-2 bg-[#ff686c] hover:bg-[#e55d61] text-white font-semibold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-xl text-sm"
+            >
+              <span>Book a demo</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/hidden-cost"
+              className="text-sm font-semibold text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white transition-colors"
+            >
+              Find your hidden cost
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -1095,7 +1103,7 @@ export function InstitutionView() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight">
-            More placements. Less admin. Reports that attract funding.
+            One system from enrolled to employed. Without the extra staff.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-slate-300">
             See what Clarivue can do for your program.
@@ -1106,13 +1114,13 @@ export function InstitutionView() {
               href="/book-demo"
               className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#ff686c] text-white text-lg font-semibold shadow-lg shadow-[#ff686c]/30 transition-all duration-300 hover:bg-[#e55d61] hover:shadow-xl hover:-translate-y-0.5 min-w-[260px]"
             >
-              Talk to us
+              Book a demo
             </a>
             <a
               href="/hidden-cost"
               className="text-xl font-semibold text-white/60 hover:text-white/90 transition-colors underline underline-offset-4 decoration-white/30 hover:decoration-white/50"
             >
-              or find your hidden cost →
+              Find your hidden cost
             </a>
           </div>
 

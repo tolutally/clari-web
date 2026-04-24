@@ -553,7 +553,7 @@ export default function PlacementGapCalculatorPage() {
               href="/book-demo"
               className="inline-flex items-center gap-2 rounded-full bg-[#ff686c] text-white px-8 py-3.5 text-base font-semibold hover:bg-[#e55d61] transition-colors shadow-lg shadow-[#ff686c]/30"
             >
-              Talk to us
+              Book a demo
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

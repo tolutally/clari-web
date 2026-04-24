@@ -317,13 +317,20 @@ export function InstitutionBenefits() {
         </div>
 
         {/* CTA */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/hidden-cost"
+            className="inline-flex items-center gap-2 text-[#003366]/70 hover:text-[#003366] font-semibold transition-colors"
+          >
+            <span>Find your hidden cost</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
           <Link
             href="/book-demo"
             className="group inline-flex items-center gap-2 bg-[#003366] hover:bg-[#00264d] text-white font-semibold px-6 py-3 rounded-full transition-all shadow-lg hover:shadow-xl"
           >
             <Sparkles className="w-4 h-4" />
-            <span>See it in action</span>
+            <span>Book a demo</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

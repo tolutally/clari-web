@@ -63,13 +63,21 @@ export default function EmployerConfidencePage() {
             <p className="text-white/70 mb-6">
               Learn how readiness verification keeps recruiter trust intact.
             </p>
-            <Link
-              href="/book-demo"
-              className="inline-flex items-center gap-2 bg-[#ff686c] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#ff5b5f] transition-colors"
-            >
-              Book a Demo
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+            <div className="flex flex-col items-center gap-4">
+              <Link
+                href="/book-demo"
+                className="inline-flex items-center gap-2 bg-[#ff686c] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#ff5b5f] transition-colors"
+              >
+                Book a demo
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/hidden-cost"
+                className="font-semibold text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white transition-colors"
+              >
+                Find your hidden cost
+              </Link>
+            </div>
           </div>
         </section>
       </main>
