@@ -199,6 +199,108 @@ body {
   }
 }
 
+@keyframes resumeFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes resumeDrift {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-0.6deg);
+  }
+}
+
+@keyframes resumePulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes resumeGlow {
+  0%,
+  100% {
+    opacity: 0.24;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes resumeBadgeBob {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.resume-document {
+  animation: resumeDrift 6.2s ease-in-out infinite;
+}
+
+.resume-card-alert {
+  animation: resumeFloat 4.4s ease-in-out infinite;
+}
+
+.resume-card-alert-delayed {
+  animation-delay: 0.8s;
+}
+
+.resume-card-fix {
+  animation: resumeFloat 5.1s ease-in-out infinite;
+}
+
+.resume-card-fix-delayed {
+  animation-delay: 0.7s;
+}
+
+.resume-card-fix-late {
+  animation-delay: 1.4s;
+}
+
+.resume-link-alert,
+.resume-link-fix,
+.resume-chip-missing {
+  animation: resumePulse 2.4s ease-in-out infinite;
+}
+
+.resume-link-fix-delayed {
+  animation-delay: 0.8s;
+}
+
+.resume-ready-pill {
+  animation: resumeBadgeBob 4.8s ease-in-out infinite;
+}
+
+.resume-scene-glow {
+  animation: resumeGlow 7s ease-in-out infinite;
+}
+
+.resume-scene-wave {
+  animation: resumePulse 3.8s ease-in-out infinite;
+}
+
+.resume-scene-wave-delayed {
+  animation-delay: 1.2s;
+}
+
 /* Blog Styles */
 .line-clamp-2 {
   display: -webkit-box;
@@ -345,6 +447,25 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes heroDashboardEnter {
+  0% { opacity: 0; transform: translateY(56px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes roleLeaderDotX {
+  0% { left: 0; transform: translateY(-4px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: calc(100% - 10px); transform: translateY(-4px); opacity: 0; }
+}
+
+@keyframes roleLeaderDotY {
+  0% { top: 0; transform: translateX(-5px); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: calc(100% - 10px); transform: translateX(-5px); opacity: 0; }
+}
+
 @keyframes float {
   0%, 100% { transform: translate(0, 0); }
   50% { transform: translate(20px, -20px); }
@@ -353,6 +474,25 @@ body {
 .animate-fade-in-up {
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
+}
+
+.hero-dashboard-enter {
+  animation: heroDashboardEnter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 260ms both;
+  will-change: transform, opacity;
+}
+
+.role-leader-dot-x {
+  animation: roleLeaderDotX 10s linear infinite;
+  will-change: transform, opacity;
+}
+
+.role-leader-dot-y {
+  animation: roleLeaderDotY 8.5s linear infinite;
+  will-change: transform, opacity;
+}
+
+.role-leader-dot-y-delayed {
+  animation-delay: 1.8s;
 }
 
 .animate-float {

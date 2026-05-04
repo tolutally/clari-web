@@ -119,7 +119,7 @@ export function Header({
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#ff686c] text-white hover:bg-[#ff5b5f] transition-colors shadow-sm"
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Book a demo</span>
+            <span>Get in Touch</span>
           </Link>
         </div>
       </div>

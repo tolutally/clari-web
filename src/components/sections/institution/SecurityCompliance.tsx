@@ -1,151 +1,136 @@
-import Image from "next/image";
-import { FileText, CheckCircle2, Accessibility, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { BellRing, Building2, CheckCircle2, LockKeyhole, ShieldCheck } from "lucide-react";
 
 export function SecurityCompliance() {
   return (
     <section className="w-full text-[#003366]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Section Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/50 px-3 py-1.5 bg-white/60 backdrop-blur-lg shadow-lg shadow-[#003366]/5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-sm font-semibold text-[#003366]">SECURITY &amp; COMPLIANCE</span>
-            </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-0 py-9 sm:py-10 lg:py-11">
+          <div className="text-center mb-7 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-[3rem] font-semibold tracking-[-0.04em] text-[#042b53] leading-[1.05]">
+              Enterprise Grade Security
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
-            Built for institutions where data governance is non-negotiable.
-          </h2>
-          <p className="mt-3 text-base text-[#003366]/70 max-w-2xl mx-auto">
-            PIPEDA and GDPR ready. SOC 2 aligned. Role-based access. Audit-ready reporting. Your data stays yours.
-          </p>
-        </div>
 
-        {/* Security & Compliance Card */}
-        <article className="rounded-3xl bg-white px-6 py-7 sm:px-7 sm:py-8 border flex flex-col lg:flex-row justify-between gap-8 border-[#003366]/15">
-          {/* Left side — Compliance badges */}
-          <div className="flex-1">
-            <div className="grid grid-cols-4 gap-3 max-w-md">
-              {[
-                { src: "/pipeda-logo.png", alt: "PIPEDA" },
-                { src: "/iso2001-logo.png", alt: "ISO 27001" },
-                { src: "/ferpa.png", alt: "FERPA (US)" },
-                { src: "/soc2-icon.jpg", alt: "SOC 2" },
-              ].map((badge, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-center gap-2 rounded-2xl bg-[#b8ccf4]/30 border border-[#003366]/10 px-3 py-3"
-                >
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={badge.src}
-                      alt={badge.alt}
-                      width={32}
-                      height={32}
-                      loading="lazy"
-                      sizes="32px"
-                      className="object-contain w-full h-full"
-                    />
-                  </div>
-                  <span className="text-[10px] font-semibold text-[#003366]/70 text-center">
-                    {badge.alt}
-                  </span>
+          <div className="grid gap-3 lg:grid-cols-3 lg:gap-3">
+            <article className="rounded-[24px] border border-[#042b53]/12 bg-white/90 p-5 shadow-[0_16px_36px_-34px_rgba(4,43,83,0.24)] backdrop-blur-sm">
+              <h3 className="text-[1.45rem] leading-none tracking-[-0.03em] font-medium text-[#042b53]">
+                Built for Trust
+              </h3>
+              <p className="mt-2 text-base leading-[1.45] text-[#042b53]/72 max-w-sm">
+                Protect student and program data with privacy standards built for institutional scrutiny.
+              </p>
+
+              <div className="mt-5 rounded-[18px] border border-[#042b53]/8 bg-[#fcfcfc] px-4 py-5">
+                <div className="mx-auto flex max-w-[220px] flex-col gap-2.5">
+                  {[
+                    { label: "FERPA Compliant", icon: ShieldCheck },
+                    { label: "HECVAT Ready", icon: CheckCircle2 },
+                  ].map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className="flex items-center justify-center gap-2 rounded-full border border-[#042b53]/16 bg-white px-4 py-2 text-[#042b53] shadow-[0_1px_0_rgba(255,255,255,0.9)]"
+                      >
+                        <Icon className="h-4 w-4 text-[#ff6b57]" strokeWidth={1.8} />
+                        <span className="text-sm font-medium">{item.label}</span>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
+              </div>
+            </article>
+
+            <article className="rounded-[24px] border border-[#042b53]/12 bg-white/90 p-5 shadow-[0_16px_36px_-34px_rgba(4,43,83,0.24)] backdrop-blur-sm">
+              <h3 className="text-[1.45rem] leading-none tracking-[-0.03em] font-medium text-[#042b53]">
+                Controlled Access
+              </h3>
+              <p className="mt-2 text-base leading-[1.45] text-[#042b53]/72 max-w-sm">
+                Institutions retain full ownership and role-based control over every workflow.
+              </p>
+
+              <div className="mt-5 rounded-[18px] border border-[#042b53]/8 bg-[#fcfcfc] px-4 py-4">
+                <div className="text-center text-[13px] font-medium text-[#042b53]">role-based access</div>
+                <div className="mt-4 flex items-center justify-between gap-2">
+                  <div className="flex flex-col gap-5 pt-0.5">
+                    {[0, 1].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5">
+                        <div className="h-7 w-7 rounded-[9px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
+                          <LockKeyhole className="h-3.5 w-3.5 text-[#444444]" strokeWidth={1.8} />
+                        </div>
+                        <svg width="42" height="18" viewBox="0 0 42 18" className="overflow-visible">
+                          <path d="M1 9 C10 9, 12 1, 21 1 S32 17, 41 17" fill="none" stroke="#0ea5e9" strokeWidth="1.6" strokeLinecap="round" />
+                        </svg>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="h-[60px] w-[60px] rounded-[12px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
+                    <Building2 className="h-7 w-7 text-[#444444]" strokeWidth={1.7} />
+                  </div>
+
+                  <div className="flex flex-col gap-5 pt-0.5">
+                    {[0, 1].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5">
+                        <svg width="42" height="18" viewBox="0 0 42 18" className="overflow-visible">
+                          <path d="M1 17 C10 17, 12 1, 21 1 S32 9, 41 9" fill="none" stroke="#ff6b57" strokeWidth="1.6" strokeLinecap="round" />
+                        </svg>
+                        <div className="h-7 w-7 rounded-[9px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
+                          <LockKeyhole className="h-3.5 w-3.5 text-[#444444]" strokeWidth={1.8} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article className="rounded-[24px] border border-[#042b53]/12 bg-white/90 p-5 shadow-[0_16px_36px_-34px_rgba(4,43,83,0.24)] backdrop-blur-sm">
+              <h3 className="text-[1.45rem] leading-none tracking-[-0.03em] font-medium text-[#042b53]">
+                Proactive Protection
+              </h3>
+              <p className="mt-2 text-base leading-[1.45] text-[#042b53]/72 max-w-sm">
+                Real-time monitoring and audit visibility keep institutional data review-ready.
+              </p>
+
+              <div className="mt-5 rounded-[18px] border border-[#042b53]/8 bg-[#fcfcfc] px-4 py-4">
+                <div className="flex items-center gap-3 pb-3">
+                  <div className="h-10 w-10 rounded-[10px] border border-[#042b53]/18 bg-white flex items-center justify-center">
+                    <BellRing className="h-4.5 w-4.5 text-[#444444]" strokeWidth={1.8} />
+                  </div>
+                  <p className="text-[14px] font-medium text-[#042b53]">24/7 Notifications and Testing</p>
+                </div>
+
+                <div className="relative mt-2 pl-7">
+                  <div className="absolute left-[8px] top-1 bottom-1 w-[1.5px] bg-[#042b53]/16" />
+                  <div className="space-y-5">
+                    {[
+                      { label: "1 user logged in", color: "bg-[#5aa595]" },
+                      { label: "Full Database is secure", color: "bg-[#5aa595]" },
+                      { label: "1 new user alert", color: "bg-[#df8a35]" },
+                    ].map((item) => (
+                      <div key={item.label} className="relative text-[14px] text-[#042b53]">
+                        <span className={`absolute -left-[20px] top-1.5 h-3 w-3 rounded-full ${item.color}`} />
+                        {item.label}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
 
-          {/* Right side — Triangular feature cards */}
-          <div className="flex-1 flex flex-col justify-center gap-4 lg:gap-5">
-            {/* Top item — Auditable */}
-            <div className="flex gap-3 items-start">
-              <div className="shrink-0 w-10 h-10 rounded-lg bg-[#0ea5e9]/15 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-[#0ea5e9]" strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#003366]">Auditable</p>
-                <p className="text-xs text-[#003366]/65 leading-snug">Session logs are exportable. Operational logs are retained 365+ days.</p>
-              </div>
-            </div>
-
-            {/* Middle item — Independently tested */}
-            <div className="flex gap-3 items-start">
-              <div className="shrink-0 w-10 h-10 rounded-lg bg-[#10b981]/15 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-[#10b981]" strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#003366]">Independently tested</p>
-                <p className="text-xs text-[#003366]/65 leading-snug">Third-party pen test completed. All findings are closed.</p>
-              </div>
-            </div>
-
-            {/* Bottom item — Accessible */}
-            <div className="flex gap-3 items-start">
-              <div className="shrink-0 w-10 h-10 rounded-lg bg-[#f59e0b]/15 flex items-center justify-center">
-                <Accessibility className="w-5 h-5 text-[#f59e0b]" strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#003366]">Accessible</p>
-                <p className="text-xs text-[#003366]/65 leading-snug">24/7 via browser or phone. Low-bandwidth friendly.</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        {/* Responsible AI Principles Card */}
-        <article className="rounded-3xl bg-gradient-to-br from-[#f8f0ff]/70 via-[#fef2f2]/50 to-[#fff7ed]/60 border-2 border-[#8b5cf6]/20 p-8 md:p-10 shadow-sm">
-          {/* Header row */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8b5cf6] to-[#ec4899] flex items-center justify-center shadow-md">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-[#003366] tracking-tight">
-                Responsible AI principles
-              </h2>
-            </div>
-            <a
-              href="/responsible-ai"
-              className="inline-flex items-center gap-2 rounded-full border border-[#ff686c]/30 bg-white px-5 py-2.5 text-sm font-medium text-[#ff686c] hover:bg-[#ff686c]/5 transition-colors shadow-sm"
+          <div className="mt-6 flex justify-center">
+            <Link
+              href="/book-demo"
+              className="inline-flex items-center justify-center rounded-xl bg-[#ff686c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#f05a46]"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Clarivue AI Principles
-            </a>
+              Get in Touch
+            </Link>
           </div>
-
-          {/* 3 column grid */}
-          <div className="grid md:grid-cols-3 gap-8 md:gap-10">
-            {/* Column 1 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-[#003366] mb-2 italic">
-                Transparent by design
-              </h3>
-              <p className="text-sm md:text-base text-[#003366]/60 leading-relaxed">
-                AI involvement is clearly communicated. Outputs support learning, not replace evaluation.
-              </p>
-            </div>
-            {/* Column 2 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-[#003366] mb-2 italic">
-                Human-in-the-loop
-              </h3>
-              <p className="text-sm md:text-base text-[#003366]/60 leading-relaxed">
-                AI supports decisions—doesn&apos;t make them alone. Educator judgment stays central.
-              </p>
-            </div>
-            {/* Column 3 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-[#003366] mb-2 italic">
-                Responsible boundaries
-              </h3>
-              <p className="text-sm md:text-base text-[#003366]/60 leading-relaxed">
-                No model training on content. No biometrics. No unapproved AI on student data.
-              </p>
-            </div>
-          </div>
-        </article>
+        </div>
       </div>
     </section>
   );

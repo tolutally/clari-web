@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Activity,
   ArrowRight,
@@ -10,9 +12,7 @@ import {
   Infinity,
   Link as LinkIcon,
   Lock,
-  Rocket,
   Send,
-  Settings2,
   ShieldCheck,
   Sparkles,
   Users,
@@ -22,7 +22,6 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 // import { TrustShowcase } from "@/components/sections/trust/TrustShowcase";
-import { StatsConfidence } from "@/components/sections/trust/StatsConfidence";
 import { CalculatorTeaser } from "@/components/sections/institution/CalculatorTeaser";
 import { InstitutionBenefits } from "@/components/sections/institution/InstitutionBenefits";
 import { SecurityCompliance } from "@/components/sections/institution/SecurityCompliance";
@@ -31,49 +30,12 @@ const ClarivueImpactCalculator = dynamic(
   () => import("@/components/sections/institution/ClarivueImpactCalculator"),
   { ssr: true }
 );
-const InstitutionPainPoints = dynamic(
-  () => import("@/components/sections/institution/InstitutionPainPoints"),
-  { ssr: true }
-);
 const BlogInsights = dynamic(
   () => import("@/components/sections/institution/BlogInsights").then(m => m.BlogInsights),
   { ssr: true }
 );
 // import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
 import { useEffect, useRef, useState, FormEvent } from "react";
-
-const comparisonRows = [
-  {
-    feature: "Outcome timing",
-    with: "Gaps flagged early",
-    without: "Problems show up after the outcome",
-  },
-  {
-    feature: "Support quality",
-    with: "Consistent evaluation every time",
-    without: "Support depends on the advisor",
-  },
-  {
-    feature: "Submission quality",
-    with: "Issues caught before submission",
-    without: "Resumes go out with mistakes",
-  },
-  {
-    feature: "Momentum",
-    with: "Continuous check-ins",
-    without: "Progress stalls between sessions",
-  },
-  {
-    feature: "Visibility",
-    with: "Live visibility across the caseload",
-    without: "No clear view of who needs help",
-  },
-  {
-    feature: "Reporting",
-    with: "Data already available",
-    without: "Scrambling when asked for results",
-  },
-];
 
 type CommunityTone =
   | "indigo"
@@ -186,6 +148,500 @@ const communityToneStyles: Record<CommunityTone, { bg: string; ring: string; was
     wash: "bg-zinc-500/10",
   },
 };
+
+const institutionRoleCards = [
+  {
+    title: "Program Director",
+    description:
+      "Get a real-time, program-wide view of placement rates, advisor capacity, cohort progress, and funder readiness so you can spot risk before quarterly reports do.",
+    icon: Activity,
+    iconWrapClass: "bg-[#ff6b57]/12",
+    iconClass: "text-[#ff6b57]",
+  },
+  {
+    title: "Career Services",
+    description:
+      "Monitor mock interview scores, resume readiness, and employer follow-through across every cohort in real time to spot operational gaps and reallocate advisor time before placements slip.",
+    icon: GraduationCap,
+    iconWrapClass: "bg-[#7c82ff]/14",
+    iconClass: "text-[#5a63ff]",
+  },
+  {
+    title: "Workforce Advisor",
+    description:
+      "Get a unified view of caseloads, at-risk learners, and check-in history so you can act early and spend more time on the people who need you, not on documentation.",
+    icon: Users,
+    iconWrapClass: "bg-[#0ea5e9]/14",
+    iconClass: "text-[#0284c7]",
+  },
+  {
+    title: "Intake & Enrollment",
+    description:
+      "Track enrollment volume, learner readiness baseline, and cohort momentum in one place to understand where to focus next intake's effort.",
+    icon: Send,
+    iconWrapClass: "bg-[#14b8a6]/14",
+    iconClass: "text-[#0f766e]",
+  },
+  {
+    title: "Funder & Compliance",
+    description:
+      "Reduce reporting workload and data prep by unifying every learner touchpoint so compliance teams can focus on outcomes, not on chasing advisors for case notes.",
+    icon: ClipboardCheck,
+    iconWrapClass: "bg-[#f59e0b]/14",
+    iconClass: "text-[#d97706]",
+  },
+  {
+    title: "Employer Partnerships",
+    description:
+      "Track which referrals land jobs, which employers keep coming back, and which roles your program fills fastest so you can grow partnerships from data, not from gut feel.",
+    icon: LinkIcon,
+    iconWrapClass: "bg-[#ec4899]/14",
+    iconClass: "text-[#db2777]",
+  },
+] as const;
+
+function ResumeDiagnosticsMock() {
+  return (
+    <div className="resume-scene relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute -left-10 top-16 h-px w-[55%] rotate-[-8deg] bg-[#b8ccf4]/80 resume-scene-wave" />
+        <div className="absolute -right-10 bottom-16 h-px w-[55%] rotate-[6deg] bg-[#b8ccf4]/80 resume-scene-wave resume-scene-wave-delayed" />
+        <div className="resume-scene-glow absolute left-[18%] top-10 h-56 w-56 rounded-full bg-white/35 blur-3xl" />
+      </div>
+
+      <div className="relative flex h-full items-center justify-between gap-3">
+        <div className="flex w-[26%] flex-col gap-2.5 pt-3">
+          <div className="resume-card-alert rounded-2xl border border-[#ff686c]/35 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(255,104,109,0.55)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff686c]/12 text-[#ff686c]">
+                <X className="h-4 w-4" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Caught</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Bullet missing metric</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">Experience section · line 3</p>
+          </div>
+
+          <div className="resume-card-alert resume-card-alert-delayed rounded-2xl border border-[#ff686c]/35 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(255,104,109,0.55)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff686c]/12 text-[#ff686c]">
+                <X className="h-4 w-4" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Caught</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Missing keyword</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">SQL not matched to job listing</p>
+          </div>
+        </div>
+
+        <div className="relative w-[42%] shrink-0 self-stretch pt-1">
+          <div className="resume-document mx-auto h-full min-h-[270px] rounded-[22px] border border-[#102c64]/15 bg-white px-5 py-4 shadow-[0_28px_70px_-34px_rgba(16,44,100,0.34)]">
+            <div className="h-3 w-28 rounded-sm bg-[#102c64]" />
+            <div className="mt-2 h-1.5 w-18 rounded-sm bg-[#102c64]/45" />
+            <div className="mt-2 h-2 w-36 rounded-sm bg-[#5b7393]/60" />
+            <div className="mt-3 h-px w-full bg-[#e2e8f2]" />
+
+            <div className="mt-3 space-y-3">
+              <div>
+                <div className="h-2 w-14 rounded-sm bg-[#102c64]" />
+                <div className="mt-2 space-y-1.5">
+                  <div className="h-1.5 w-full rounded-sm bg-[#5b7393]/50" />
+                  <div className="h-1.5 w-[90%] rounded-sm bg-[#5b7393]/50" />
+                  <div className="h-1.5 w-[82%] rounded-sm bg-[#5b7393]/50" />
+                </div>
+              </div>
+
+              <div>
+                <div className="h-2 w-16 rounded-sm bg-[#102c64]" />
+                <div className="mt-2 space-y-1.5">
+                  <div className="h-1.5 w-[78%] rounded-sm bg-[#5b7393]/50" />
+                  <div className="h-1.5 w-[96%] rounded-sm bg-[#5b7393]/50" />
+                  <div className="h-1.5 w-[70%] rounded-sm bg-[#5b7393]/50" />
+                </div>
+              </div>
+
+              <div>
+                <div className="h-2 w-12 rounded-sm bg-[#102c64]" />
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {[
+                    { label: "Excel", tone: "bg-[#b8ccf4]/60 text-[#102c64]" },
+                    { label: "Email", tone: "bg-[#b8ccf4]/60 text-[#102c64]" },
+                    { label: "Teamwork", tone: "bg-[#b8ccf4]/60 text-[#102c64]" },
+                    { label: "missing", tone: "border border-dashed border-[#ff686c]/70 bg-[#ff686c]/10 text-[#ff686c]" },
+                  ].map((chip) => (
+                    <span
+                      key={chip.label}
+                      className={`rounded-full px-2.5 py-1 text-[9px] font-medium ${chip.tone} ${chip.label === "missing" ? "resume-chip-missing" : ""}`}
+                    >
+                      {chip.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="h-2 w-14 rounded-sm bg-[#102c64]" />
+                <div className="mt-2 space-y-1.5">
+                  <div className="h-1.5 w-[72%] rounded-sm bg-[#5b7393]/50" />
+                  <div className="h-1.5 w-[58%] rounded-sm bg-[#5b7393]/50" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="resume-link-alert absolute left-[-24px] top-[102px] h-16 w-px rotate-[-24deg] bg-[linear-gradient(to_bottom,rgba(255,104,109,0),rgba(255,104,109,0.7),rgba(255,104,109,0))]" />
+          <div className="resume-link-fix absolute right-[-22px] top-[108px] h-px w-10 bg-[linear-gradient(to_right,rgba(16,44,100,0),rgba(16,44,100,0.35),rgba(16,44,100,0.65))]" />
+          <div className="resume-link-fix resume-link-fix-delayed absolute right-[-16px] top-[178px] h-px w-9 bg-[linear-gradient(to_right,rgba(16,44,100,0),rgba(16,44,100,0.35),rgba(16,44,100,0.65))]" />
+        </div>
+
+        <div className="flex w-[26%] flex-col gap-2.5 pt-3">
+          <div className="resume-card-fix rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#102c64]/10 text-[#102c64]">
+                <Check className="h-4 w-4" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Fixed</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Margins reformatted</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">ATS-readable layout restored</p>
+          </div>
+
+          <div className="resume-card-fix resume-card-fix-delayed rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">ATS pass rate</p>
+            <div className="mt-2.5 h-2 w-full rounded-full bg-[#b8ccf4]/55">
+              <div className="bar-fill h-2 rounded-full bg-[#102c64]" style={{ ["--bar-width" as string]: "94%" }} />
+            </div>
+            <div className="mt-2.5 flex items-end gap-2">
+              <span className="text-[24px] font-semibold leading-none text-[#102c64]">94%</span>
+              <span className="pb-0.5 text-[11px] font-medium text-[#ff686c]">up from 47%</span>
+            </div>
+            <p className="mt-1.5 text-[10px] text-[#5b7393]">Across the last 200 resumes reviewed</p>
+          </div>
+
+          <div className="resume-card-fix resume-card-fix-late rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#102c64]/10 text-[#102c64]">
+                <Check className="h-4 w-4" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Fixed</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Average time to fix</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">2 minutes per resume</p>
+          </div>
+
+          <div className="resume-ready-pill self-end rounded-full bg-[#102c64] px-3.5 py-1.5 text-[12px] font-semibold text-white shadow-[0_18px_34px_-24px_rgba(16,44,100,0.55)]">
+            ATS ready ✓
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MockInterviewsMock() {
+  return (
+    <div className="relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute -left-10 top-16 h-px w-[55%] rotate-[-8deg] bg-[#b8ccf4]/80" />
+        <div className="absolute -right-10 bottom-16 h-px w-[55%] rotate-[6deg] bg-[#b8ccf4]/80" />
+      </div>
+
+      <div className="relative flex h-full items-center justify-between gap-3">
+        <div className="flex w-[28%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Rubric scores</p>
+            <div className="mt-2.5 space-y-2">
+              {[
+                { label: "Clarity", value: 86, tone: "bg-[#102c64]" },
+                { label: "Composure", value: 92, tone: "bg-[#102c64]" },
+                { label: "Specificity", value: 58, tone: "bg-[#ff686c]" },
+              ].map((item) => (
+                <div key={item.label} className="grid grid-cols-[1fr_auto] gap-2 text-[10px] text-[#5b7393]">
+                  <span>{item.label}</span>
+                  <span className={`font-semibold ${item.value < 70 ? "text-[#ff686c]" : "text-[#102c64]"}`}>{item.value}</span>
+                  <div className="col-span-2 h-1.5 rounded-full bg-[#b8ccf4]/50">
+                    <div className={`${item.tone} h-1.5 rounded-full`} style={{ width: `${item.value}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#ff686c]/20 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff686c]/12 text-[#ff686c]">
+                <X className="h-3.5 w-3.5" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Flagged</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Vague answers</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">Recommend coaching before referral</p>
+          </div>
+        </div>
+
+        <div className="relative flex w-[34%] items-center justify-center self-stretch">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="h-[210px] w-[210px] rounded-full border border-[#b8ccf4]/50" />
+            <div className="absolute h-[162px] w-[162px] rounded-full border border-[#b8ccf4]/60" />
+            <div className="absolute h-[116px] w-[116px] rounded-full border border-[#b8ccf4]/70" />
+          </div>
+          <div className="relative z-10 flex h-[156px] w-[156px] flex-col items-center justify-center rounded-full border border-[#102c64]/15 bg-white px-4 shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
+            <div className="mb-2.5 inline-flex items-center gap-2 rounded-full bg-[#ff686c] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
+              <span className="h-2 w-2 rounded-full bg-white" />
+              Live
+            </div>
+            <div className="flex items-end gap-1">
+              {[20, 32, 44, 24, 52, 36, 48, 28, 40, 22].map((height, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 rounded-full ${index >= 4 && index <= 7 ? "bg-[#ff686c]" : "bg-[#102c64]/70"}`}
+                  style={{ height }}
+                />
+              ))}
+            </div>
+            <p className="mt-2.5 max-w-[92px] text-center text-[9px] uppercase tracking-[0.12em] leading-tight text-[#5b7393]">
+              Interview · 12:43
+            </p>
+          </div>
+        </div>
+
+        <div className="flex w-[30%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Learner · Marcus J.</p>
+            <div className="mt-2 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#102c64] text-[11px] font-semibold text-white">MJ</div>
+              <div>
+                <p className="text-[13px] font-semibold text-[#102c64]">79 / 100</p>
+                <p className="text-[10px] text-[#5b7393]">Patient care · cohort 14</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Cohort throughput</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="text-[24px] font-semibold leading-none text-[#102c64]">28</span>
+              <span className="text-[10px] text-[#5b7393]">interviews this week</span>
+            </div>
+            <p className="mt-1.5 text-[10px] text-[#5b7393]">Manually: 21 advisor hours</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#102c64]/10 text-[#102c64]">
+                <Check className="h-3.5 w-3.5" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Verdict</span>
+            </div>
+            <p className="mt-1.5 text-[12px] font-semibold text-[#102c64]">Ready for referral</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">After one coaching session</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdvisorWorkflowMock() {
+  return (
+    <div className="relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute left-10 top-8 h-48 w-48 rounded-full bg-white/35 blur-3xl" />
+      </div>
+
+      <div className="relative flex h-full items-center justify-between gap-3">
+        <div className="flex w-[25%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Caseload</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="text-[24px] font-semibold leading-none text-[#102c64]">42</span>
+              <span className="text-[10px] text-[#5b7393]">active learners</span>
+            </div>
+            <p className="mt-1.5 text-[10px] text-[#5b7393]">12 need attention this week</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Auto-logged</p>
+            <div className="mt-2 space-y-1.5 text-[10px] text-[#102c64]">
+              <div className="flex items-center justify-between rounded-lg bg-[#003366]/[0.03] px-2 py-1.5"><span>Check-in notes</span><span className="font-semibold">18</span></div>
+              <div className="flex items-center justify-between rounded-lg bg-[#003366]/[0.03] px-2 py-1.5"><span>Follow-ups</span><span className="font-semibold">9</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[42%]">
+          <div className="rounded-[22px] border border-[#102c64]/15 bg-white p-4 shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Advisor workflow</p>
+                <p className="mt-1 text-[13px] font-semibold text-[#102c64]">From session to next action</p>
+              </div>
+              <span className="rounded-full bg-[#102c64]/8 px-3 py-1 text-[10px] font-semibold text-[#102c64]">Live queue</span>
+            </div>
+
+            <div className="mt-3 space-y-2.5">
+              {[
+                { label: "1. Session captured", meta: "Transcript + notes", tone: "bg-[#102c64]" },
+                { label: "2. Risk scored", meta: "Interview anxiety flagged", tone: "bg-[#ff686c]" },
+                { label: "3. Follow-up drafted", meta: "Mock panel scheduled", tone: "bg-[#102c64]" },
+                { label: "4. Employer intro ready", meta: "Referral packet assembled", tone: "bg-[#102c64]" },
+              ].map((step, index) => (
+                <div key={step.label} className="flex items-center gap-3">
+                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-white ${step.tone}`}>
+                    {index + 1}
+                  </div>
+                  <div className="flex-1 rounded-xl border border-[#003366]/8 bg-[#003366]/[0.03] px-3 py-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-[11px] font-semibold text-[#102c64]">{step.label}</span>
+                      <span className="text-[10px] text-[#5b7393]">{step.meta}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex w-[25%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Backlog</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="text-[24px] font-semibold leading-none text-emerald-600">0 days</span>
+            </div>
+            <p className="mt-1.5 text-[10px] text-[#5b7393]">Down from 3 weeks</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Next action</p>
+            <p className="mt-2 text-[12px] font-semibold text-[#102c64]">Coach Marcus on specificity</p>
+            <p className="mt-1 text-[10px] text-[#5b7393]">Suggested before employer referral</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Time saved</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="text-[24px] font-semibold leading-none text-[#102c64]">6 hrs</span>
+              <span className="text-[10px] text-[#5b7393]">per advisor / week</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FunderReportsMock() {
+  return (
+    <div className="relative min-h-[240px] overflow-hidden rounded-[24px] border border-[#003366]/10 bg-[#eaf1fb] px-4 py-3 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[272px]">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute -left-10 top-16 h-px w-[55%] rotate-[-8deg] bg-[#b8ccf4]/80" />
+        <div className="absolute -right-10 bottom-16 h-px w-[55%] rotate-[6deg] bg-[#b8ccf4]/80" />
+      </div>
+
+      <div className="relative flex h-full items-center justify-between gap-2.5">
+        <div className="flex w-[22%] flex-col gap-2">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Data sources</p>
+            <div className="mt-1.5 space-y-1 text-[9px] text-[#102c64]">
+              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#102c64]" />SIS · Banner</div>
+              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#102c64]" />LMS · Canvas</div>
+              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#ff686c]" />Clarivue engine</div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Prep time</p>
+            <p className="mt-1.5 text-[20px] font-semibold leading-none text-[#102c64]">0 hrs</p>
+            <p className="mt-1 text-[9px] text-[#5b7393]">Down from 38</p>
+          </div>
+        </div>
+
+        <div className="w-[48%]">
+          <div className="overflow-hidden rounded-[20px] border border-[#102c64]/15 bg-white shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
+            <div className="bg-[#102c64] px-3 py-2.5 text-white">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-white/65">Quarterly funder report</p>
+                  <p className="mt-0.5 text-[13px] font-semibold">WIOA Title I · Q1 2026</p>
+                </div>
+                <span className="rounded-full bg-white/15 px-2.5 py-1 text-[9px] font-semibold">Auto-filled</span>
+              </div>
+            </div>
+            <div className="p-3">
+              <div className="grid grid-cols-2 gap-3 border-b border-[#e2e8f2] pb-2.5">
+                <div>
+                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Program</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-[#102c64]">Healthcare Bridge</p>
+                </div>
+                <div>
+                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Reporting period</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-[#102c64]">Jan 1 - Mar 31</p>
+                </div>
+              </div>
+
+              <div className="space-y-2 py-2.5 border-b border-[#e2e8f2]">
+                {[
+                  ["Total enrolled", "142", "SIS"],
+                  ["Completed training", "128", "LMS"],
+                  ["Mock interviews", "119", "Clarivue"],
+                  ["Referred to employer", "94", "Clarivue"],
+                  ["Placed in employment", "68", "Clarivue"],
+                  ["Placement rate", "53%", "up from 31%"],
+                ].map(([label, value, source]) => (
+                  <div key={label} className="grid grid-cols-[1fr_auto_auto] items-center gap-2 text-[9px] text-[#5b7393]">
+                    <span className={label === "Placed in employment" ? "font-semibold text-[#102c64]" : undefined}>{label}</span>
+                    <span className="font-semibold text-[#102c64]">{value}</span>
+                    <span className={`rounded px-1.5 py-0.5 text-[8px] ${source === "Clarivue" || source === "up from 31%" ? "bg-[#ff686c]/10 text-[#ff686c]" : "bg-[#102c64]/8 text-[#102c64]"}`}>{source}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="py-2.5 border-b border-[#e2e8f2]">
+                <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Narrative summary</p>
+                <div className="mt-1.5 space-y-1">
+                  <div className="h-1.5 w-full rounded-sm bg-[#5b7393]/40" />
+                  <div className="h-1.5 w-[92%] rounded-sm bg-[#5b7393]/40" />
+                  <div className="h-1.5 w-full rounded-sm bg-[#5b7393]/40" />
+                  <div className="h-1.5 w-[72%] rounded-sm bg-[#5b7393]/40" />
+                </div>
+              </div>
+
+              <div className="pt-2.5 flex items-center gap-2 text-[10px] font-medium text-[#102c64]">
+                <span className="flex h-4 w-4 items-center justify-center rounded bg-[#102c64] text-white"><Check className="h-3 w-3" strokeWidth={2.5} /></span>
+                Reviewed and ready to submit
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex w-[22%] flex-col gap-2">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Compliance</p>
+            <div className="mt-1.5 space-y-1 text-[9px] text-[#102c64]">
+              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />All fields filled</div>
+              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />PII redacted</div>
+              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />Audit trail logged</div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-[#ff686c] p-2.5 text-white shadow-[0_18px_30px_-26px_rgba(255,104,109,0.55)]">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-white/75">Deadline</p>
+            <p className="mt-1.5 text-[13px] font-semibold">12 days early</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Next report</p>
+            <p className="mt-1.5 text-[11px] font-semibold text-[#102c64]">SNAP E&T</p>
+            <p className="mt-1 text-[9px] text-[#5b7393]">Generating · 64%</p>
+            <div className="mt-1.5 h-1.5 rounded-full bg-[#b8ccf4]/50">
+              <div className="bar-fill h-1.5 rounded-full bg-[#102c64]" style={{ ["--bar-width" as string]: "64%" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function RequestAccessForm() {
   const [name, setName] = useState("");
@@ -326,28 +782,8 @@ export function InstitutionView() {
   const coachingPct = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
   const advisoryCardRef = useRef<HTMLDivElement>(null);
-  const comparisonRef = useRef<HTMLDivElement>(null);
   const [advisoryAnimated, setAdvisoryAnimated] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
-
-  // Comparison slide-in animation
-  useEffect(() => {
-    const el = comparisonRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.querySelectorAll(".compare-slide-left, .compare-slide-right").forEach(
-            (card) => card.classList.add("compare-visible")
-          );
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   useEffect(() => {
     const animateProgress = () => {
@@ -454,7 +890,7 @@ export function InstitutionView() {
       {/* Hero */}
       <section
         id="institutions-hero"
-        className="relative bg-[#f8fafe] min-h-[85vh] overflow-hidden flex items-center justify-center py-24 px-6 sm:px-12 lg:px-24"
+        className="relative bg-[#f8fafe] min-h-[92vh] overflow-hidden flex items-start justify-center px-6 pt-10 pb-12 sm:px-12 sm:pt-14 sm:pb-14 lg:px-20 lg:pt-16 lg:pb-16"
       >
         {/* Background Grid Layer */}
         <div 
@@ -466,53 +902,64 @@ export function InstitutionView() {
         />
 
         {/* Decorative Floating Elements */}
-        <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] rounded-full bg-rose-200/40 blur-[100px] animate-float pointer-events-none z-0" />
-        <div className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-blue-200/40 blur-[120px] animate-float-delayed pointer-events-none z-0" />
+        <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-rose-200/40 blur-[120px] animate-float pointer-events-none z-0" />
+        <div className="absolute bottom-[10%] left-[5%] w-[600px] h-[600px] rounded-full bg-blue-200/40 blur-[140px] animate-float-delayed pointer-events-none z-0" />
 
         {/* Main Content */}
-        <div className="relative z-10 max-w-[1000px] mx-auto w-full flex flex-col items-start">
+        <div className="relative z-10 max-w-[1280px] mx-auto w-full flex flex-col items-center text-center">
           
           {/* Badge */}
-          <div className="animate-fade-in-up inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur-sm px-4 py-2 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.05)] border border-slate-100/80">
+          <div className="animate-fade-in-up inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur-sm px-5 py-2.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.05)] border border-slate-100/80">
             <div className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-100">
               <div className="absolute h-full w-full animate-ping rounded-full bg-rose-300 opacity-60" />
               <div className="relative h-1.5 w-1.5 rounded-full bg-rose-500" />
             </div>
             <span className="text-xs font-medium tracking-[0.08em] uppercase text-[#042b53]">
-              For training & workforce programs
+              Institutional Agentic AI
             </span>
           </div>
 
           {/* Headline */}
-          <h1 className="animate-fade-in-up delay-100 mt-10 text-5xl sm:text-6xl md:text-[5.5rem] leading-[1.05] font-semibold tracking-tight text-[#042b53] max-w-4xl">
-            Move more people from training into jobs
+            <h1 className="animate-fade-in-up delay-100 mt-12 text-4xl sm:text-[2.85rem] md:text-[3rem] lg:text-[3.1rem] xl:text-[3.45rem] leading-[1.08] font-semibold tracking-[-0.03em] text-[#042b53]">
+              <span className="block lg:whitespace-nowrap">AI Operations Engine built for</span>
+              <span className="block lg:whitespace-nowrap">Workforce and Training Programs</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="animate-fade-in-up delay-200 mt-8 text-lg sm:text-xl md:text-2xl text-slate-500 max-w-3xl leading-relaxed font-normal">
-            More placements. Less admin. Proof that funders believe. From enrollment to employment, covered.
+            <p className="animate-fade-in-up delay-200 mt-8 max-w-3xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
+            Clarivue automates your institution's training-to-employment pipeline and multiplies your job placement rates -simply by enrolling a cohort.
           </p>
 
           {/* Buttons */}
-          <div className="animate-fade-in-up delay-300 mt-12 flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
+          <div className="animate-fade-in-up delay-300 mt-14 flex flex-col sm:flex-row items-center justify-center gap-5">
             <a
               href="/hidden-cost"
-              className="w-full sm:w-auto rounded-full bg-white px-8 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
+              className="rounded-full bg-white px-10 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
             >
-              Find your hidden cost
+              See your cost
             </a>
             <a
               href="/book-demo"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-8 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-10 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
             >
-              Book a demo
+              Get in Touch
               <ArrowRight className="w-5 h-5 shrink-0" />
             </a>
           </div>
 
+          <div className="hero-dashboard-enter mt-12 w-full max-w-6xl">
+            <div className="relative mx-auto aspect-[1060/580] w-full overflow-hidden rounded-[28px] border border-[#042b53]/10 bg-white shadow-[0_30px_80px_-28px_rgba(4,43,83,0.28)]">
+              <img
+                src="/clarivue_hero_dashboard_v7.svg"
+                alt="Clarivue dashboard preview"
+                className="absolute left-[-6.61%] top-[-12.07%] w-[119.81%] max-w-none"
+              />
+            </div>
+          </div>
+
           {/* Footer Note */}
-          <div className="animate-fade-in-up delay-400 mt-8 flex items-start sm:items-center gap-2.5 text-sm md:text-base text-slate-400 font-normal">
-            <Gift className="w-5 h-5 text-[#ff5a5f] shrink-0 mt-0.5 sm:mt-0" />
+          <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center gap-2.5 text-sm md:text-base text-slate-400 font-normal">
+            <Gift className="w-5 h-5 text-[#ff5a5f] shrink-0" />
             <p>30 minutes free. Test with a few learners and see the gaps. No credit card.</p>
           </div>
 
@@ -545,7 +992,7 @@ export function InstitutionView() {
       */}
 
       {/* Partner Brand Strip */}
-      <div className="pt-6 pb-6">
+      <div className="pt-0 pb-6">
         <p className="text-[22px] font-bold uppercase tracking-[0.25em] text-[#003366]/55 text-center mb-6">
           Selected by Canada's leading innovation ecosystem
         </p>
@@ -574,516 +1021,191 @@ export function InstitutionView() {
         </div>
       </div>
 
-      {/* Pain Points / Use Cases */}
-      <InstitutionPainPoints />
+      {/* Pain Points / Use Cases hidden for now */}
 
-      {/* Last Mile Statement */}
-      <section className="w-full bg-[#003366] py-12 md:py-16 relative overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at center, #ffffff 1.5px, transparent 1.5px)", backgroundSize: "24px 24px" }} />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#ff686c] rounded-full blur-[140px] opacity-30 pointer-events-none" />
-        <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-blue-400 rounded-full blur-[120px] opacity-20 pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
-          <div className="inline-flex items-center justify-center p-2.5 rounded-xl bg-white/10 backdrop-blur-md mb-5 border border-white/10">
-            <Rocket className="w-5 h-5 text-[#ff686c]" strokeWidth={1.5} />
-          </div>
-
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-white mb-4 max-w-2xl">
-            The gap between training and employment is where programs lose people.
-          </h2>
-
-          <p className="text-slate-300 text-base md:text-lg max-w-xl mb-6 font-normal leading-relaxed">
-            Not because of skills. Because of resumes that don&apos;t land, interviews no one prepared them for, momentum that dies between meetings, and systems held together by spreadsheets and memory. Clarivue closes that gap.
-          </p>
-
-          <div className="flex flex-col items-center gap-4">
-            <Link
-              href="/book-demo"
-              className="inline-flex items-center gap-2 bg-[#ff686c] hover:bg-[#e55d61] text-white font-semibold px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-xl text-sm"
-            >
-              <span>Book a demo</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/hidden-cost"
-              className="text-sm font-semibold text-white/70 underline underline-offset-4 decoration-white/30 hover:text-white transition-colors"
-            >
-              Find your hidden cost
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Last Mile Statement hidden for now */}
 
       {/* Features + Feature Details (bundled, no gaps) */}
       <section
         id="institutions-features"
         className="md:px-10 max-w-6xl mx-auto px-6"
       >
-        {/* SECTION PILL */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur border-[#003366]/15 bg-white/70">
-            <Sparkles className="h-4 w-4 text-sky-700" strokeWidth={1.5} />
-            <span className="text-sm text-[#003366]">WHAT YOU GET</span>
-          </div>
-        </div>
-
         {/* SECTION TITLE */}
-        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366] text-center mt-6">
-         One platform covers
-          <span className="block">the gap between trained and hired.</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-2xl text-center text-base md:text-lg font-normal text-[#003366]/70">
-          Every step from resume to job offer — tracked, managed, and nothing falling through the cracks.
-        </p>
+        <div className="pl-1 text-left sm:pl-2">
+          <div className="max-w-6xl">
+            <h2 className="text-3xl sm:text-4xl lg:text-[3.1rem] font-semibold tracking-[-0.04em] text-[#003366] leading-[1.05] lg:whitespace-nowrap">
+              Your placement workflow, finally running on its own.
+            </h2>
+            <p className="mt-4 text-base md:text-lg lg:text-[1.05rem] font-normal text-[#003366]/70 lg:whitespace-nowrap">
+              Pull every step from training to placement into one engine your team actually trusts.
+            </p>
+          </div>
+          <Link
+            href="/book-demo"
+            className="mt-6 inline-flex items-center justify-center gap-2 self-start rounded-xl bg-[#ff686c] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#f05a46]"
+          >
+            Get in Touch
+          </Link>
+        </div>
 
         {(() => {
           const FEATURES = [
     {
   icon: <Users className="h-5 w-5" strokeWidth={1.5} />,
-  title: "AI Resume Fixer",
+  title: "Catch resumes before they fail",
   description:
-    "Send job-ready resumes, not almost-ready ones. One missing keyword. One formatting mistake. That's all it takes for ATS to reject someone your program spent months training. Fix it before it goes out.",
+    "Fix keywords, formatting, and ATS gaps automatically — so candidates never get rejected before being read.",
   color: "bg-fuchsia-500",
   image: "/employer_bridge.mp4",
 },
 {
   icon: <Infinity className="h-5 w-5" strokeWidth={1.5} />,
-  title: "Mock Interview Engine",
+  title: "Run mock interviews at cohort scale",
   description:
-    "Your learners only get one shot at a first impression. Every unprepared interview costs you a placement and an employer's trust. Practice them on the real job, score them honestly, and know who's ready before the employer finds out who isn't.",
+    "Score every learner on the same rubric employers use, before they walk into the interview.",
   color: "bg-emerald-500",
   image: "/Practicing_Job_Interview_On_Laptop.mp4",
 },
 {
-  icon: <Settings2 className="h-5 w-5" strokeWidth={1.5} />,
-  title: "Voice Check-In",
-  description:
-    "Stop losing people between meetings. Clients drop off when nobody checks in. Momentum dies in the gap between appointments. Programs that stay connected between sessions keep people moving.",
-  color: "bg-indigo-500",
-  image: "/check-in-clarivue.mp4",
-},
-{
   icon: <BarChart2 className="h-5 w-5" strokeWidth={1.5} />,
-  title: "Case Autopilot",
+  title: " Keep advisors in front of learners, not paperwork",
   description:
-    "Know who's falling behind before they disappear. Spreadsheets don't flag at-risk clients. Memory doesn't scale. Track every client's progress automatically and intervene early instead of finding out late.",
+    "Auto-capture case notes, follow-ups, and check-ins between sessions.",
   color: "bg-sky-500",
   image: "/Career_Readiness_Dashboard_Video.mp4",
 },
 {
   icon: <ClipboardCheck className="h-5 w-5" strokeWidth={1.5} />,
-  title: "AI Notes Capture",
+  title: "Generate funder reports that already know the answer",
   description:
-    "Stop choosing between helping people and documenting it. Every hour spent on case notes is an hour not spent on clients. Capture insights and log it automatically to give advisors their evenings back and give funders better data.",
+    "Real-time engagement and outcome data feeds WIOA, SNAP E&T, and grant narratives.",
   color: "bg-amber-500",
   image: "/ai-capture.mp4",
 },
           ];
 
           return (
-            <div className="mt-12 flex flex-col lg:flex-row gap-10 lg:gap-14 items-start">
+            <div className="mt-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
               {/* Left: Accordion */}
-              <div className="w-full lg:w-5/12 divide-y divide-[#003366]/10">
+              <div className="w-full lg:w-[34%] divide-y divide-[#003366]/10">
                 {FEATURES.map((f, i) => (
                   <button
                     key={i}
                     onClick={() => setActiveFeature(i)}
-                    className="w-full text-left py-5 group"
+                    onMouseEnter={() => setActiveFeature(i)}
+                    onFocus={() => setActiveFeature(i)}
+                    className={`w-full text-left py-3 group rounded-2xl px-3 transition-all duration-300 ${
+                      activeFeature === i ? "bg-[#003366]/[0.035]" : "hover:bg-[#003366]/[0.02]"
+                    }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <span className={`text-[#003366]/70 group-hover:text-[#003366] transition-colors`}>
+                        <span className={`text-[#003366]/70 group-hover:text-[#003366] transition-all duration-300 ${
+                          activeFeature === i ? "scale-105 text-[#003366]" : ""
+                        }`}>
                           {f.icon}
                         </span>
-                        <span className={`text-lg font-semibold transition-colors ${
-                          activeFeature === i ? "text-[#003366]" : "text-[#003366]/70 group-hover:text-[#003366]"
+                        <span className={`text-[16px] font-semibold leading-tight transition-all duration-300 ${
+                          activeFeature === i
+                            ? "translate-x-1 text-[#003366]"
+                            : "text-[#003366]/70 group-hover:translate-x-1 group-hover:text-[#003366]"
                         }`}>
                           {f.title}
                         </span>
                       </div>
                       <ChevronDown
-                        className={`h-5 w-5 text-[#003366]/40 transition-transform duration-300 ${
-                          activeFeature === i ? "rotate-180" : ""
+                        className={`h-5 w-5 text-[#003366]/40 transition-all duration-300 ${
+                          activeFeature === i ? "rotate-180 text-[#003366]" : "group-hover:text-[#003366]/70"
                         }`}
                         strokeWidth={1.5}
                       />
                     </div>
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                        activeFeature === i ? "max-h-40 opacity-100 mt-3" : "max-h-0 opacity-0"
+                      className={`grid overflow-hidden transition-all duration-300 ease-out ${
+                        activeFeature === i ? "grid-rows-[1fr] opacity-100 mt-2" : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
-                      <p className="text-sm text-[#003366]/60 leading-relaxed pl-8">
-                        {f.description}
-                      </p>
+                      <div className="min-h-0">
+                        <p className={`pl-8 text-[12px] leading-relaxed text-[#003366]/60 transition-all duration-300 ${
+                          activeFeature === i ? "translate-y-0" : "-translate-y-2"
+                        }`}>
+                          {f.description}
+                        </p>
+                      </div>
                     </div>
                   </button>
                 ))}
               </div>
 
               {/* Right: Image area with overlapping UI card */}
-              <div className="hidden lg:block w-full lg:w-7/12">
-                <div className="relative min-h-[420px] lg:min-h-[480px]">
-                  {/* GIF image area — sits to the right */}
-                  <div className="absolute right-0 top-4 bottom-4 w-[75%] rounded-3xl overflow-hidden">
-                    <video
-                      src={FEATURES[activeFeature].image}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="metadata"
-                      className="w-full h-full object-cover transition-opacity duration-500"
-                      key={activeFeature}
-                    />
-                    {/* Subtle gradient overlay for contrast with white card */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent pointer-events-none" />
-                  </div>
-
-                  {/* White UI card — overlaps left edge */}
-                  <div className={`absolute left-0 -translate-y-1/2 w-[39%] max-w-xs z-10 transition-all duration-500 ${activeFeature === 1 ? "top-[25%]" : "top-[80%]"}`}>
-                    <div className="bg-white rounded-2xl shadow-2xl shadow-black/[0.08] border border-[#003366]/10 overflow-hidden">
-
-                      {/* ── AI Resume Fixer card ── */}
-                      {activeFeature === 0 && (
-                        <div className="p-3.5 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="w-7 h-7 rounded-lg bg-fuchsia-100 flex items-center justify-center">
-                              <Users className="h-3.5 w-3.5 text-fuchsia-600" strokeWidth={2} />
-                            </span>
-                            <div>
-                              <p className="text-xs font-bold text-[#003366]">ATS Optimization</p>
-                              <p className="text-[9px] text-[#003366]/40">Real-time keyword analysis</p>
-                            </div>
-                          </div>
-
-                          {/* Before/After comparison */}
-                          <div className="space-y-1.5">
-                            <div className="rounded-lg bg-rose-50 border border-rose-200/60 px-2.5 py-1.5">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-rose-600 uppercase">Before</span>
-                                <span className="text-[9px] text-rose-500">3 keywords missing</span>
-                              </div>
-                              <div className="flex gap-1">
-                                {["SQL", "Agile", "Tableau"].map((kw) => (
-                                  <span key={kw} className="rounded bg-rose-100 px-1.5 py-0.5 text-[8px] font-medium text-rose-600 line-through">{kw}</span>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="rounded-lg bg-emerald-50 border border-emerald-200/60 px-2.5 py-1.5">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-[9px] font-semibold text-emerald-600 uppercase">After</span>
-                                <span className="text-[9px] text-emerald-500">ATS Ready ✓</span>
-                              </div>
-                              <div className="flex gap-1">
-                                {["SQL", "Agile", "Tableau"].map((kw) => (
-                                  <span key={kw} className="rounded bg-emerald-100 px-1.5 py-0.5 text-[8px] font-medium text-emerald-700">{kw}</span>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="border-t border-[#003366]/[0.06]" />
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Pass rate</p>
-                              <p className="text-sm font-bold text-[#003366]">94%<span className="text-emerald-500 text-[10px] ml-1">↑ 47%</span></p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Avg fix time</p>
-                              <p className="text-sm font-bold text-[#003366]">2 min</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── Other feature cards ── */}
-                      {activeFeature !== 0 && (
-                        <>
-
-                      {/* ── Mock Interview Engine / Role-Specific Readiness card ── */}
-                      {activeFeature === 1 && (
-                        <div className="p-4 space-y-2.5">
-                          {/* Mini JD card */}
-                          <div className="rounded-lg bg-emerald-50 border border-emerald-200/60 px-3 py-2">
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <span className="w-5 h-5 rounded bg-emerald-500 flex items-center justify-center">
-                                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                              </span>
-                              <p className="text-[11px] font-bold text-emerald-800">Targeting: Data Analyst</p>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {["SQL", "Dashboards", "Stakeholder Comm."].map((s) => (
-                                <span key={s} className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-semibold text-emerald-700">{s}</span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Arrow */}
-                          <div className="flex justify-center">
-                            <svg className="w-4 h-4 text-[#003366]/25" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-                          </div>
-
-                          {/* Generated questions */}
-                          <div className="rounded-lg bg-[#003366]/[0.03] border border-[#003366]/[0.06] px-3 py-2 space-y-1.5">
-                            <p className="text-[9px] text-[#003366]/40 uppercase tracking-wider font-semibold">Interview questions</p>
-                            {[
-                              "Walk me through how you'd structure a dashboard for…",
-                              "A stakeholder disputes your data — what's your next step?",
-                            ].map((q, i) => (
-                              <div key={i} className="flex items-start gap-1.5">
-                                <span className="text-emerald-500 text-[10px] mt-px font-bold">Q{i + 1}</span>
-                                <p className="text-[10px] text-[#003366]/70 leading-tight">{q}</p>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Tagline */}
-                          <p className="text-center text-[9px] text-[#003366]/40 font-medium">
-                            Only drills what the role demands
-                          </p>
-                        </div>
-                      )}
-
-                      {/* ── Voice Check-In card ── */}
-                      {activeFeature === 2 && (
-                        <div className="p-3.5 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
-                              <Settings2 className="h-3.5 w-3.5 text-indigo-600" strokeWidth={2} />
-                            </span>
-                            <div>
-                              <p className="text-xs font-bold text-[#003366]">Engagement Pulse</p>
-                              <p className="text-[9px] text-[#003366]/40">Auto check-ins · Silent alerts</p>
-                            </div>
-                          </div>
-
-                          {/* Silent client alerts */}
-                          <div className="space-y-1">
-                            {[
-                              { name: "Marcus T.", days: "7 days silent", status: "bg-rose-400", action: "Check-in sent" },
-                              { name: "Aisha R.", days: "5 days silent", status: "bg-amber-400", action: "Scheduled" },
-                              { name: "David L.", days: "Responded ✓", status: "bg-emerald-400", action: "Recovered" },
-                            ].map((item, i) => (
-                              <div key={i} className="flex items-center gap-2 rounded-lg bg-[#003366]/[0.03] px-2.5 py-1.5">
-                                <span className={`w-1.5 h-1.5 rounded-full ${item.status} shrink-0`} />
-                                <span className="text-[11px] font-semibold text-[#003366] flex-1">{item.name}</span>
-                                <span className="text-[9px] text-[#003366]/50">{item.days}</span>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="border-t border-[#003366]/[0.06]" />
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Recovery rate</p>
-                              <p className="text-sm font-bold text-[#003366]">78%<span className="text-emerald-500 text-[10px] ml-1">↑ 31%</span></p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Avg response</p>
-                              <p className="text-sm font-bold text-[#003366]">1.2 days</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── Case Autopilot card ── */}
-                      {activeFeature === 3 && (
-                        <div className="p-3.5 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center">
-                              <BarChart2 className="h-3.5 w-3.5 text-sky-600" strokeWidth={2} />
-                            </span>
-                            <div>
-                              <p className="text-xs font-bold text-[#003366]">Caseload Monitor</p>
-                              <p className="text-[9px] text-[#003366]/40">Auto-tracked · Zero filing</p>
-                            </div>
-                          </div>
-
-                          {/* Case status list */}
-                          <div className="space-y-1">
-                            {[
-                              { client: "Case #247", status: "Auto-logged", icon: "✓", color: "text-emerald-500" },
-                              { client: "Case #198", status: "Risk flagged", icon: "!", color: "text-amber-500" },
-                              { client: "Case #312", status: "Follow-up set", icon: "→", color: "text-sky-500" },
-                            ].map((item, i) => (
-                              <div key={i} className="flex items-center gap-2 rounded-lg bg-[#003366]/[0.03] px-2.5 py-1.5">
-                                <span className={`text-[10px] font-bold ${item.color} shrink-0`}>{item.icon}</span>
-                                <span className="text-[11px] font-semibold text-[#003366] flex-1">{item.client}</span>
-                                <span className="text-[9px] text-[#003366]/50">{item.status}</span>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="border-t border-[#003366]/[0.06]" />
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Filing backlog</p>
-                              <p className="text-sm font-bold text-emerald-600">0 days<span className="text-[#003366]/40 text-[10px] ml-1">was 3 wks</span></p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Time saved</p>
-                              <p className="text-sm font-bold text-[#003366]">6 hrs<span className="text-sky-500 text-[10px] ml-1">/week</span></p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* ── AI Notes Capture card ── */}
-                      {activeFeature === 4 && (
-                        <div className="p-3.5 space-y-2">
-                          <div className="flex items-center gap-2">
-                            <span className="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
-                              <ClipboardCheck className="h-3.5 w-3.5 text-amber-600" strokeWidth={2} />
-                            </span>
-                            <div>
-                              <p className="text-xs font-bold text-[#003366]">Session Intelligence</p>
-                              <p className="text-[9px] text-[#003366]/40">Auto-captured · Searchable</p>
-                            </div>
-                          </div>
-
-                          {/* Live capture preview */}
-                          <div className="rounded-lg bg-amber-50 border border-amber-200/60 px-3 py-2 space-y-1.5">
-                            <div className="flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                              <p className="text-[9px] font-semibold text-amber-700 uppercase tracking-wider">Live capture</p>
-                            </div>
-                            <p className="text-[10px] text-[#003366]/70 leading-snug italic">&ldquo;Discussed anxiety around panel interviews...&rdquo;</p>
-                          </div>
-
-                          {/* Auto-generated notes */}
-                          <div className="space-y-1">
-                            <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Auto-generated notes</p>
-                            {[
-                              "Panel interview anxiety identified",
-                              "Completed 2 STAR practice scenarios",
-                              "Follow-up: Mock panel scheduled",
-                            ].map((note, i) => (
-                              <div key={i} className="flex items-start gap-1.5 rounded-lg bg-[#003366]/[0.03] px-2.5 py-1.5">
-                                <svg className="w-3 h-3 text-amber-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span className="text-[10px] text-[#003366]/70">{note}</span>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="border-t border-[#003366]/[0.06]" />
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Filing time saved</p>
-                              <p className="text-sm font-bold text-[#003366]">4.2 hrs<span className="text-amber-500 text-[10px] ml-1">/week</span></p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-[9px] text-[#003366]/50 uppercase tracking-wider font-semibold">Compliance ready</p>
-                              <p className="text-sm font-bold text-emerald-600">100%</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                        </>
-                      )}
-
-                    </div>
-                  </div>
-                </div>
+              <div className="hidden lg:block w-full lg:w-[66%]">
+                {activeFeature === 0 && <ResumeDiagnosticsMock />}
+                {activeFeature === 1 && <MockInterviewsMock />}
+                {activeFeature === 2 && <AdvisorWorkflowMock />}
+                {activeFeature === 3 && <FunderReportsMock />}
               </div>
             </div>
           );
         })()}
       </section>
 
-      {/* Benefits — Security, Stats, Readiness */}
-      <InstitutionBenefits />
-
-      {/* Stats */}
-      <StatsConfidence />
-
-      {/* Comparison — side-by-side paired rows */}
-      <section id="institutions-comparison" className="pt-7 md:pt-8 pb-4">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center space-y-2 mb-10">
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#003366]/70 border-[#003366]/15 bg-white/80">
-              WHY CLARIVUE MATTERS
+      <section className="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-24">
+        <div className="px-0 py-0">
+          <div className="px-0 pb-10 sm:pb-12 lg:pb-14">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#042b53]/45">
+                Built For Every Program Leader
+              </p>
+              <h2 className="mt-3 text-3xl sm:text-4xl lg:text-[3.1rem] font-semibold tracking-[-0.04em] text-[#042b53] leading-[1.05]">
+                One system, tailored to every team moving learners into jobs.
+              </h2>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#003366]">
-              Training is not the problem. What happens after is.
-            </h2>
-            <p className="text-sm sm:text-base text-[#003366]/70 max-w-3xl mx-auto">
-              Clarivue covers the gap between training and employment.
-            </p>
           </div>
 
-          <div ref={comparisonRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* ── Without Clarivue ── */}
-            <div className="compare-slide-left relative rounded-3xl border border-rose-200/60 bg-gradient-to-b from-rose-50/80 to-white p-6 pb-4 overflow-hidden">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-[#003366]">What most programs deal with</h3>
-                <span className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200/60 flex items-center justify-center">
-                  <X className="h-4 w-4 text-rose-500" strokeWidth={2.5} />
-                </span>
+          <div className="relative overflow-hidden grid lg:grid-cols-3 gap-0 border-t-2 border-[#042b53]/18">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-[2px] bg-[#042b53]/16" />
+            <div className="pointer-events-none absolute left-0 top-0 h-2.5 w-2.5 -translate-y-[4px] rounded-full bg-[#ff6b57] role-leader-dot-x" />
+            <div className="pointer-events-none absolute hidden lg:block left-1/3 top-0 bottom-0 w-[2px] -translate-x-px bg-[#042b53]/14" />
+            <div className="pointer-events-none absolute hidden lg:block left-1/3 top-0 h-2.5 w-2.5 -translate-x-[5px] rounded-full bg-[#5a63ff] role-leader-dot-y" />
+            <div className="pointer-events-none absolute hidden lg:block left-2/3 top-0 bottom-0 w-[2px] -translate-x-px bg-[#042b53]/14" />
+            <div className="pointer-events-none absolute hidden lg:block left-2/3 top-0 h-2.5 w-2.5 -translate-x-[5px] rounded-full bg-[#0ea5e9] role-leader-dot-y role-leader-dot-y-delayed" />
+            {[0, 1, 2].map((columnIndex) => (
+              <div
+                key={columnIndex}
+                className={columnIndex < 2 ? "divide-y-2 divide-[#042b53]/12 lg:border-r-2 border-[#042b53]/12" : "divide-y-2 divide-[#042b53]/12"}
+              >
+                {institutionRoleCards.slice(columnIndex * 2, columnIndex * 2 + 2).map((card) => {
+                  const Icon = card.icon;
+
+                  return (
+                    <article key={card.title} className="p-8 sm:p-9">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${card.iconWrapClass}`}>
+                          <Icon className={`h-6 w-6 ${card.iconClass}`} strokeWidth={1.5} />
+                        </div>
+                        <div>
+                          <div className="text-[#042b53] font-medium text-lg leading-tight">{card.title}</div>
+                          <div className="text-sm text-[#042b53]/45">Role-specific visibility</div>
+                        </div>
+                      </div>
+                      <p className="text-[#042b53]/72 leading-relaxed text-[15px] sm:text-base">
+                        {card.description}
+                      </p>
+                    </article>
+                  );
+                })}
               </div>
-
-              <div className="space-y-1">
-                {comparisonRows.map((row, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
-                    <span className="w-5 h-5 rounded-full border border-rose-300 text-rose-400 grid place-items-center shrink-0">
-                      <X className="h-3 w-3" strokeWidth={2.5} />
-                    </span>
-                    <span className="text-sm font-semibold text-[#003366]/90">
-                      {row.without}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs text-rose-400/80 mt-4 font-semibold leading-relaxed">
-                Gaps you find after it&apos;s too late.
-              </p>
-            </div>
-
-            {/* ── With Clarivue ── */}
-            <div className="compare-slide-right relative rounded-3xl border border-sky-200/60 bg-gradient-to-b from-sky-50/80 to-white p-6 pb-4 overflow-hidden shadow-lg shadow-sky-500/5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-[#003366]">What changes with Clarivue</h3>
-                <span className="w-9 h-9 rounded-full bg-sky-100 border border-sky-200/60 flex items-center justify-center">
-                  <ArrowRight className="h-4 w-4 text-sky-600" strokeWidth={2.5} />
-                </span>
-              </div>
-
-              <div className="space-y-1">
-                {comparisonRows.map((row, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2.5 min-h-[44px]">
-                    <span className="w-5 h-5 rounded-full border border-emerald-400 text-emerald-500 grid place-items-center shrink-0">
-                      <Check className="h-3 w-3" strokeWidth={2.5} />
-                    </span>
-                    <span className="text-sm font-semibold text-[#003366]/90">
-                      {row.with}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs text-sky-600/80 mt-4 font-semibold leading-relaxed">
-                Proof you control before it matters.
-              </p>
-
-              {/* CTA bar */}
-              <div className="mt-3 -mx-6 -mb-4 bg-gradient-to-r from-sky-100/80 to-sky-50/80 border-t border-sky-200/40 px-6 py-3 flex items-center justify-center">
-                <a href="/hidden-cost" className="text-sm font-semibold text-sky-700 hover:text-sky-900 transition-colors flex items-center gap-1.5">
-                  See the impact <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Benefits — Security, Stats, Readiness */}
+      <InstitutionBenefits />
+
+      {/* Institutional stats hidden for now */}
+
+      {/* Comparison section hidden for now */}
 
       {/* Security & Compliance + Responsible AI */}
       <SecurityCompliance />
@@ -1109,18 +1231,12 @@ export function InstitutionView() {
             See what Clarivue can do for your program.
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-4">
+          <div className="mt-10 flex items-center justify-center">
             <a
               href="/book-demo"
               className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#ff686c] text-white text-lg font-semibold shadow-lg shadow-[#ff686c]/30 transition-all duration-300 hover:bg-[#e55d61] hover:shadow-xl hover:-translate-y-0.5 min-w-[260px]"
             >
               Book a demo
-            </a>
-            <a
-              href="/hidden-cost"
-              className="text-xl font-semibold text-white/60 hover:text-white/90 transition-colors underline underline-offset-4 decoration-white/30 hover:decoration-white/50"
-            >
-              Find your hidden cost
             </a>
           </div>
 
