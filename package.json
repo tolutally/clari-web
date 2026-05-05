@@ -21,6 +21,7 @@
     "@sanity/vision": "^5.9.0",
     "@supabase/supabase-js": "^2.89.0",
     "@vercel/analytics": "^1.6.1",
+    "framer-motion": "^12.38.0",
     "lucide-react": "^0.562.0",
     "next": "^16.1.2",
     "next-sanity": "^12.1.0",
