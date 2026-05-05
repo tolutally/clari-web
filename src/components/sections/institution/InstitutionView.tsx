@@ -36,6 +36,7 @@ const BlogInsights = dynamic(
 );
 // import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
 import { useEffect, useRef, useState, FormEvent } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 type CommunityTone =
   | "indigo"
@@ -339,6 +340,19 @@ function ResumeDiagnosticsMock() {
 }
 
 function MockInterviewsMock() {
+  const listeningBars = [
+    { height: 20, duration: "1160ms", delay: "0ms", color: "bg-[#102c64]/70" },
+    { height: 30, duration: "980ms", delay: "-420ms", color: "bg-[#102c64]/70" },
+    { height: 42, duration: "1080ms", delay: "-220ms", color: "bg-[#102c64]/70" },
+    { height: 28, duration: "920ms", delay: "-640ms", color: "bg-[#102c64]/70" },
+    { height: 54, duration: "1250ms", delay: "-160ms", color: "bg-[#ff686c]" },
+    { height: 38, duration: "900ms", delay: "-560ms", color: "bg-[#ff686c]" },
+    { height: 50, duration: "1180ms", delay: "-320ms", color: "bg-[#ff686c]" },
+    { height: 32, duration: "960ms", delay: "-760ms", color: "bg-[#ff686c]" },
+    { height: 44, duration: "1100ms", delay: "-480ms", color: "bg-[#102c64]/70" },
+    { height: 24, duration: "1020ms", delay: "-680ms", color: "bg-[#102c64]/70" },
+  ] as const;
+
   return (
     <div className="relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
       <div className="pointer-events-none absolute inset-0 opacity-60">
@@ -390,12 +404,16 @@ function MockInterviewsMock() {
               <span className="h-2 w-2 rounded-full bg-white" />
               Live
             </div>
-            <div className="flex items-end gap-1">
-              {[20, 32, 44, 24, 52, 36, 48, 28, 40, 22].map((height, index) => (
+            <div className="flex h-[58px] items-end gap-1">
+              {listeningBars.map((bar, index) => (
                 <div
                   key={index}
-                  className={`w-1.5 rounded-full ${index >= 4 && index <= 7 ? "bg-[#ff686c]" : "bg-[#102c64]/70"}`}
-                  style={{ height }}
+                  className={`listening-wave-bar w-1.5 rounded-full ${bar.color}`}
+                  style={{
+                    height: `${bar.height}px`,
+                    animationDuration: bar.duration,
+                    animationDelay: bar.delay,
+                  }}
                 />
               ))}
             </div>
@@ -481,14 +499,22 @@ function AdvisorWorkflowMock() {
 
             <div className="mt-3 space-y-2.5">
               {[
-                { label: "1. Session captured", meta: "Transcript + notes", tone: "bg-[#102c64]" },
-                { label: "2. Risk scored", meta: "Interview anxiety flagged", tone: "bg-[#ff686c]" },
-                { label: "3. Follow-up drafted", meta: "Mock panel scheduled", tone: "bg-[#102c64]" },
-                { label: "4. Employer intro ready", meta: "Referral packet assembled", tone: "bg-[#102c64]" },
-              ].map((step, index) => (
+                { label: "Session captured", meta: "Transcript + notes", status: "done" },
+                { label: "Risk scored", meta: "Interview anxiety flagged", status: "done" },
+                { label: "Follow-up drafted", meta: "Mock panel scheduled", status: "done" },
+                { label: "Employer intro ready", meta: "Referral packet assembled", status: "active" },
+              ].map((step) => (
                 <div key={step.label} className="flex items-center gap-3">
-                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-white ${step.tone}`}>
-                    {index + 1}
+                  <div
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                      step.status === "done" ? "bg-[#102c64] text-white" : "border border-[#ff686c]/30 bg-[#ff686c]/12 text-[#ff686c]"
+                    }`}
+                  >
+                    {step.status === "done" ? (
+                      <Check className="h-3.5 w-3.5" strokeWidth={2.6} />
+                    ) : (
+                      <span className="h-2.5 w-2.5 rounded-full bg-current" />
+                    )}
                   </div>
                   <div className="flex-1 rounded-xl border border-[#003366]/8 bg-[#003366]/[0.03] px-3 py-2">
                     <div className="flex items-center justify-between gap-3">
@@ -782,6 +808,8 @@ export function InstitutionView() {
   const coachingPct = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
   const advisoryCardRef = useRef<HTMLDivElement>(null);
+  const dashboardRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [advisoryAnimated, setAdvisoryAnimated] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -885,25 +913,36 @@ export function InstitutionView() {
     return () => observer.disconnect();
   }, []);
 
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ["start 0.85", "end 0.3"],
+  });
+  const dashboardScale = useTransform(scrollYProgress, [0, 1], [0.88, 1.0]);
+  const dashboardBorderRadius = useTransform(scrollYProgress, [0, 1], ["28px", "16px"]);
+  const fadeOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
     <div className="transition-opacity duration-500 ease-in-out opacity-100 space-y-8">
       {/* Hero */}
       <section
+        ref={scrollContainerRef}
         id="institutions-hero"
-        className="relative bg-[#f8fafe] min-h-[92vh] overflow-hidden flex items-start justify-center px-6 pt-10 pb-12 sm:px-12 sm:pt-14 sm:pb-14 lg:px-20 lg:pt-16 lg:pb-16"
+        className="relative bg-[#f8fafe] min-h-[92vh] flex items-start justify-center px-6 pt-10 pb-12 sm:px-12 sm:pt-14 sm:pb-14 lg:px-20 lg:pt-16 lg:pb-16"
       >
         {/* Background Grid Layer */}
         <div 
-          className="absolute inset-0 z-0 pointer-events-none" 
+          className="absolute inset-0 z-0 pointer-events-none overflow-hidden" 
           style={{ 
             backgroundImage: 'linear-gradient(to right, #e2e8f080 1px, transparent 1px), linear-gradient(to bottom, #e2e8f080 1px, transparent 1px)', 
             backgroundSize: '32px 32px' 
           }} 
         />
 
-        {/* Decorative Floating Elements */}
-        <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-rose-200/40 blur-[120px] animate-float pointer-events-none z-0" />
-        <div className="absolute bottom-[10%] left-[5%] w-[600px] h-[600px] rounded-full bg-blue-200/40 blur-[140px] animate-float-delayed pointer-events-none z-0" />
+        {/* Decorative Floating Elements — clipped to section */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] rounded-full bg-rose-200/40 blur-[120px] animate-float" />
+          <div className="absolute bottom-[10%] left-[5%] w-[600px] h-[600px] rounded-full bg-blue-200/40 blur-[140px] animate-float-delayed" />
+        </div>
 
         {/* Main Content */}
         <div className="relative z-10 max-w-[1280px] mx-auto w-full flex flex-col items-center text-center">
@@ -927,7 +966,7 @@ export function InstitutionView() {
 
           {/* Subheadline */}
             <p className="animate-fade-in-up delay-200 mt-8 max-w-3xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
-            Clarivue automates your institution's training-to-employment pipeline and multiplies your job placement rates -simply by enrolling a cohort.
+            Clarivue automates your institution's training-to-employment pipeline and surfaces job placement risk before employers do -simply by enrolling a cohort.
           </p>
 
           {/* Buttons */}
@@ -947,20 +986,32 @@ export function InstitutionView() {
             </a>
           </div>
 
-          <div className="hero-dashboard-enter mt-12 w-full max-w-6xl">
-            <div className="relative mx-auto aspect-[1060/580] w-full overflow-hidden rounded-[28px] border border-[#042b53]/10 bg-white shadow-[0_30px_80px_-28px_rgba(4,43,83,0.28)]">
+          <motion.div
+            ref={dashboardRef}
+            initial={{ opacity: 0, y: 56 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.26 }}
+            style={{ scale: dashboardScale, borderRadius: dashboardBorderRadius }}
+            className="mt-12 w-full max-w-6xl will-change-transform"
+          >
+            <div className="relative mx-auto aspect-[1060/580] w-full overflow-hidden border border-[#042b53]/10 bg-white shadow-[0_30px_80px_-28px_rgba(4,43,83,0.28)]" style={{ borderRadius: 'inherit' }}>
               <img
                 src="/clarivue_hero_dashboard_v7.svg"
                 alt="Clarivue dashboard preview"
                 className="absolute left-[-6.61%] top-[-12.07%] w-[119.81%] max-w-none"
               />
+              {/* Scroll-driven bottom fade — dissolves as image scales up */}
+              <motion.div
+                style={{ opacity: fadeOpacity }}
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-[#f8fafe] via-[#f8fafe]/55 to-transparent z-10"
+              />
             </div>
-          </div>
+          </motion.div>
 
           {/* Footer Note */}
-          <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center gap-2.5 text-sm md:text-base text-slate-400 font-normal">
-            <Gift className="w-5 h-5 text-[#ff5a5f] shrink-0" />
-            <p>30 minutes free. Test with a few learners and see the gaps. No credit card.</p>
+          <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center gap-3 text-base md:text-lg text-slate-500 font-medium">
+            <Gift className="w-6 h-6 text-[#ff5a5f] shrink-0" />
+            <p>Run your first cohort free. No demo. No credit card.</p>
           </div>
 
         </div>
@@ -990,36 +1041,6 @@ export function InstitutionView() {
         </div>
       </div>
       */}
-
-      {/* Partner Brand Strip */}
-      <div className="pt-0 pb-6">
-        <p className="text-[22px] font-bold uppercase tracking-[0.25em] text-[#003366]/55 text-center mb-6">
-          Selected by Canada's leading innovation ecosystem
-        </p>
-        <div className="flex items-center justify-center gap-10 sm:gap-16 md:gap-20 flex-wrap px-6">
-          <Image
-            src="/partners/tribe_logo.png"
-            alt="Tribe"
-            width={250}
-            height={83}
-            className="h-16 sm:h-[83px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-          />
-          <Image
-            src="/partners/Volta-Logo.png"
-            alt="Volta"
-            width={208}
-            height={67}
-            className="h-[52px] sm:h-[58px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-          />
-          <Image
-            src="/partners/Invest-Nova-Scotia-Logo.png"
-            alt="Invest Nova Scotia"
-            width={333}
-            height={99}
-            className="h-[76px] sm:h-[91px] w-auto object-contain opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-          />
-        </div>
-      </div>
 
       {/* Pain Points / Use Cases hidden for now */}
 
@@ -1236,7 +1257,7 @@ export function InstitutionView() {
               href="/book-demo"
               className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#ff686c] text-white text-lg font-semibold shadow-lg shadow-[#ff686c]/30 transition-all duration-300 hover:bg-[#e55d61] hover:shadow-xl hover:-translate-y-0.5 min-w-[260px]"
             >
-              Book a demo
+              Get in Touch
             </a>
           </div>
 
@@ -1244,7 +1265,7 @@ export function InstitutionView() {
           <div className="mt-8 flex items-center justify-center gap-8 text-sm text-white/60">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-white/50" />
-              <span className="font-medium">PIPEDA &amp; GDPR ready</span>
+              <span className="font-medium">FERPA, PIPEDA &amp; GDPR ready</span>
             </div>
             <div className="hidden sm:block w-px h-4 bg-white/20" />
             <div className="hidden sm:flex items-center gap-2">
@@ -1254,7 +1275,7 @@ export function InstitutionView() {
             <div className="hidden sm:block w-px h-4 bg-white/20" />
             <div className="hidden sm:flex items-center gap-2">
               <Users className="w-5 h-5 text-white/50" />
-              <span className="font-medium">120K+ minutes analyzed</span>
+              <span className="font-medium">1,400+ learners</span>
             </div>
           </div>
         </div>
@@ -1368,6 +1389,34 @@ export function InstitutionView() {
             100% {
               transform: translateY(-50%);
             }
+          }
+
+          @keyframes listening-wave {
+            0%,
+            100% {
+              transform: scaleY(0.38);
+              opacity: 0.45;
+            }
+            20% {
+              transform: scaleY(1);
+              opacity: 1;
+            }
+            45% {
+              transform: scaleY(0.58);
+              opacity: 0.72;
+            }
+            70% {
+              transform: scaleY(0.9);
+              opacity: 0.92;
+            }
+          }
+
+          .listening-wave-bar {
+            transform-origin: center bottom;
+            animation-name: listening-wave;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            will-change: transform, opacity;
           }
         \`}</style>
       </section>
