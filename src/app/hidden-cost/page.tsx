@@ -192,6 +192,84 @@ function PayoffCard({ placements, range }: { placements: number; range: { low: n
   );
 }
 
+function ResultsPlaceholder() {
+  const previewItems = [
+    {
+      icon: <DollarSign className="w-5 h-5" />,
+      label: "Annual cost exposure",
+      hint: "Dollars lost to workflow drag",
+    },
+    {
+      icon: <Clock className="w-5 h-5" />,
+      label: "Advisor time lost",
+      hint: "Hours consumed by last-mile coordination",
+    },
+    {
+      icon: <Users className="w-5 h-5" />,
+      label: "Missed placements",
+      hint: "Learners most likely to fall through the gap",
+    },
+  ];
+
+  return (
+    <div className="relative overflow-hidden rounded-[28px] border border-[#003366]/10 bg-[linear-gradient(135deg,rgba(0,51,102,0.03),rgba(255,104,108,0.09))] p-6 md:p-7 shadow-xl shadow-[#003366]/5">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,104,108,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(0,51,102,0.08),transparent_42%)]" />
+      <div className="relative">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#003366]/60 backdrop-blur-sm">
+          <Sparkles className="w-3.5 h-3.5 text-[#ff686c]" />
+          Live Results Panel
+        </div>
+
+        <h3 className="mt-4 text-2xl font-semibold leading-tight text-[#003366]">
+          Your gap snapshot will appear here
+        </h3>
+
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-[#003366]/55">
+          Add your learner volume, staffing, and caseload. We will turn that into a
+          clean estimate of lost hours, lost dollars, and recoverable placements.
+        </p>
+
+        <div className="mt-6 grid gap-3">
+          {previewItems.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-2xl border border-white/80 bg-white/85 p-4 backdrop-blur-sm"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#003366]/5 text-[#003366]">
+                  {item.icon}
+                </div>
+
+                <div className="flex-1">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#003366]/45">
+                    {item.label}
+                  </p>
+                  <div className="mt-2 h-7 w-32 rounded-full bg-[#003366]/8 animate-pulse" />
+                  <p className="mt-2 text-xs text-[#003366]/45">{item.hint}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-[#003366]/10 bg-[#003366] p-4 text-white">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/60">
+                What You Unlock
+              </p>
+              <p className="mt-1 text-sm text-white/85">
+                A cost summary, a loss breakdown, and projected placement lift.
+              </p>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-[#ffb3b5]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN PAGE
 // ═══════════════════════════════════════════════════════════════════════════
@@ -273,14 +351,14 @@ export default function PlacementGapCalculatorPage() {
           </div>
 
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#003366] leading-tight mb-6">
-            What is the gap{" "}
-            <span className="text-[#ff686c]">actually</span> costing your program?
+            What is your {" "}
+            <span className="text-[#ff686c]">placement workflow</span> silently costing you?
           </h1>
 
           <p className="text-base md:text-lg text-[#003366]/60 max-w-2xl mx-auto leading-relaxed">
-            Most programs know they lose learners between training and employment. 
-            Few know the real cost. Answer 4 questions and see your gap in dollars, 
-            hours, and people.
+            Most programs run their training-to-employment work on spreadsheets, memory, and good 
+            intentions. Few have ever put a number on what that's costing. Answer 
+            4 questions and see yours — in dollars, hours, and missed placements.
           </p>
         </section>
 
@@ -293,11 +371,16 @@ export default function PlacementGapCalculatorPage() {
                 LEFT: FORM
                ───────────────────────────────────────────── */}
             <div className="rounded-2xl border border-[#003366]/10 bg-white shadow-xl shadow-[#003366]/5 p-6 md:p-8">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-[#003366]/5 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-[#003366]" />
+              <div className="mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-[#003366]/5 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-[#003366]" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-[#003366]">Your program</h2>
                 </div>
-                <h2 className="text-lg font-semibold text-[#003366]">Your program</h2>
+                <p className="mt-2 text-sm text-[#003366]/55">
+                  Tell us four things. We&apos;ll do the math.
+                </p>
               </div>
 
               <div className="space-y-5">
@@ -325,7 +408,7 @@ export default function PlacementGapCalculatorPage() {
 
                 <InputField
                   label="Advisors / staff"
-                  subLabel="People doing placement-related work"
+                  subLabel="People who do placement-related work for your learners"
                   value={formData.advisorsCount}
                   onChange={(v) => handleInputChange("advisorsCount", v)}
                   type="number"
@@ -362,13 +445,7 @@ export default function PlacementGapCalculatorPage() {
                ───────────────────────────────────────────── */}
             <div className="space-y-6">
               {!result ? (
-                // Empty state
-                <div className="rounded-2xl border border-dashed border-[#003366]/20 bg-[#003366]/[0.02] p-8 text-center">
-                  <AlertTriangle className="w-10 h-10 text-[#003366]/20 mx-auto mb-4" />
-                  <p className="text-sm text-[#003366]/40">
-                    Enter your program details to see what the gap is costing you.
-                  </p>
-                </div>
+                <ResultsPlaceholder />
               ) : (
                 <>
                   {/* Hero: Aggregate Gap Cost */}
@@ -467,10 +544,10 @@ export default function PlacementGapCalculatorPage() {
           <div className="mt-12">
             <div className="text-center mb-8">
               <p className="text-xs font-semibold text-[#003366]/50 uppercase tracking-wider mb-2">
-                The math behind the gap
+                The math behind the number
               </p>
               <h3 className="text-xl md:text-2xl font-semibold text-[#003366]">
-                Every number here is happening inside your program right now.
+                These four costs are running in every program right now. Most don&apos;t measure them.
               </h3>
             </div>
 
@@ -480,10 +557,11 @@ export default function PlacementGapCalculatorPage() {
                 <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mb-3">
                   <Clock className="w-4 h-4 text-slate-600" />
                 </div>
-                <p className="text-sm font-semibold text-[#003366] mb-1">Time Lost</p>
+                <p className="text-sm font-semibold text-[#003366] mb-1">Time the engine handles</p>
                 <p className="text-xs text-[#003366]/50 leading-relaxed">
                   Each learner needs <span className="font-medium text-[#003366]/70">6–11 hours</span> of 
-                  resume reviews, mock interviews, and follow-ups. Multiply by your volume.
+                  resume reviews, mock interviews, and follow-ups. The engine runs all of it in the background, 
+                  freeing advisors to spend time on the people who need them.
                 </p>
               </div>
 
@@ -492,10 +570,11 @@ export default function PlacementGapCalculatorPage() {
                 <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center mb-3">
                   <DollarSign className="w-4 h-4 text-amber-600" />
                 </div>
-                <p className="text-sm font-semibold text-[#003366] mb-1">Money Lost</p>
+                <p className="text-sm font-semibold text-[#003366] mb-1">Money the operations should generate</p>
                 <p className="text-xs text-[#003366]/50 leading-relaxed">
-                  Your advisors cost <span className="font-medium text-[#003366]/70">$45–$55/hour</span> loaded. 
-                  Those hours spent on avoidable tasks add up fast.
+                  Loaded advisor cost runs <span className="font-medium text-[#003366]/70">$45–$55/hour</span>. 
+                  Hours spent on routine admin compound across cohorts. The engine recovers those hours so they go 
+                  toward placements, not paperwork.
                 </p>
               </div>
 
@@ -504,10 +583,12 @@ export default function PlacementGapCalculatorPage() {
                 <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center mb-3">
                   <Users className="w-4 h-4 text-red-600" />
                 </div>
-                <p className="text-sm font-semibold text-[#003366] mb-1">People Lost</p>
+                <p className="text-sm font-semibold text-[#003366] mb-1">Placements you should be making</p>
                 <p className="text-xs text-[#003366]/50 leading-relaxed">
-                  <span className="font-medium text-[#003366]/70">8–18%</span> don't place because of the gap—not skills. 
-                  Overloaded caseloads make it worse (up to <span className="font-medium text-[#003366]/70">1.6×</span>).
+                  <span className="font-medium text-[#003366]/70">8–18%</span> of learners don&apos;t place because of the 
+                  operations gap, not because of skills. Overloaded caseloads push that further 
+                  (up to <span className="font-medium text-[#003366]/70">1.6×</span>). The engine catches the operational 
+                  drop-offs before employers do.
                 </p>
               </div>
 
@@ -516,10 +597,10 @@ export default function PlacementGapCalculatorPage() {
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
                   <TrendingUp className="w-4 h-4 text-emerald-600" />
                 </div>
-                <p className="text-sm font-semibold text-emerald-700 mb-1">What's recoverable</p>
+                <p className="text-sm font-semibold text-emerald-700 mb-1">What you can recover</p>
                 <p className="text-xs text-emerald-600/70 leading-relaxed">
-                  <span className="font-medium text-emerald-700">65%</span> of those lost placements 
-                  come back when the gap is closed. That's what Clarivue does.
+                  About <span className="font-medium text-emerald-700">65%</span> of lost placements come back when the 
+                  operations gap closes. That&apos;s what the engine recovers, and what your funder will notice next quarter.
                 </p>
               </div>
             </div>
@@ -529,7 +610,7 @@ export default function PlacementGapCalculatorPage() {
               <div className="inline-flex items-center gap-2 rounded-full bg-[#003366]/5 px-4 py-2">
                 <AlertTriangle className="w-3.5 h-3.5 text-[#ff686c]" />
                 <p className="text-xs text-[#003366]/70">
-                  The gap isn't about effort. It's about structure. Fix the structure, fix the outcome.
+                  The operational drag isn&apos;t a budget problem. It&apos;s a structure problem. Fix the structure, fix the outcome.
                 </p>
               </div>
             </div>
@@ -542,20 +623,28 @@ export default function PlacementGapCalculatorPage() {
         <section className="bg-[#003366] py-16">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
-              You thought the gap was about skills.
+              Once you have your number, you have a decision.
             </h2>
             <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8 leading-relaxed">
-              It&apos;s not. It&apos;s about resumes that don&apos;t land, interviews no one 
-              prepared them for, and momentum that dies between meetings. 
-              These are fixable. Clarivue fixes them.
+              Most programs sit on the number for a quarter before they act. The cohort you&apos;re running 
+              right now will cost you what this calculator says it costs you unless the operations change.
             </p>
-            <a
-              href="/book-demo"
-              className="inline-flex items-center gap-2 rounded-full bg-[#ff686c] text-white px-8 py-3.5 text-base font-semibold hover:bg-[#e55d61] transition-colors shadow-lg shadow-[#ff686c]/30"
-            >
-              Book a demo
-              <ArrowRight className="w-4 h-4" />
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="/book-demo"
+                className="inline-flex items-center gap-2 rounded-full bg-[#ff686c] text-white px-8 py-3.5 text-base font-semibold hover:bg-[#e55d61] transition-colors shadow-lg shadow-[#ff686c]/30"
+              >
+                Book a demo
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="/#institutions-features"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 text-white px-8 py-3.5 text-base font-semibold hover:bg-white/10 transition-colors"
+              >
+                Or read how the engine works
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </section>
       </main>

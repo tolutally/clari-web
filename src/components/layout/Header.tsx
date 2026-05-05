@@ -108,13 +108,6 @@ export function Header({
             <span className="hidden sm:inline">Log In</span>
           </Link>
           <Link
-            href="/hidden-cost"
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#003366]/60 hover:text-[#003366] transition-colors"
-          >
-            <Activity className="w-3.5 h-3.5" />
-            <span>Find your hidden cost</span>
-          </Link>
-          <Link
             href="/book-demo"
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#ff686c] text-white hover:bg-[#ff5b5f] transition-colors shadow-sm"
           >

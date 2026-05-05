@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { BellRing, Building2, CheckCircle2, LockKeyhole, ShieldCheck } from "lucide-react";
+import { BellRing, CheckCircle2, ShieldCheck } from "lucide-react";
 
 export function SecurityCompliance() {
   return (
@@ -26,6 +25,7 @@ export function SecurityCompliance() {
                   {[
                     { label: "FERPA Compliant", icon: ShieldCheck },
                     { label: "HECVAT Ready", icon: CheckCircle2 },
+                    { label: "SOC 2 Aligned", icon: CheckCircle2 },
                   ].map((item) => {
                     const Icon = item.icon;
 
@@ -51,39 +51,75 @@ export function SecurityCompliance() {
                 Institutions retain full ownership and role-based control over every workflow.
               </p>
 
-              <div className="mt-5 rounded-[18px] border border-[#042b53]/8 bg-[#fcfcfc] px-4 py-4">
-                <div className="text-center text-[13px] font-medium text-[#042b53]">role-based access</div>
-                <div className="mt-4 flex items-center justify-between gap-2">
-                  <div className="flex flex-col gap-5 pt-0.5">
-                    {[0, 1].map((item) => (
-                      <div key={item} className="flex items-center gap-2.5">
-                        <div className="h-7 w-7 rounded-[9px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
-                          <LockKeyhole className="h-3.5 w-3.5 text-[#444444]" strokeWidth={1.8} />
-                        </div>
-                        <svg width="42" height="18" viewBox="0 0 42 18" className="overflow-visible">
-                          <path d="M1 9 C10 9, 12 1, 21 1 S32 17, 41 17" fill="none" stroke="#0ea5e9" strokeWidth="1.6" strokeLinecap="round" />
-                        </svg>
-                      </div>
-                    ))}
-                  </div>
+              <div className="mt-5 overflow-hidden rounded-[18px] border border-[#042b53]/8 bg-[#fcfcfc] p-0">
+                <svg
+                  viewBox="0 0 360 220"
+                  xmlns="http://www.w3.org/2000/svg"
+                  role="img"
+                  aria-labelledby="controlled-access-title controlled-access-desc"
+                  className="block h-auto w-full"
+                >
+                  <title id="controlled-access-title">Role-based access</title>
+                  <desc id="controlled-access-desc">
+                    A card showing four user avatars connected by curved lines to a central institution icon, illustrating role-based access.
+                  </desc>
 
-                  <div className="h-[60px] w-[60px] rounded-[12px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
-                    <Building2 className="h-7 w-7 text-[#444444]" strokeWidth={1.7} />
-                  </div>
+                  <rect x="0" y="0" width="360" height="220" fill="#F8FAFD" />
 
-                  <div className="flex flex-col gap-5 pt-0.5">
-                    {[0, 1].map((item) => (
-                      <div key={item} className="flex items-center gap-2.5">
-                        <svg width="42" height="18" viewBox="0 0 42 18" className="overflow-visible">
-                          <path d="M1 17 C10 17, 12 1, 21 1 S32 9, 41 9" fill="none" stroke="#ff6b57" strokeWidth="1.6" strokeLinecap="round" />
-                        </svg>
-                        <div className="h-7 w-7 rounded-[9px] border border-[#042b53]/18 bg-white flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.9)]">
-                          <LockKeyhole className="h-3.5 w-3.5 text-[#444444]" strokeWidth={1.8} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                  <g stroke="#B8CCF4" strokeWidth="0.5" opacity="0.4">
+                    <line x1="0" y1="44" x2="360" y2="44" />
+                    <line x1="0" y1="88" x2="360" y2="88" />
+                    <line x1="0" y1="132" x2="360" y2="132" />
+                    <line x1="0" y1="176" x2="360" y2="176" />
+                    <line x1="60" y1="0" x2="60" y2="220" />
+                    <line x1="120" y1="0" x2="120" y2="220" />
+                    <line x1="180" y1="0" x2="180" y2="220" />
+                    <line x1="240" y1="0" x2="240" y2="220" />
+                    <line x1="300" y1="0" x2="300" y2="220" />
+                  </g>
+
+                  <text
+                    x="180"
+                    y="40"
+                    textAnchor="middle"
+                    fontFamily="DM Sans, system-ui, sans-serif"
+                    fontSize="14"
+                    fill="#5B7393"
+                  >
+                    role-based access
+                  </text>
+
+                  <path d="M 78 86 Q 130 92 160 110" fill="none" stroke="#FE686D" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M 282 86 Q 230 92 200 110" fill="none" stroke="#FE686D" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M 78 154 Q 130 148 160 130" fill="none" stroke="#102C64" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M 282 154 Q 230 148 200 130" fill="none" stroke="#102C64" strokeWidth="2" strokeLinecap="round" />
+
+                  {[
+                    { x: 50, y: 70 },
+                    { x: 268, y: 70 },
+                    { x: 50, y: 138 },
+                    { x: 268, y: 138 },
+                  ].map((avatar) => (
+                    <g key={`${avatar.x}-${avatar.y}`} transform={`translate(${avatar.x} ${avatar.y})`}>
+                      <circle cx="14" cy="14" r="14" fill="#FFFFFF" stroke="#102C64" strokeOpacity="0.18" strokeWidth="1" />
+                      <circle cx="14" cy="11" r="4" fill="#102C64" opacity="0.65" />
+                      <path d="M 6 22 Q 14 16 22 22" fill="none" stroke="#102C64" strokeWidth="1.6" strokeLinecap="round" opacity="0.65" />
+                    </g>
+                  ))}
+
+                  <g transform="translate(150 86)">
+                    <rect x="0" y="0" width="60" height="60" rx="10" fill="#FFFFFF" stroke="#102C64" strokeOpacity="0.18" strokeWidth="1" />
+                    <g transform="translate(14 16)" fill="#102C64">
+                      <polygon points="16,0 0,10 32,10" />
+                      <rect x="0" y="10" width="32" height="3" />
+                      <rect x="3" y="14" width="3" height="14" />
+                      <rect x="10" y="14" width="3" height="14" />
+                      <rect x="19" y="14" width="3" height="14" />
+                      <rect x="26" y="14" width="3" height="14" />
+                      <rect x="0" y="28" width="32" height="3" />
+                    </g>
+                  </g>
+                </svg>
               </div>
             </article>
 
@@ -120,15 +156,6 @@ export function SecurityCompliance() {
                 </div>
               </div>
             </article>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <Link
-              href="/book-demo"
-              className="inline-flex items-center justify-center rounded-xl bg-[#ff686c] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#f05a46]"
-            >
-              Get in Touch
-            </Link>
           </div>
         </div>
       </div>
