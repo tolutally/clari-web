@@ -11,9 +11,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Clarivue | AI infrastructure for workforce and employment training programs",
+  title: "Clarivue · AI Engine for Training-to-Employment Outcomes",
   description:
-    "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
+    "Run the work between training and a job - automatically. Resumes, mock interviews, advisor follow-ups, funder reports. More placements per cohort, no extra hiring.",
   icons: {
     icon: [
       { url: "/clarivue-favicon/favicon.ico", sizes: "any" },
@@ -24,18 +24,27 @@ export const metadata: Metadata = {
   },
   manifest: "/clarivue-favicon/site.webmanifest",
   openGraph: {
-    title: "Clarivue | AI infrastructure for workforce and employment training programs",
+    title: "Clarivue · AI Engine for Training-to-Employment Outcomes",
     description:
-      "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
+      "Run the work between training and a job - automatically. Resumes, mock interviews, advisor follow-ups, funder reports. More placements per cohort, no extra hiring.",
     type: "website",
     siteName: "Clarivue",
     url: "https://clarivue.io",
+    images: [
+      {
+        url: "https://clarivue.io/og-hero.png",
+        width: 1200,
+        height: 630,
+        alt: "Clarivue dashboard — AI Engine for Training-to-Employment Outcomes",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Clarivue | AI infrastructure for workforce and employment training programs",
+    title: "Clarivue · AI Engine for Training-to-Employment Outcomes",
     description:
-      "More placements, less admin, and reports that attract funding. AI-powered resume fixing, mock interviews, voice check-ins, case management, and session capture - built for programs that want to move more people from training into jobs.",
+      "Run the work between training and a job - automatically. Resumes, mock interviews, advisor follow-ups, funder reports. More placements per cohort, no extra hiring.",
+    images: ["https://clarivue.io/og-hero.png"],
   },
 };
 
