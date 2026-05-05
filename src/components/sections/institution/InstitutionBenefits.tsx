@@ -271,9 +271,6 @@ export function InstitutionBenefits() {
         <div className="grid gap-3 sm:gap-3.5 lg:gap-4 lg:grid-cols-4">
           {/* Card 1: Funnel — Emerald accent */}
           <div className="rounded-lg sm:rounded-xl bg-gradient-to-br from-[#10b981]/5 to-[#10b981]/10 border border-[#10b981]/20 p-3 sm:p-3.5 lg:p-4">
-            <span className="inline-block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#10b981] bg-[#10b981]/10 px-1.5 sm:px-2 py-0.5 rounded-full mb-1.5 sm:mb-2">
-              ROI
-            </span>
             <h3 className="text-[15px] sm:text-base font-bold text-[#003366] mb-1 leading-snug">
               More placements per cohort, same budget
             </h3>
@@ -285,9 +282,6 @@ export function InstitutionBenefits() {
 
           {/* Card 2: Caseload — Indigo accent */}
           <div className="rounded-lg sm:rounded-xl bg-gradient-to-br from-[#6366f1]/5 to-[#6366f1]/10 border border-[#6366f1]/20 p-3 sm:p-3.5 lg:p-4">
-            <span className="inline-block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#6366f1] bg-[#6366f1]/10 px-1.5 sm:px-2 py-0.5 rounded-full mb-1.5 sm:mb-2">
-              Capacity
-            </span>
             <h3 className="text-[15px] sm:text-base font-bold text-[#003366] mb-1 leading-snug">
              One advisor, fifty learners, no extra hiring
             </h3>
@@ -299,9 +293,6 @@ export function InstitutionBenefits() {
 
           {/* Card 3: Reports — Amber accent */}
           <div className="rounded-lg sm:rounded-xl bg-gradient-to-br from-[#f59e0b]/5 to-[#f59e0b]/10 border border-[#f59e0b]/20 p-3 sm:p-3.5 lg:p-4">
-            <span className="inline-block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#f59e0b] bg-[#f59e0b]/10 px-1.5 sm:px-2 py-0.5 rounded-full mb-1.5 sm:mb-2">
-              Compliance
-            </span>
             <h3 className="text-[15px] sm:text-base font-bold text-[#003366] mb-1 leading-snug">
               Funder reports that already know the answer
             </h3>
@@ -313,9 +304,6 @@ export function InstitutionBenefits() {
 
           {/* Card 4: Pipeline — Sky accent */}
           <div className="rounded-lg sm:rounded-xl bg-gradient-to-br from-[#0ea5e9]/5 to-[#0ea5e9]/10 border border-[#0ea5e9]/20 p-3 sm:p-3.5 lg:p-4">
-            <span className="inline-block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#0ea5e9] bg-[#0ea5e9]/10 px-1.5 sm:px-2 py-0.5 rounded-full mb-1.5 sm:mb-2">
-              Employers
-            </span>
             <h3 className="text-[15px] sm:text-base font-bold text-[#003366] mb-1 leading-snug">
               Employers who keep saying yes
             </h3>
