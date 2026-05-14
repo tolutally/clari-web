@@ -966,7 +966,7 @@ export function InstitutionView() {
 
           {/* Subheadline */}
             <p className="animate-fade-in-up delay-200 mt-8 max-w-3xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
-            Clarivue automates your institution's training-to-employment pipeline and surfaces job placement risk before employers do -simply by enrolling a cohort.
+            Clarivue runs the work between training completion and job offers for you, turning every cohort into a placement-ready pipeline.
           </p>
 
           {/* Buttons */}
