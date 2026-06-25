@@ -70,16 +70,19 @@ export default function WorkbookModalButton({ workbookUrl }: { workbookUrl: stri
     fetch("https://assets.mailerlite.com/jsonp/2466380/forms/191100561442998162/takel").catch(() => {});
   }, [workbookUrl]);
 
-  // Lock body scroll + ESC key when modal is open
+  // Lock body scroll, hide footer, ESC key when modal is open
   useEffect(() => {
     if (!open) return;
     document.body.style.overflow = "hidden";
+    const footer = document.querySelector("footer") as HTMLElement | null;
+    if (footer) footer.style.display = "none";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      if (footer) footer.style.display = "";
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
