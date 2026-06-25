@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function WorkbookModalButton({ workbookUrl }: { workbookUrl: string }) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -33,6 +34,7 @@ export default function WorkbookModalButton({ workbookUrl }: { workbookUrl: stri
       setSuccess(false);
       setError("");
       setEmail("");
+      setHoneypot("");
     }, 300);
   };
 
@@ -44,7 +46,7 @@ export default function WorkbookModalButton({ workbookUrl }: { workbookUrl: stri
       const res = await fetch("/api/resources/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, _hp: honeypot }),
       });
       const data = await res.json();
       if (res.ok && data.ok) {
@@ -186,6 +188,17 @@ export default function WorkbookModalButton({ workbookUrl }: { workbookUrl: stri
                 <p style={{ fontFamily: "'Open Sans',Arial,sans-serif", fontSize: 14, color: "#003366", lineHeight: 1.43, margin: "0 0 20px" }}>
                   The question bank, scorecard, and full quote dataset, straight to your inbox.
                 </p>
+                {/* Honeypot — hidden from humans, filled by bots */}
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+                />
                 <input
                   type="email"
                   value={email}
