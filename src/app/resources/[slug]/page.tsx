@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import DownloadButton from "./DownloadButton";
 import WorkbookModalButton from "./WorkbookForm";
+import { BlogInsights } from "@/components/sections/institution/BlogInsights";
 
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", display: "swap" });
@@ -466,6 +467,9 @@ export default async function ResourcePage({ params }: Props) {
           </div>
         </div>
       </main>
+
+      {/* ── Guides & Resources ── */}
+      <BlogInsights />
 
       {/* ── Footer ── */}
       <Footer />
