@@ -18,6 +18,8 @@ export default function DownloadButton({ href, filename, label = "Download the r
     <a
       href={href}
       download={filename}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={() =>
         window.gtag?.("event", "file_download", {
           file_name: filename,
