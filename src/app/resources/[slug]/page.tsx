@@ -7,6 +7,7 @@ import Script from "next/script";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import DownloadButton from "./DownloadButton";
+import WorkbookModalButton from "./WorkbookForm";
 
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", display: "swap" });
@@ -455,13 +456,10 @@ export default async function ResourcePage({ params }: Props) {
                     }}
                   >
                     The advisor&apos;s question bank — questions for all six themes — a printable
-                    readiness scorecard, and the complete 104-quote dataset. Free to download.
+                    readiness scorecard, and the complete 104-quote dataset. Enter your email and
+                    we&apos;ll send it over.
                   </p>
-                  <DownloadButton
-                    href={r.workbookPath}
-                    filename={r.workbookFilename}
-                    label="Download the workbook"
-                  />
+                  <WorkbookModalButton workbookUrl={r.workbookPath} />
                 </div>
               </div>
             </section>
