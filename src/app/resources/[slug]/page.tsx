@@ -6,7 +6,6 @@ import Link from "next/link";
 import Script from "next/script";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import WorkbookForm from "./WorkbookForm";
 import DownloadButton from "./DownloadButton";
 
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora", display: "swap" });
@@ -24,6 +23,8 @@ const reports: Record<ReportSlug, {
   readTime: string;
   pdfPath: string;
   pdfFilename: string;
+  workbookPath: string;
+  workbookFilename: string;
   workbookCoverPath: string;
   heroCoverPath: string;
   whatIsInside: string[];
@@ -37,8 +38,10 @@ const reports: Record<ReportSlug, {
     eyebrow: "Free research report",
     date: "June 2026",
     readTime: "12 min read",
-    pdfPath: "/reports/clarivue-report.pdf",
-    pdfFilename: "Clarivue-What-Hiring-Managers-Notice-First.pdf",
+    pdfPath: "/report-files/Clarivue-Research-Report.pdf",
+    pdfFilename: "Clarivue-Research-Report.pdf",
+    workbookPath: "/report-files/Clarivue-Research-Workbook.pdf",
+    workbookFilename: "Clarivue-Research-Workbook.pdf",
     workbookCoverPath: "/reports/previews/workbook-img.jpg",
     heroCoverPath: "/reports/previews/report-cover.jpg",
     whatIsInside: [
@@ -429,18 +432,6 @@ export default async function ResourcePage({ params }: Props) {
 
                 {/* Form side */}
                 <div>
-                  <div
-                    style={{
-                      fontSize: 12,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.16em",
-                      color: "#5B7393",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Optional · Email required
-                  </div>
                   <h2
                     id="wb-title"
                     style={{
@@ -464,10 +455,13 @@ export default async function ResourcePage({ params }: Props) {
                     }}
                   >
                     The advisor&apos;s question bank — questions for all six themes — a printable
-                    readiness scorecard, and the complete 104-quote dataset. Enter your email and
-                    we&apos;ll send it over.
+                    readiness scorecard, and the complete 104-quote dataset. Free to download.
                   </p>
-                  <WorkbookForm />
+                  <DownloadButton
+                    href={r.workbookPath}
+                    filename={r.workbookFilename}
+                    label="Download the workbook"
+                  />
                 </div>
               </div>
             </section>

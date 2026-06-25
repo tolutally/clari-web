@@ -10,9 +10,10 @@ declare global {
 interface DownloadButtonProps {
   href: string;
   filename: string;
+  label?: string;
 }
 
-export default function DownloadButton({ href, filename }: DownloadButtonProps) {
+export default function DownloadButton({ href, filename, label = "Download the report" }: DownloadButtonProps) {
   return (
     <a
       href={href}
@@ -56,7 +57,7 @@ export default function DownloadButton({ href, filename }: DownloadButtonProps) 
         <polyline points="7 10 12 15 17 10" />
         <line x1="12" y1="15" x2="12" y2="3" />
       </svg>
-      Download the report
+      {label}
     </a>
   );
 }
