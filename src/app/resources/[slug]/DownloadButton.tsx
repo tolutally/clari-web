@@ -17,7 +17,6 @@ export default function DownloadButton({ href, filename, label = "Download the r
   return (
     <a
       href={href}
-      download={filename}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() =>
