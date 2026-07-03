@@ -1,5 +1,7 @@
 "use client";
 
+import { track } from "@vercel/analytics";
+
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,12 +21,13 @@ export default function DownloadButton({ href, filename, label = "Download the r
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() =>
+      onClick={() => {
+        track("report_download", { file_name: filename });
         window.gtag?.("event", "file_download", {
           file_name: filename,
           file_extension: "pdf",
-        })
-      }
+        });
+      }}
       style={{
         display: "inline-flex",
         alignItems: "center",
