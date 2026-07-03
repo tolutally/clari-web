@@ -16,9 +16,10 @@ interface DownloadButtonProps {
 }
 
 export default function DownloadButton({ href, filename, label = "Download the report" }: DownloadButtonProps) {
+  const counterUrl = `/report/downloaded?file=${encodeURIComponent(href)}`;
   return (
     <a
-      href={href}
+      href={counterUrl}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => {
