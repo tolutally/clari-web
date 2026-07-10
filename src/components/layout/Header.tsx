@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   Activity,
   BookOpen,
+  FileText,
   Home,
   LayoutDashboard,
   LogIn,
@@ -25,7 +26,7 @@ interface HeaderProps {
 const institutionLinks = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/#institutions-features", icon: LayoutDashboard, label: "Platform" },
-  { href: "/hidden-cost", icon: Activity, label: "The Hidden Cost" },
+  { href: "/clarivue-sample-report", icon: FileText, label: "Sample Report" },
   { href: "/blog", icon: PenLine, label: "Blog" },
 ];
 

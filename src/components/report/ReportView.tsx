@@ -567,17 +567,22 @@ function emphasize(text: string): React.ReactNode {
   ];
   let nodes: React.ReactNode[] = [text];
   phrases.forEach((phrase, pi) => {
-    nodes = nodes.flatMap((node, ni) => {
-      if (typeof node !== "string" || !node.includes(phrase)) return [node];
+    const next: React.ReactNode[] = [];
+    nodes.forEach((node, ni) => {
+      if (typeof node !== "string" || !node.includes(phrase)) {
+        next.push(node);
+        return;
+      }
       const [before, after] = node.split(phrase);
-      return [
+      next.push(
         before,
         <b key={`${pi}-${ni}`} className="font-semibold text-navy">
           {phrase}
         </b>,
         after,
-      ];
+      );
     });
+    nodes = next;
   });
   return nodes;
 }

@@ -34,7 +34,7 @@ const BlogInsights = dynamic(
 );
 // import HowItWorksInstitutions from "@/components/sections/institution/HowItWorksInstitutions";
 import { useEffect, useRef, useState, FormEvent } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import EvidenceOrbit from "@/components/sections/institution/EvidenceOrbit";
 
 type CommunityTone =
   | "indigo"
@@ -938,8 +938,6 @@ export function InstitutionView() {
   const coachingPct = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
   const advisoryCardRef = useRef<HTMLDivElement>(null);
-  const dashboardRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [advisoryAnimated, setAdvisoryAnimated] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -1043,21 +1041,12 @@ export function InstitutionView() {
     return () => observer.disconnect();
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: scrollContainerRef,
-    offset: ["start 0.85", "end 0.3"],
-  });
-  const dashboardScale = useTransform(scrollYProgress, [0, 1], [0.88, 1.0]);
-  const dashboardBorderRadius = useTransform(scrollYProgress, [0, 1], ["28px", "16px"]);
-  const fadeOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
   return (
     <div className="transition-opacity duration-500 ease-in-out opacity-100 space-y-8">
       {/* Hero */}
       <section
-        ref={scrollContainerRef}
         id="institutions-hero"
-        className="relative bg-[#f8fafe] min-h-[92vh] flex items-start justify-center px-6 pt-10 pb-12 sm:px-12 sm:pt-14 sm:pb-14 lg:px-20 lg:pt-16 lg:pb-16"
+        className="relative bg-[#f8fafe] min-h-[92vh] flex items-center justify-center px-6 pt-10 pb-12 sm:px-12 sm:pt-14 sm:pb-14 lg:px-20 lg:pt-16 lg:pb-16"
       >
         {/* Background Grid Layer */}
         <div 
@@ -1074,73 +1063,61 @@ export function InstitutionView() {
           <div className="absolute bottom-[10%] left-[5%] w-[600px] h-[600px] rounded-full bg-blue-200/40 blur-[140px] animate-float-delayed" />
         </div>
 
-        {/* Main Content */}
-        <div className="relative z-10 max-w-[1280px] mx-auto w-full flex flex-col items-center text-center">
-          
-          {/* Badge */}
-          <div className="animate-fade-in-up inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur-sm px-5 py-2.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.05)] border border-slate-100/80">
-            <div className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-100">
-              <div className="absolute h-full w-full animate-ping rounded-full bg-rose-300 opacity-60" />
-              <div className="relative h-1.5 w-1.5 rounded-full bg-rose-500" />
+        {/* Main Content — side by side */}
+        <div className="relative z-10 max-w-[1280px] mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+          {/* LEFT: copy */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+
+            {/* Badge */}
+            <div className="animate-fade-in-up inline-flex items-center gap-2.5 rounded-full bg-white/80 backdrop-blur-sm px-5 py-2.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.05)] border border-slate-100/80">
+              <div className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-100">
+                <div className="absolute h-full w-full animate-ping rounded-full bg-rose-300 opacity-60" />
+                <div className="relative h-1.5 w-1.5 rounded-full bg-rose-500" />
+              </div>
+              <span className="text-xs font-medium tracking-[0.08em] uppercase text-[#042b53]">
+                Institutional Agentic AI
+              </span>
             </div>
-            <span className="text-xs font-medium tracking-[0.08em] uppercase text-[#042b53]">
-              Institutional Agentic AI
-            </span>
+
+            {/* Headline */}
+            <h1 className="animate-fade-in-up delay-100 mt-8 text-4xl sm:text-[2.85rem] md:text-[3rem] lg:text-[3.1rem] xl:text-[3.4rem] leading-[1.08] font-semibold tracking-[-0.03em] text-[#042b53]">
+              Proof of impact, built as the program runs.
+            </h1>
+
+            {/* Subheadline */}
+            <p className="animate-fade-in-up delay-200 mt-6 max-w-xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
+              Avoid the scramble: turn daily program activity into funder-ready evidence without waiting until the end of the cycle.
+            </p>
+
+            {/* Buttons */}
+            <div className="animate-fade-in-up delay-300 mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 w-full sm:w-auto">
+              <a
+                href="/clarivue-sample-report"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff5a5f] px-7 py-3.5 text-[15px] font-semibold text-white hover:bg-[#fa4b50] shadow-[0_6px_18px_-4px_rgba(255,90,95,0.4)] hover:shadow-[0_10px_26px_-6px_rgba(255,90,95,0.5)] hover:-translate-y-0.5 transition-all duration-300"
+              >
+                See sample report
+                <ArrowRight className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="/book-demo"
+                className="inline-flex items-center justify-center rounded-xl bg-white px-7 py-3.5 text-[15px] font-semibold text-[#042b53] border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] transition-all duration-300"
+              >
+                Book a 15-min walkthrough
+              </a>
+            </div>
+
+            {/* Footer Note */}
+            <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center lg:justify-start gap-3 text-base md:text-lg text-slate-500 font-medium">
+              <Gift className="w-6 h-6 text-[#ff5a5f] shrink-0" />
+              <p>Run your first report free. No demo. No credit card.</p>
+            </div>
+
           </div>
 
-          {/* Headline */}
-            <h1 className="animate-fade-in-up delay-100 mt-12 text-4xl sm:text-[2.85rem] md:text-[3rem] lg:text-[3.1rem] xl:text-[3.45rem] leading-[1.08] font-semibold tracking-[-0.03em] text-[#042b53]">
-              <span className="block lg:whitespace-nowrap">Proof of impact, built as the program runs.</span>
-          </h1>
-
-          {/* Subheadline */}
-            <p className="animate-fade-in-up delay-200 mt-8 max-w-3xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
-            Avoid the scramble: turn daily program activity into funder-ready evidence without waiting until the end of the cycle.
-          </p>
-
-          {/* Buttons */}
-          <div className="animate-fade-in-up delay-300 mt-14 flex flex-col sm:flex-row items-center justify-center gap-5">
-            <a
-              href="/clarivue-sample-report"
-              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-10 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
-            >
-              See sample report
-              <ArrowRight className="w-5 h-5 shrink-0" />
-            </a>
-            <a
-              href="/book-demo"
-              className="rounded-full bg-white px-10 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
-            >
-              Book a 15-min walkthrough
-            </a>
-          </div>
-
-          <motion.div
-            ref={dashboardRef}
-            initial={{ opacity: 0, y: 56 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.26 }}
-            style={{ scale: dashboardScale, borderRadius: dashboardBorderRadius }}
-            className="mt-12 w-full max-w-6xl will-change-transform"
-          >
-            <div className="relative mx-auto aspect-[1060/580] w-full overflow-hidden border border-[#042b53]/10 bg-white shadow-[0_30px_80px_-28px_rgba(4,43,83,0.28)]" style={{ borderRadius: 'inherit' }}>
-              <img
-                src="/clarivue_hero_dashboard_v7.svg"
-                alt="Clarivue dashboard preview"
-                className="absolute left-[-6.61%] top-[-12.07%] w-[119.81%] max-w-none"
-              />
-              {/* Scroll-driven bottom fade — dissolves as image scales up */}
-              <motion.div
-                style={{ opacity: fadeOpacity }}
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-[#f8fafe] via-[#f8fafe]/55 to-transparent z-10"
-              />
-            </div>
-          </motion.div>
-
-          {/* Footer Note */}
-          <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center gap-3 text-base md:text-lg text-slate-500 font-medium">
-            <Gift className="w-6 h-6 text-[#ff5a5f] shrink-0" />
-            <p>Run your first report free. No demo. No credit card.</p>
+          {/* RIGHT: evidence orbit */}
+          <div className="animate-fade-in-up delay-200 w-full">
+            <EvidenceOrbit />
           </div>
 
         </div>
