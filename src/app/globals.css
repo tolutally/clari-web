@@ -12,6 +12,28 @@
   --font-sans: var(--font-jakarta);
 }
 
+/* Clarivue funder-report brand tokens (used by /report) */
+@theme {
+  --color-navy: #102c64;
+  --color-navy-2: #1b3e82;
+  --color-ink: #12203f;
+  --color-coral: #fe686d;
+  --color-coral-deep: #e24e53;
+  --color-blue: #b8ccf4;
+  --color-blue-strong: #6e8fd6;
+  --color-blue-wash: #eaf0fb;
+  --color-paper: #fbfaf7;
+  --color-line: #e3e6ef;
+  --color-slate: #5e6b85;
+  --color-teal: #1fa98c;
+  --color-dim: #8a94a8;
+  --color-cream: #f5efe3;
+
+  --font-serif: var(--font-report-serif), Georgia, serif;
+  --font-mono: var(--font-report-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;

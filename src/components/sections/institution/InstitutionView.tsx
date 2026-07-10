@@ -10,7 +10,6 @@ import {
   Gift,
   GraduationCap,
   Infinity,
-  Link as LinkIcon,
   Lock,
   Send,
   ShieldCheck,
@@ -19,7 +18,6 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 // import { TrustShowcase } from "@/components/sections/trust/TrustShowcase";
 import { CalculatorTeaser } from "@/components/sections/institution/CalculatorTeaser";
@@ -153,51 +151,57 @@ const communityToneStyles: Record<CommunityTone, { bg: string; ring: string; was
 const institutionRoleCards = [
   {
     title: "Program Director",
+    tagline: "See risk before it costs you",
     description:
-      "Get a real-time, program-wide view of placement rates, advisor capacity, cohort progress, and funder readiness so you can spot risk before quarterly reports do.",
+      "Watch placement rates, advisor capacity, and cohort progress in real time, and catch the program that's slipping before the reporting cycle forces the conversation.",
     icon: Activity,
     iconWrapClass: "bg-[#ff6b57]/12",
     iconClass: "text-[#ff6b57]",
   },
   {
-    title: "Career Services",
+    title: "Funder & Compliance",
+    tagline: "Stop chasing, start proving",
     description:
-      "Monitor mock interview scores, resume readiness, and employer follow-through across every cohort in real time to spot operational gaps and reallocate advisor time before placements slip.",
+      "Pull every learner touchpoint into one place, so you build the funder's evidence instead of chasing advisors for case notes.",
+    icon: ClipboardCheck,
+    iconWrapClass: "bg-[#f59e0b]/14",
+    iconClass: "text-[#d97706]",
+  },
+  {
+    title: "Executive Director / CEO",
+    tagline: "Walk into the funding conversation with proof",
+    description:
+      "See whether your whole program's impact holds up before a funder or board decides its future, so you defend your budget with evidence, not a story you're scrambling to assemble.",
+    icon: ShieldCheck,
+    iconWrapClass: "bg-[#a855f7]/14",
+    iconClass: "text-[#9333ea]",
+  },
+  {
+    title: "Career Services",
+    tagline: "Spot the gap, move the advisor",
+    description:
+      "See mock interview scores, resume readiness, and employer follow-through across every cohort, and reallocate advisor time before placements slip.",
     icon: GraduationCap,
     iconWrapClass: "bg-[#7c82ff]/14",
     iconClass: "text-[#5a63ff]",
   },
   {
     title: "Workforce Advisor",
+    tagline: "Reach the learner who's about to fall",
     description:
-      "Get a unified view of caseloads, at-risk learners, and check-in history so you can act early and spend more time on the people who need you, not on documentation.",
+      "See caseloads, at-risk learners, and check-in history at a glance, and spend your hours on the people who need you, not on documenting that you did.",
     icon: Users,
     iconWrapClass: "bg-[#0ea5e9]/14",
     iconClass: "text-[#0284c7]",
   },
   {
     title: "Intake & Enrollment",
+    tagline: "Know where the next cohort needs you",
     description:
-      "Track enrollment volume, learner readiness baseline, and cohort momentum in one place to understand where to focus next intake's effort.",
+      "Track enrollment volume, readiness baseline, and cohort momentum, so you aim the next intake's effort where it'll actually move.",
     icon: Send,
     iconWrapClass: "bg-[#14b8a6]/14",
     iconClass: "text-[#0f766e]",
-  },
-  {
-    title: "Funder & Compliance",
-    description:
-      "Reduce reporting workload and data prep by unifying every learner touchpoint so compliance teams can focus on outcomes, not on chasing advisors for case notes.",
-    icon: ClipboardCheck,
-    iconWrapClass: "bg-[#f59e0b]/14",
-    iconClass: "text-[#d97706]",
-  },
-  {
-    title: "Employer Partnerships",
-    description:
-      "Track which referrals land jobs, which employers keep coming back, and which roles your program fills fastest so you can grow partnerships from data, not from gut feel.",
-    icon: LinkIcon,
-    iconWrapClass: "bg-[#ec4899]/14",
-    iconClass: "text-[#db2777]",
   },
 ] as const;
 
@@ -556,111 +560,237 @@ function AdvisorWorkflowMock() {
   );
 }
 
-function FunderReportsMock() {
+/* ARCHIVED — FunderReportsMock (replaced by LearnerMatchMock)
+function FunderReportsMock() { ... }
+*/
+
+function LearnerMatchMock() {
+  const jobs = [
+    { role: "Medical Assistant", employer: "City Health Clinic", match: 94, badge: "Top match", badgeStyle: "bg-emerald-500 text-white" },
+    { role: "Patient Coordinator", employer: "Northeast Medical", match: 81, badge: "Referred", badgeStyle: "bg-[#102c64] text-white" },
+    { role: "Care Navigator", employer: "WellPath", match: 67, badge: "1 skill gap", badgeStyle: "bg-amber-400 text-white" },
+  ];
+
   return (
-    <div className="relative min-h-[240px] overflow-hidden rounded-[24px] border border-[#003366]/10 bg-[#eaf1fb] px-4 py-3 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[272px]">
+    <div className="relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
       <div className="pointer-events-none absolute inset-0 opacity-60">
         <div className="absolute -left-10 top-16 h-px w-[55%] rotate-[-8deg] bg-[#b8ccf4]/80" />
         <div className="absolute -right-10 bottom-16 h-px w-[55%] rotate-[6deg] bg-[#b8ccf4]/80" />
+        <div className="absolute left-[30%] top-8 h-48 w-48 rounded-full bg-white/35 blur-3xl" />
       </div>
 
-      <div className="relative flex h-full items-center justify-between gap-2.5">
-        <div className="flex w-[22%] flex-col gap-2">
-          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Data sources</p>
-            <div className="mt-1.5 space-y-1 text-[9px] text-[#102c64]">
-              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#102c64]" />SIS · Banner</div>
-              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#102c64]" />LMS · Canvas</div>
-              <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[#ff686c]" />Clarivue engine</div>
+      <div className="relative flex h-full items-center justify-between gap-3">
+        {/* Left — Learner profile */}
+        <div className="flex w-[28%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Learner</p>
+            <div className="mt-2 flex items-center gap-2.5">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#102c64] text-[11px] font-semibold text-white">MJ</div>
+              <div>
+                <p className="text-[13px] font-semibold text-[#102c64]">Marcus J.</p>
+                <p className="text-[10px] text-[#5b7393]">Healthcare Bridge · cohort 14</p>
+              </div>
+            </div>
+            <div className="mt-2.5 flex items-end gap-1.5">
+              <span className="text-[22px] font-semibold leading-none text-[#102c64]">84</span>
+              <span className="pb-0.5 text-[10px] text-[#5b7393]">/100 readiness</span>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Prep time</p>
-            <p className="mt-1.5 text-[20px] font-semibold leading-none text-[#102c64]">0 hrs</p>
-            <p className="mt-1 text-[9px] text-[#5b7393]">Down from 38</p>
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Skill profile</p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {[
+                { label: "Patient Care", matched: true },
+                { label: "EMR Systems", matched: true },
+                { label: "Communication", matched: true },
+                { label: "Phlebotomy", matched: false },
+              ].map((chip) => (
+                <span
+                  key={chip.label}
+                  className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${
+                    chip.matched
+                      ? "bg-[#b8ccf4]/60 text-[#102c64]"
+                      : "border border-dashed border-[#ff686c]/70 bg-[#ff686c]/10 text-[#ff686c]"
+                  }`}
+                >
+                  {chip.matched ? "✓ " : "· "}{chip.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="w-[48%]">
-          <div className="overflow-hidden rounded-[20px] border border-[#102c64]/15 bg-white shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
-            <div className="bg-[#102c64] px-3 py-2.5 text-white">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-white/65">Quarterly funder report</p>
-                  <p className="mt-0.5 text-[13px] font-semibold">WIOA Title I · Q1 2026</p>
+        {/* Center — Match engine */}
+        <div className="relative flex w-[22%] items-center justify-center self-stretch">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="h-[160px] w-[160px] rounded-full border border-[#b8ccf4]/50" />
+            <div className="absolute h-[118px] w-[118px] rounded-full border border-[#b8ccf4]/60" />
+            <div className="absolute h-[78px] w-[78px] rounded-full border border-[#b8ccf4]/70" />
+          </div>
+          <div className="relative z-10 flex h-[120px] w-[120px] flex-col items-center justify-center rounded-full border border-[#102c64]/15 bg-white px-3 shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
+            <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+              Live
+            </div>
+            <p className="text-center text-[11px] font-semibold leading-tight text-[#102c64]">3 roles matched</p>
+            <p className="mt-1 text-center text-[9px] uppercase tracking-[0.12em] text-[#5b7393]">Matching engine</p>
+          </div>
+        </div>
+
+        {/* Right — Job opportunities */}
+        <div className="flex w-[44%] flex-col gap-2">
+          {jobs.map((job) => (
+            <div key={job.role} className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[12px] font-semibold text-[#102c64]">{job.role}</p>
+                  <p className="text-[10px] text-[#5b7393]">{job.employer}</p>
                 </div>
-                <span className="rounded-full bg-white/15 px-2.5 py-1 text-[9px] font-semibold">Auto-filled</span>
+                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold ${job.badgeStyle}`}>{job.badge}</span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <div className="h-1.5 flex-1 rounded-full bg-[#b8ccf4]/50">
+                  <div
+                    className={`h-1.5 rounded-full ${
+                      job.match >= 85 ? "bg-emerald-500" : job.match >= 75 ? "bg-[#102c64]" : "bg-amber-400"
+                    }`}
+                    style={{ width: `${job.match}%` }}
+                  />
+                </div>
+                <span className={`text-[10px] font-semibold ${
+                  job.match >= 85 ? "text-emerald-600" : job.match >= 75 ? "text-[#102c64]" : "text-amber-500"
+                }`}>{job.match}%</span>
               </div>
             </div>
-            <div className="p-3">
-              <div className="grid grid-cols-2 gap-3 border-b border-[#e2e8f2] pb-2.5">
-                <div>
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Program</p>
-                  <p className="mt-0.5 text-[11px] font-semibold text-[#102c64]">Healthcare Bridge</p>
-                </div>
-                <div>
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Reporting period</p>
-                  <p className="mt-0.5 text-[11px] font-semibold text-[#102c64]">Jan 1 - Mar 31</p>
-                </div>
-              </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-              <div className="space-y-2 py-2.5 border-b border-[#e2e8f2]">
-                {[
-                  ["Total enrolled", "142", "SIS"],
-                  ["Completed training", "128", "LMS"],
-                  ["Mock interviews", "119", "Clarivue"],
-                  ["Referred to employer", "94", "Clarivue"],
-                  ["Placed in employment", "68", "Clarivue"],
-                  ["Placement rate", "53%", "up from 31%"],
-                ].map(([label, value, source]) => (
-                  <div key={label} className="grid grid-cols-[1fr_auto_auto] items-center gap-2 text-[9px] text-[#5b7393]">
-                    <span className={label === "Placed in employment" ? "font-semibold text-[#102c64]" : undefined}>{label}</span>
-                    <span className="font-semibold text-[#102c64]">{value}</span>
-                    <span className={`rounded px-1.5 py-0.5 text-[8px] ${source === "Clarivue" || source === "up from 31%" ? "bg-[#ff686c]/10 text-[#ff686c]" : "bg-[#102c64]/8 text-[#102c64]"}`}>{source}</span>
+function PostExitTrackingMock() {
+  const checkIns = [
+    { day: "7-day",  label: "Placement confirmed",    status: "done"   },
+    { day: "30-day", label: "Still employed",          status: "done"   },
+    { day: "60-day", label: "Role matches training",   status: "done"   },
+    { day: "90-day", label: "Scheduled · in 3 days",   status: "active" },
+  ];
+
+  return (
+    <div className="relative min-h-[300px] overflow-hidden rounded-[26px] border border-[#003366]/10 bg-[#eaf1fb] px-5 py-4 shadow-[0_30px_70px_-36px_rgba(4,43,83,0.28)] lg:min-h-[340px]">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <div className="absolute -left-10 top-16 h-px w-[55%] rotate-[-8deg] bg-[#b8ccf4]/80" />
+        <div className="absolute -right-10 bottom-16 h-px w-[55%] rotate-[6deg] bg-[#b8ccf4]/80" />
+        <div className="absolute right-[20%] top-6 h-48 w-48 rounded-full bg-white/30 blur-3xl" />
+      </div>
+
+      <div className="relative flex h-full items-center justify-between gap-3">
+        {/* Left — Graduate snapshot */}
+        <div className="flex w-[26%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Graduate</p>
+            <div className="mt-2 flex items-center gap-2.5">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#102c64] text-[11px] font-semibold text-white">NR</div>
+              <div>
+                <p className="text-[13px] font-semibold text-[#102c64]">Nia R.</p>
+                <p className="text-[10px] text-[#5b7393]">Exited · 47 days ago</p>
+              </div>
+            </div>
+            <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[10px] font-semibold text-emerald-700">Employed ✓</span>
+            </div>
+            <p className="mt-1.5 text-[10px] text-[#5b7393]">Medical Assistant · City Health Clinic</p>
+          </div>
+
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Cohort 14 · placed</p>
+            <div className="mt-2 flex items-end gap-1.5">
+              <span className="text-[22px] font-semibold leading-none text-[#102c64]">18</span>
+              <span className="pb-0.5 text-[10px] text-[#5b7393]">/22 confirmed</span>
+            </div>
+            <div className="mt-2 h-1.5 w-full rounded-full bg-[#b8ccf4]/50">
+              <div className="h-1.5 rounded-full bg-[#102c64]" style={{ width: "82%" }} />
+            </div>
+            <p className="mt-1 text-[9px] text-[#5b7393]">82% placement rate</p>
+          </div>
+        </div>
+
+        {/* Center — Check-in timeline */}
+        <div className="w-[44%]">
+          <div className="rounded-[22px] border border-[#102c64]/15 bg-white p-4 shadow-[0_24px_50px_-30px_rgba(16,44,100,0.34)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Post-exit tracking</p>
+                <p className="mt-1 text-[13px] font-semibold text-[#102c64]">Cohort 14 · check-in schedule</p>
+              </div>
+              <span className="rounded-full bg-[#102c64]/8 px-3 py-1 text-[10px] font-semibold text-[#102c64]">Auto</span>
+            </div>
+
+            <div className="mt-3 space-y-2.5">
+              {checkIns.map((item) => (
+                <div key={item.day} className="flex items-center gap-3">
+                  <div
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                      item.status === "done"
+                        ? "bg-[#102c64] text-white"
+                        : "border border-amber-400/50 bg-amber-400/10 text-amber-600"
+                    }`}
+                  >
+                    {item.status === "done" ? (
+                      <Check className="h-3.5 w-3.5" strokeWidth={2.6} />
+                    ) : (
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-current" />
+                    )}
                   </div>
-                ))}
-              </div>
-
-              <div className="py-2.5 border-b border-[#e2e8f2]">
-                <p className="text-[9px] uppercase tracking-[0.16em] text-[#5b7393]">Narrative summary</p>
-                <div className="mt-1.5 space-y-1">
-                  <div className="h-1.5 w-full rounded-sm bg-[#5b7393]/40" />
-                  <div className="h-1.5 w-[92%] rounded-sm bg-[#5b7393]/40" />
-                  <div className="h-1.5 w-full rounded-sm bg-[#5b7393]/40" />
-                  <div className="h-1.5 w-[72%] rounded-sm bg-[#5b7393]/40" />
+                  <div className="flex-1 rounded-xl border border-[#003366]/8 bg-[#003366]/[0.03] px-3 py-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-[11px] font-semibold text-[#102c64]">{item.label}</span>
+                      <span className={`text-[9px] font-semibold uppercase tracking-[0.14em] ${
+                        item.status === "done" ? "text-[#5b7393]" : "text-amber-500"
+                      }`}>{item.day}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <div className="pt-2.5 flex items-center gap-2 text-[10px] font-medium text-[#102c64]">
-                <span className="flex h-4 w-4 items-center justify-center rounded bg-[#102c64] text-white"><Check className="h-3 w-3" strokeWidth={2.5} /></span>
-                Reviewed and ready to submit
-              </div>
+              ))}
             </div>
+
+            <p className="mt-3 text-center text-[9px] text-[#5b7393]">Auto-scheduled · no advisor action needed</p>
           </div>
         </div>
 
-        <div className="flex w-[22%] flex-col gap-2">
-          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Compliance</p>
-            <div className="mt-1.5 space-y-1 text-[9px] text-[#102c64]">
-              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />All fields filled</div>
-              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />PII redacted</div>
-              <div className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-[#102c64]" strokeWidth={2.3} />Audit trail logged</div>
+        {/* Right — Aggregate outcome metrics */}
+        <div className="flex w-[24%] flex-col gap-2.5">
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Retention · 60 days</p>
+            <div className="mt-2 flex items-end gap-1.5">
+              <span className="text-[22px] font-semibold leading-none text-emerald-600">94%</span>
             </div>
+            <p className="mt-1 text-[9px] text-[#5b7393]">Across all tracked graduates</p>
           </div>
 
-          <div className="rounded-2xl bg-[#ff686c] p-2.5 text-white shadow-[0_18px_30px_-26px_rgba(255,104,109,0.55)]">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-white/75">Deadline</p>
-            <p className="mt-1.5 text-[13px] font-semibold">12 days early</p>
+          <div className="rounded-2xl border border-[#ff686c]/40 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(255,104,109,0.4)]">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff686c]/12 text-[#ff686c]">
+                <X className="h-3.5 w-3.5" strokeWidth={2.3} />
+              </span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#ff686c]">Unreachable</span>
+            </div>
+            <div className="mt-1.5 flex items-end gap-1.5">
+              <span className="text-[22px] font-semibold leading-none text-[#ff686c]">4</span>
+              <span className="pb-0.5 text-[10px] text-[#5b7393]">graduates</span>
+            </div>
+            <p className="mt-1.5 rounded-lg bg-[#ff686c]/8 px-2 py-1 text-[9px] font-semibold text-[#ff686c]">Follow-up queued</p>
           </div>
 
-          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-2.5 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Next report</p>
-            <p className="mt-1.5 text-[11px] font-semibold text-[#102c64]">SNAP E&T</p>
-            <p className="mt-1 text-[9px] text-[#5b7393]">Generating · 64%</p>
-            <div className="mt-1.5 h-1.5 rounded-full bg-[#b8ccf4]/50">
-              <div className="bar-fill h-1.5 rounded-full bg-[#102c64]" style={{ ["--bar-width" as string]: "64%" }} />
+          <div className="rounded-2xl border border-[#102c64]/12 bg-white p-3 shadow-[0_18px_30px_-26px_rgba(16,44,100,0.4)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b7393]">Outcome data</p>
+            <p className="mt-1.5 text-[11px] font-semibold text-[#102c64]">Ready for funder report</p>
+            <div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[#102c64]/8 px-2 py-0.5">
+              <Check className="h-3 w-3 text-[#102c64]" strokeWidth={2.5} />
+              <span className="text-[9px] font-semibold text-[#102c64]">Auto-compiled</span>
             </div>
           </div>
         </div>
@@ -960,29 +1090,28 @@ export function InstitutionView() {
 
           {/* Headline */}
             <h1 className="animate-fade-in-up delay-100 mt-12 text-4xl sm:text-[2.85rem] md:text-[3rem] lg:text-[3.1rem] xl:text-[3.45rem] leading-[1.08] font-semibold tracking-[-0.03em] text-[#042b53]">
-              <span className="block lg:whitespace-nowrap">AI Operations Engine built for</span>
-              <span className="block lg:whitespace-nowrap">Workforce and Training Programs</span>
+              <span className="block lg:whitespace-nowrap">Proof of impact, built as the program runs.</span>
           </h1>
 
           {/* Subheadline */}
             <p className="animate-fade-in-up delay-200 mt-8 max-w-3xl text-lg sm:text-[1.35rem] text-slate-500 leading-relaxed font-normal">
-            Clarivue runs the work between training completion and job offers for you, turning every cohort into a placement-ready pipeline.
+            Avoid the scramble: turn daily program activity into funder-ready evidence without waiting until the end of the cycle.
           </p>
 
           {/* Buttons */}
           <div className="animate-fade-in-up delay-300 mt-14 flex flex-col sm:flex-row items-center justify-center gap-5">
             <a
-              href="/hidden-cost"
-              className="rounded-full bg-white px-10 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
+              href="/clarivue-sample-report"
+              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-10 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
             >
-              See your cost
+              See sample report
+              <ArrowRight className="w-5 h-5 shrink-0" />
             </a>
             <a
               href="/book-demo"
-              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ff5a5f] px-10 py-4 text-base md:text-lg font-medium text-white hover:bg-[#fa4b50] shadow-[0_4px_14px_0_rgba(255,90,95,0.3)] hover:shadow-[0_8px_24px_0_rgba(255,90,95,0.4)] hover:-translate-y-0.5 transition-all duration-300"
+              className="rounded-full bg-white px-10 py-4 text-base md:text-lg font-medium text-[#042b53] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.08)] border border-slate-100 hover:bg-slate-50 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-300"
             >
-              Get in Touch
-              <ArrowRight className="w-5 h-5 shrink-0" />
+              Book a 15-min walkthrough
             </a>
           </div>
 
@@ -1011,7 +1140,7 @@ export function InstitutionView() {
           {/* Footer Note */}
           <div className="animate-fade-in-up delay-500 mt-8 flex items-center justify-center gap-3 text-base md:text-lg text-slate-500 font-medium">
             <Gift className="w-6 h-6 text-[#ff5a5f] shrink-0" />
-            <p>Run your first cohort free. No demo. No credit card.</p>
+            <p>Run your first report free. No demo. No credit card.</p>
           </div>
 
         </div>
@@ -1054,19 +1183,13 @@ export function InstitutionView() {
         {/* SECTION TITLE */}
         <div className="pl-1 text-left sm:pl-2">
           <div className="max-w-6xl">
-            <h2 className="text-3xl sm:text-4xl lg:text-[3.1rem] font-semibold tracking-[-0.04em] text-[#003366] leading-[1.05] lg:whitespace-nowrap">
-              Your placement workflow, finally running on its own.
+            <h2 className="text-3xl sm:text-4xl lg:text-[3.1rem] font-semibold tracking-[-0.04em] text-[#003366] leading-[1.05]">
+              Every step captured. All of it becomes proof.
             </h2>
-            <p className="mt-4 text-base md:text-lg lg:text-[1.05rem] font-normal text-[#003366]/70 lg:whitespace-nowrap">
-              Pull every step from training to placement into one engine your team actually trusts.
+            <p className="mt-4 text-base md:text-lg lg:text-[1.05rem] font-normal text-[#003366]/70 max-w-2xl">
+              Clarivue runs alongside the systems you already use, capturing the work between training and a job, so the evidence is ready before your funder asks.
             </p>
           </div>
-          <Link
-            href="/book-demo"
-            className="mt-6 inline-flex items-center justify-center gap-2 self-start rounded-xl bg-[#ff686c] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#f05a46]"
-          >
-            Get in Touch
-          </Link>
         </div>
 
         {(() => {
@@ -1075,7 +1198,7 @@ export function InstitutionView() {
   icon: <Users className="h-5 w-5" strokeWidth={1.5} />,
   title: "Catch resumes before they fail",
   description:
-    "Fix keywords, formatting, and ATS gaps automatically — so candidates never get rejected before being read.",
+    "Fix keywords, formatting, and ATS gaps automatically, and log every fix as evidence the work happened.",
   color: "bg-fuchsia-500",
   image: "/employer_bridge.mp4",
 },
@@ -1083,24 +1206,32 @@ export function InstitutionView() {
   icon: <Infinity className="h-5 w-5" strokeWidth={1.5} />,
   title: "Run mock interviews at cohort scale",
   description:
-    "Score every learner on the same rubric employers use, before they walk into the interview.",
+    "Score every learner on the same signals employers screen for, so readiness is a record, not a guess.",
   color: "bg-emerald-500",
   image: "/Practicing_Job_Interview_On_Laptop.mp4",
 },
 {
   icon: <BarChart2 className="h-5 w-5" strokeWidth={1.5} />,
-  title: " Keep advisors in front of learners, not paperwork",
+  title: "Keep advisors in front of learners, not paperwork",
   description:
-    "Auto-capture case notes, follow-ups, and check-ins between sessions.",
+    "Auto-capture case notes, follow-ups, and check-ins between sessions, so nothing your team does goes undocumented.",
   color: "bg-sky-500",
   image: "/Career_Readiness_Dashboard_Video.mp4",
 },
 {
   icon: <ClipboardCheck className="h-5 w-5" strokeWidth={1.5} />,
-  title: "Generate funder reports that already know the answer",
+  title: "Match learners to real opportunities",
   description:
-    "Real-time engagement and outcome data feeds WIOA, SNAP E&T, and grant narratives.",
+    "Route each learner to roles that fit their skills, so preparation ends in a real shot at a job, not a dead end.",
   color: "bg-amber-500",
+  image: "/ai-capture.mp4",
+},
+{
+  icon: <Activity className="h-5 w-5" strokeWidth={1.5} />,
+  title: "Track what happens after they leave",
+  description:
+    "Follow graduates past exit to establish what placement actually became, the outcome data everyone's judged on and no one can reach.",
+  color: "bg-violet-500",
   image: "/ai-capture.mp4",
 },
           ];
@@ -1163,11 +1294,48 @@ export function InstitutionView() {
                 {activeFeature === 0 && <ResumeDiagnosticsMock />}
                 {activeFeature === 1 && <MockInterviewsMock />}
                 {activeFeature === 2 && <AdvisorWorkflowMock />}
-                {activeFeature === 3 && <FunderReportsMock />}
+                {activeFeature === 3 && <LearnerMatchMock />}
+                {activeFeature === 4 && <PostExitTrackingMock />}
               </div>
             </div>
           );
         })()}
+
+        {/* Rollup capstone — everything above flows into one report */}
+        <div className="mt-14 sm:mt-16">
+          {/* Converging funnel motif */}
+          <div className="relative mx-auto mb-6 h-8 w-full max-w-[520px]" aria-hidden="true">
+            <div className="absolute left-0 top-0 h-8 w-px origin-top rotate-[22deg] bg-gradient-to-b from-transparent to-[#003366]/25" />
+            <div className="absolute left-1/2 top-0 h-8 w-px -translate-x-1/2 bg-gradient-to-b from-transparent to-[#003366]/25" />
+            <div className="absolute right-0 top-0 h-8 w-px origin-top rotate-[-22deg] bg-gradient-to-b from-transparent to-[#003366]/25" />
+            <div className="absolute bottom-0 left-1/2 h-1.5 w-1.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-[#ff5a5f]" />
+          </div>
+
+          <div className="relative mx-auto max-w-4xl overflow-hidden rounded-[28px] border border-[#003366]/10 bg-gradient-to-br from-white to-[#f4f8ff] px-8 py-10 text-center shadow-[0_30px_80px_-40px_rgba(4,43,83,0.3)] sm:px-12">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-rose-200/30 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-blue-200/30 blur-3xl" />
+
+            <div className="relative">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#003366]/[0.04] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#003366]/60">
+                <ClipboardCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                The report
+              </span>
+              <p className="mx-auto mt-5 max-w-3xl text-2xl sm:text-[1.75rem] lg:text-[2rem] font-semibold leading-[1.2] tracking-[-0.02em] text-[#042b53]">
+                All of it rolls into one report, the proof that decides whether your funding{" "}
+                <span className="text-[#ff5a5f]">grows or disappears</span>.
+              </p>
+              <div className="mt-7">
+                <a
+                  href="/clarivue-sample-report"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#003366] px-7 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(0,51,102,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#02294f]"
+                >
+                  See sample report
+                  <ArrowRight className="h-4 w-4 shrink-0" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="max-w-6xl mx-auto px-6 md:px-10 py-20 md:py-24">
@@ -1178,7 +1346,7 @@ export function InstitutionView() {
                 Built For Every Program Leader
               </p>
               <h2 className="mt-3 text-3xl sm:text-4xl lg:text-[3.1rem] font-semibold tracking-[-0.04em] text-[#042b53] leading-[1.05]">
-                One system, tailored to every team moving learners into jobs.
+                Everyone who touches a learner sees the proof they need.
               </h2>
             </div>
           </div>
@@ -1206,7 +1374,7 @@ export function InstitutionView() {
                         </div>
                         <div>
                           <div className="text-[#042b53] font-medium text-lg leading-tight">{card.title}</div>
-                          <div className="text-sm text-[#042b53]/45">Role-specific visibility</div>
+                          <div className={`mt-0.5 text-sm font-medium ${card.iconClass}`}>{card.tagline}</div>
                         </div>
                       </div>
                       <p className="text-[#042b53]/72 leading-relaxed text-[15px] sm:text-base">
@@ -1246,10 +1414,10 @@ export function InstitutionView() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight">
-            One system from enrolled to employed. Without the extra staff.
+            Prove it on your own cohort. No demo, no sales call.
           </h2>
           <p className="mt-4 text-base sm:text-lg text-slate-300">
-            See what Clarivue can do for your program.
+            Run one cohort through Clarivue and see the funder evidence build itself, before you talk to anyone here.
           </p>
 
           <div className="mt-10 flex items-center justify-center">
@@ -1257,7 +1425,7 @@ export function InstitutionView() {
               href="/book-demo"
               className="inline-flex items-center justify-center h-14 px-10 rounded-2xl bg-[#ff686c] text-white text-lg font-semibold shadow-lg shadow-[#ff686c]/30 transition-all duration-300 hover:bg-[#e55d61] hover:shadow-xl hover:-translate-y-0.5 min-w-[260px]"
             >
-              Get in Touch
+              See the proof for one cohort →
             </a>
           </div>
 

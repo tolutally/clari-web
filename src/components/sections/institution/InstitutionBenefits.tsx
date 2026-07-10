@@ -251,10 +251,10 @@ export function InstitutionBenefits() {
         <div className="mb-12 flex flex-col gap-5 pl-1 text-left sm:pl-2 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-4xl">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#003366] lg:whitespace-nowrap">
-              What changes when the engine runs
+              What you can prove after one cohort
             </h2>
             <p className="mt-3 text-lg sm:text-xl text-[#003366]/70 lg:whitespace-nowrap">
-              Four operational shifts you can put a number on within one cohort.
+              Four changes you can put a number on, and hand to a funder.
             </p>
           </div>
           <Link
@@ -262,7 +262,7 @@ export function InstitutionBenefits() {
             className="group inline-flex items-center justify-center gap-2 self-start rounded-full bg-[#ff686c] px-6 py-3 text-white font-semibold shadow-lg transition-all hover:bg-[#00264d] hover:shadow-xl lg:mt-2 lg:ml-6"
           >
             <Sparkles className="w-4 h-4" />
-            <span>Get in Touch</span>
+            <span>See the proof for one cohort</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
@@ -272,10 +272,10 @@ export function InstitutionBenefits() {
           {/* Card 1: Funnel — Emerald accent */}
           <div className="rounded-lg sm:rounded-xl bg-gradient-to-br from-[#10b981]/5 to-[#10b981]/10 border border-[#10b981]/20 p-3 sm:p-3.5 lg:p-4">
             <h3 className="text-[15px] sm:text-base font-bold text-[#003366] mb-1 leading-snug">
-              More placements per cohort, same budget
+              More learners reach a paycheck, same budget
             </h3>
             <p className="text-[12px] sm:text-[13px] leading-snug text-[#003366]/60">
-              The engine catches drop-offs, fixes resumes, and scores interviews — so more learners reach a paycheck.
+              Clarivue catches drop-offs, fixes resumes, and scores interviews, so more of the learners you already enrolled make it to a job.
             </p>
             <FunnelAnimation />
           </div>
@@ -286,7 +286,7 @@ export function InstitutionBenefits() {
              One advisor, fifty learners, no extra hiring
             </h3>
             <p className="text-[12px] sm:text-[13px] leading-snug text-[#003366]/60">
-              Routine check-ins, notes, and reviews run automatically — your team only steps in when it matters.
+              Routine check-ins, notes, and reviews run without your team, so advisors step in only where they're actually needed.
             </p>
             <CaseloadAnimation />
           </div>
@@ -297,7 +297,7 @@ export function InstitutionBenefits() {
               Funder reports that already know the answer
             </h3>
             <p className="text-[12px] sm:text-[13px] leading-snug text-[#003366]/60">
-              WIOA, SNAP E&T, and grant narratives generate themselves from real-time learner data.
+              The readiness and engagement evidence your WIOA, SNAP E&T, and grant reports are missing, captured as the work happens.
             </p>
             <ReportAnimation />
           </div>
@@ -308,7 +308,7 @@ export function InstitutionBenefits() {
               Employers who keep saying yes
             </h3>
             <p className="text-[12px] sm:text-[13px] leading-snug text-[#003366]/60">
-              Every referral is scored before it goes out — so employers stop getting candidates who weren't ready.
+              Every learner is scored on employer-ready signals before a referral goes out, so employers stop getting people who weren't ready, and keep taking your calls.
             </p>
             <PipelineAnimation />
           </div>
